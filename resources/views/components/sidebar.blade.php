@@ -138,7 +138,7 @@
                 </li>
 
 
-                {{-- Rejected requests --}}
+
 
                 <li class="nav-item">
 

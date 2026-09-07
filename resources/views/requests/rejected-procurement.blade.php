@@ -18,11 +18,7 @@
 
                         <div class="d-flex align-items-center">
 
-                            <div class="page-icon bg-danger-subtle text-danger me-3">
 
-                                <i class="bi bi-x-circle"></i>
-
-                            </div>
 
                             <div>
 
@@ -87,7 +83,6 @@
 
                                 <h5 class="mb-1">
 
-                                    <i class="bi bi-x-circle text-danger me-2"></i>
 
                                     Rejected Requests
 

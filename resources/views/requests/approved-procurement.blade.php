@@ -19,11 +19,6 @@
 
                         <div class="d-flex align-items-center">
 
-                            <div class="page-icon bg-success-subtle text-success me-3">
-
-                                <i class="bi bi-check-circle"></i>
-
-                            </div>
 
                             <div>
 
@@ -110,7 +105,7 @@
                             <div>
 
                                 <h5 class="mb-1">
-                                    <i class="bi bi-check-circle text-success me-2"></i>
+{{--                                    <i class="bi bi-check-circle text-success me-2"></i>--}}
                                     Approved Requests
                                 </h5>
 
