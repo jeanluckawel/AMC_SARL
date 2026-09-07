@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quotation — Template / Specimen</title>
+    <style>
+        *{box-sizing:border-box}
+        @page{size:A4;margin:0}
+        html,body{margin:0;background:#eee}
+        body{font-family:Arial,Helvetica,sans-serif;color:#111}
+        .page{
+            width:210mm; min-height:297mm; margin:12px auto; background:#fff;
+            position:relative; padding:12mm 12mm 18mm;
+            overflow:hidden;
+        }
+        .watermark{
+            position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+            font-size:42px; font-weight:800; color:rgba(180,0,0,.08);
+            transform:rotate(-28deg); pointer-events:none; z-index:0;
+        }
+        .content{position:relative;z-index:1}
+        .top{
+            display:grid; grid-template-columns:1fr 1fr; gap:14mm;
+            min-height:53mm;
+        }
+        .brand{display:flex;align-items:flex-start;gap:7px}
+        .logo{
+            width:39mm;height:25mm;border:3px solid #555;border-right-color:transparent;
+            border-bottom-color:transparent;border-radius:50%;display:flex;align-items:center;
+            justify-content:center;position:relative;margin-top:1mm
+        }
+        .logo b{font-size:23px;font-style:italic;color:#555;letter-spacing:-2px}
+        .logo small{position:absolute;top:17mm;left:8mm;font-size:6px;font-weight:700;color:#555}
+        .logo:after{
+            content:"";position:absolute;width:9mm;height:5mm;border-radius:70% 20%;
+            border-top:5px solid #e31b23;transform:rotate(-25deg);left:12mm;top:22mm
+        }
+        .left-meta{margin-top:2mm;font-size:11.2px;line-height:1.28}
+        .left-meta .blue{color:#0879c9;text-decoration:underline}
+        .address{font-size:12px;line-height:1.27}
+        .rule{height:1px;background:#f47721;margin:2mm 10mm 3mm}
+        .title-row{
+            display:grid;grid-template-columns:2fr 1fr;border:1px solid #222;height:9mm;
+        }
+        .title{
+            background:#4f8136;color:#000;font-size:17px;font-weight:800;
+            display:flex;align-items:center;justify-content:center
+        }
+        .date{display:flex;align-items:center;justify-content:center;font-size:11.5px}
+        .client-row{display:flex;justify-content:space-between;align-items:center;margin-top:1mm;font-size:11px}
+        .quote-no{font-weight:700;margin-top:2mm;text-align:right;font-size:11px}
+        table{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:1mm;font-size:10.5px}
+        th,td{border:1px solid #222;padding:2.8mm 1.2mm;vertical-align:middle}
+        th{background:#d9d9d9;text-align:center;font-weight:800}
+        th:nth-child(1){width:5.8%} th:nth-child(2){width:59%} th:nth-child(3){width:8%}
+        th:nth-child(4){width:7%} th:nth-child(5){width:9%} th:nth-child(6){width:11.2%}
+        td:nth-child(1),td:nth-child(3),td:nth-child(4),td:nth-child(5),td:nth-child(6){text-align:center}
+        td:nth-child(6),td:nth-child(5){text-align:right;padding-right:2mm}
+        .subtotal{
+            margin-top:5mm;display:grid;grid-template-columns:1fr 58mm;align-items:stretch;
+        }
+        .sub-label{
+            background:#d9d9d9;border:1px solid #222;border-right:0;
+            font-weight:800;text-align:center;padding:1mm;font-size:14px
+        }
+        .money{border:1px solid #222;font-size:12px}
+        .money-row{display:grid;grid-template-columns:1fr 1.25fr}
+        .money-row>div{border-bottom:1px solid #222;padding:1mm}
+        .money-row:last-child>div{border-bottom:0}
+        .money-row .label{font-weight:800;text-align:center}
+        .money-row .val{text-align:right;font-weight:800;padding-right:4mm}
+        .lower{display:grid;grid-template-columns:1fr 1fr;gap:20mm;margin-top:8mm}
+        .terms{text-align:center;font-size:11px;font-weight:700;line-height:1.65;padding-top:2mm}
+        .signature{text-align:center;font-size:11px;font-weight:700}
+        .sigbox{
+            height:35mm;margin-top:2mm;position:relative;
+            border-bottom:0 solid #777
+        }
+        .fake-stamp{
+            position:absolute;left:5mm;top:4mm;width:31mm;height:31mm;border:2px solid #c22;
+            border-radius:50%;color:#c22;display:flex;align-items:center;justify-content:center;
+            font-size:7px;font-weight:800;transform:rotate(-12deg)
+        }
+        .fake-sign{
+            position:absolute;right:13mm;top:8mm;font-family:"Brush Script MT",cursive;
+            font-size:26px;color:#263b77;transform:rotate(-7deg)
+        }
+        .footer{
+            position:absolute;left:25mm;right:25mm;bottom:22mm;border-top:1px solid #f47721;
+            padding-top:2mm;font-size:8px
+        }
+        .footer b{display:inline-block;width:24mm}
+        .note{font-size:8px;color:#8b0000;text-align:center;margin-top:2mm;font-weight:700}
+        @media print{
+            html,body{background:#fff}
+            .page{margin:0;box-shadow:none}
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="watermark">SPECIMEN — TEMPLATE</div>
+    <div class="content">
+        <section class="top">
+            <div>
+                <div class="brand">
+                    <div class="logo"><b>AMC</b><small>AFRICA COMPANY</small></div>
+                </div>
+                <div class="left-meta">
+                    RCCM : [RCCM]<br>
+                    Id. Nat: [IDENTIFIANT]<br>
+                    NIF: [NIF]<br>
+                    TVA : [TVA]<br>
+                    ARSP : [ARSP]<br>
+                    Tél. : [TÉLÉPHONE]<br>
+                    Email: <span class="blue">[EMAIL]</span>
+                </div>
+            </div>
+            <div class="address">
+                <div>[SITE / ENTREPÔT]</div>
+                <div>[ADRESSE]</div>
+                <div>[VILLE, PROVINCE]</div>
+                <div>[PAYS]</div>
+                <br>
+                <div>Tél: [TÉLÉPHONE]</div>
+                <div>[ADRESSE COMPLÉMENTAIRE]</div>
+            </div>
+        </section>
+
+        <div class="rule"></div>
+
+        <div class="title-row">
+            <div class="title">QUOTATION : [NUMÉRO]</div>
+            <div class="date">[VILLE], [DATE]</div>
+        </div>
+
+        <div class="client-row">
+            <div>Client: <strong>[CLIENT]</strong></div>
+        </div>
+        <div class="quote-no">QUOTE [RÉFÉRENCE]</div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>Line<br>N°</th>
+                <th>Item Number / Description</th>
+                <th>Quantity</th>
+                <th>U/M</th>
+                <th>Unit<br>Price</th>
+                <th>Currency</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>1</td>
+                <td>[DESCRIPTION ARTICLE 1]</td>
+                <td>[25,00]</td>
+                <td>EA</td>
+                <td>[9,25]</td>
+                <td>[231,25]</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>[DESCRIPTION ARTICLE 2]</td>
+                <td>[150,00]</td>
+                <td>EA</td>
+                <td>[6,23]</td>
+                <td>[934,50]</td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="subtotal">
+            <div class="sub-label">SUB TOTAL</div>
+            <div class="money">
+                <div class="money-row"><div class="label">$</div><div class="val">[1 165,75]</div></div>
+                <div class="money-row"><div class="label">V AT 16%</div><div class="val">$ &nbsp; [186,52]</div></div>
+                <div class="money-row"><div class="label">TOTAL</div><div class="val">$ &nbsp; [1 352,27]</div></div>
+            </div>
+        </div>
+
+        <section class="lower">
+            <div class="terms">
+                Time delivery: [5-7 days]<br>
+                Payment terms:<br>
+                [30 days from the date of service delivery.]<br><br>
+                A/C Number:<br>
+                [BANK / ACCOUNT PLACEHOLDER]
+            </div>
+            <div class="signature">
+                <div>AMC</div>
+                <div style="margin-top:4mm">[AUTHORIZED PERSON]</div>
+                <div class="sigbox">
+                    <div class="fake-stamp">SPECIMEN<br>NOT VALID</div>
+                    <div class="fake-sign">Signature</div>
+                </div>
+                Manager
+            </div>
+        </section>
+    </div>
+
+    <div class="footer"><b>Adresse</b> : [ADRESSE — VILLE / PROVINCE / PAYS]</div>
+    <div class="note">Maquette visuelle uniquement — ne constitue pas une facture ou un document commercial valide.</div>
+</div>
+</body>
+</html>
