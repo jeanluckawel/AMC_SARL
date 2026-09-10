@@ -4,65 +4,74 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-
+        /*
+        |--------------------------------------------------------------------------
+        | IT - ALL PERMISSIONS
+        |--------------------------------------------------------------------------
+        */
         $it = Role::findByName('IT', 'web');
-        $it->syncPermissions([
-            'users.view',
-            'users.create',
-            'users.edit',
-            'users.delete',
 
-            'roles.view',
-            'roles.create',
-            'roles.edit',
-            'roles.delete',
-
-            'permissions.view',
-            'permissions.create',
-            'permissions.edit',
-            'permissions.delete',
-
-            'employees.view',
-            'departments.view',
-            'sections.view',
-            'job_titles.view',
-
-            'reports.view',
-            'reports.export',
-        ]);
+        $it->syncPermissions(
+            Permission::where('guard_name', 'web')->get()
+        );
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | MD
+        |--------------------------------------------------------------------------
+        */
         $md = Role::findByName('MD', 'web');
+
         $md->syncPermissions([
             'employees.view',
             'departments.view',
             'sections.view',
             'job_titles.view',
             'salaries.view',
+
             'reports.view',
             'reports.export',
         ]);
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | CEO
+        |--------------------------------------------------------------------------
+        */
         $ceo = Role::findByName('CEO', 'web');
+
         $ceo->syncPermissions([
             'employees.view',
             'departments.view',
             'sections.view',
             'job_titles.view',
             'salaries.view',
+
             'reports.view',
             'reports.create',
             'reports.export',
+
+            'ceo.view',
+            'ceo.approve',
+            'ceo.reject',
         ]);
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | HR
+        |--------------------------------------------------------------------------
+        */
         $hr = Role::findByName('HR', 'web');
+
         $hr->syncPermissions([
             'employees.view',
             'employees.create',
@@ -97,32 +106,55 @@ class RolePermissionSeeder extends Seeder
         ]);
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | HSE
+        |--------------------------------------------------------------------------
+        */
         $hse = Role::findByName('HSE', 'web');
+
         $hse->syncPermissions([
             'employees.view',
             'employees.edit',
+
             'departments.view',
             'sections.view',
             'job_titles.view',
+
             'reports.view',
             'reports.export',
         ]);
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | LOGISTICS
+        |--------------------------------------------------------------------------
+        */
         $logistics = Role::findByName('Logistics', 'web');
+
         $logistics->syncPermissions([
             'employees.view',
+
             'departments.view',
             'sections.view',
             'job_titles.view',
+
             'reports.view',
             'reports.export',
         ]);
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | EMPLOYEE
+        |--------------------------------------------------------------------------
+        */
         $employee = Role::findByName('Employee', 'web');
+
         $employee->syncPermissions([
             'employees.view',
         ]);
     }
 }
+

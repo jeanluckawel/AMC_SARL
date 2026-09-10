@@ -22,6 +22,8 @@ enum PerPage: int
 
     case FIVE_HUNDRED_THOUSAND = 50000;
 
+    case TEN_MILLION = 10000000;
+
     public static function values(): array
     {
         return array_map(

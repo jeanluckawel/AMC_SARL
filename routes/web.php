@@ -1,21 +1,29 @@
 <?php
 
+use App\Enums\RequestDecision;
 use App\Http\Controllers\AuditLogController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\departmentBudgetsController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\RequestManagementController;
 use App\Http\Controllers\UserController;
+use App\Models\RequestModel;
+use App\Models\RequestStep;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+//Route::get('/dashboard', function () {
+//    return view('dashboard');
+//})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -30,7 +38,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/employees-create', [EmployeeController::class, 'create'])
         ->name('employees.create');
 
-    Route::get('/employees/{employee}/profile', [EmployeeController::class, 'profile'])
+    Route::get('/employees-{employee}-profile', [EmployeeController::class, 'profile'])
         ->name('employees.profile');
 
     Route::post('/employees', [EmployeeController::class, 'store'])
@@ -57,6 +65,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/roles', [UserController::class, 'role'])
         ->name('roles.index');
 
+    Route::get('/roles-{role}-edit', [UserController::class, 'editRole']) ->name('roles.edit');
+
+    Route::put('/roles-{role}', [UserController::class, 'updateRole']) ->name('roles.update');
+
+    Route::get('/users-{user}-edit', [UserController::class, 'edit']) ->name('users.edit');
+    Route::put('/users-{user}', [UserController::class, 'update']) ->name('users.update');
+
     Route::get('/audit-logs', [AuditLogController::class, 'index'])
         ->name('audit-logs.index');
 
@@ -82,7 +97,24 @@ Route::middleware('auth')->group(function () {
     Route::get('/requests-create', [RequestManagementController::class, 'create',])->name('requests.create');
     Route::post('/requests', [RequestManagementController::class, 'store',])->name('requests.store');
 
-    Route::get('/requests/{requestModel}', [RequestManagementController::class, 'show',])->name('requests.show');
+    Route::get('/requests-{requestModel}', [RequestManagementController::class, 'show',])->name('requests.show');
+
+
+//     finance
+
+    Route::get(
+        '/department-budgets',
+        [\App\Http\Controllers\DepartmentBudgetsController::class, 'departmentBudgets']
+    )->name('finance.department-budgets');
+
+    Route::get('/dashboard', [\App\Http\Controllers\DashboardController::class,'index'])->name('dashboard');
+
+//    Route::get(
+//        '/requests/recent',
+//        [DashboardController::class, 'recentRequests']
+//    )->name('requests.recent');
+
+
 
 //    Route::get( '/procurement-pending', [RequestManagementController::class, 'ProcurementPending'] )->name('procurement.pending');
 //
@@ -235,7 +267,7 @@ Route::middleware([
      * =========================================================
      */
     Route::get(
-        '/procurement-requests/{requestModel}-process',
+        '/procurement-requests-{requestModel}-process',
         [
             RequestManagementController::class,
             'processProcurement'
@@ -277,21 +309,173 @@ Route::middleware([
     );
 
 
+    Route::get(
+        '/requests-approved',
+        [RequestManagementController::class, 'approvedProcurementRequests']
+    )->name('requests.approved');
+
+    Route::get(
+        '/requests-rejected',
+        [RequestManagementController::class, 'rejectedRProcurementequests']
+    )->name('procurement.requests.rejected');
 
 
-        Route::get(
-            '/requests-approved',
-            [RequestManagementController::class, 'approvedProcurementRequests']
-        )->name('requests.approved');
+//         finance
 
-        Route::get(
-            '/requests-rejected',
-            [RequestManagementController::class, 'rejectedRProcurementequests']
-        )->name('procurement.requests.rejected');
+    Route::get(
+        '/finance-pending',
+        [
+            RequestManagementController::class,
+            'FinancePending'
+        ]
+    )->name(
+        'finance.pending'
+    );
 
+
+    Route::get(
+        '/finance-requests-{requestModel}-process',
+        [
+            RequestManagementController::class,
+            'processFinance',
+        ]
+    )->name(
+        'finance.requests.process');
+
+    Route::post(
+        '/finance/requests/{requestModel}/approve',
+        [RequestManagementController::class, 'approveFinanceRequest']
+    )->name('finance.requests.approve');
+
+    Route::post(
+        '/finance/requests/{requestModel}/reject',
+        [RequestManagementController::class, 'rejectFinanceRequest']
+    )->name('finance.requests.reject');
+
+
+    Route::get(
+        '/finance-approved',
+        [RequestManagementController::class, 'approvedFinanceRequests']
+    )->name('finance.approved');
+
+
+    Route::get(
+        '/rejected',
+        [RequestManagementController::class, 'rejectedFinanceRequests']
+    )->name('finance.rejected');
+
+
+
+//    ceo
+
+    /*
+|--------------------------------------------------------------------------
+| CEO
+|--------------------------------------------------------------------------
+*/
+
+    Route::get(
+        '/ceo-pending',
+        [RequestManagementController::class, 'CeoPending']
+    )->name('ceo.pending');
+
+
+    Route::get(
+        '/ceo-requests-{requestModel}-process',
+        [RequestManagementController::class, 'processCeo']
+    )->name('ceo.requests.process');
+
+
+    Route::post(
+        '/ceo-requests-{requestModel}-approve',
+        [RequestManagementController::class, 'approveCeoRequest']
+    )->name('ceo.requests.approve');
+
+
+    Route::post(
+        '/ceo-requests-{requestModel}-reject',
+        [RequestManagementController::class, 'cancelCeoRequest']
+    )->name('ceo.requests.reject');
+
+
+    Route::get(
+        '/ceo-approved',
+        [RequestManagementController::class, 'approvedCeoRequests']
+    )->name('ceo.approved');
+
+
+    Route::get(
+        '/ceo-rejected',
+        [RequestManagementController::class, 'rejectedCeoRequests']
+    )->name('ceo.rejected');
+
+
+// end ceo
+
+
+    Route::get(
+        '/finance-department-budgets-create-{department}',
+        [departmentBudgetsController::class, 'create']
+    )->name('finance.department-budgets.create');
+
+    Route::post(
+        '/finance-department-budgets',
+        [departmentBudgetsController::class, 'store']
+    )->name('finance.department-budgets.store');
+
+
+    Route::get(
+        '/finance-department-budgets-edit-{departmentBudget}',
+        [departmentBudgetsController::class, 'edit']
+    )->name('finance.department-budgets.edit');
+
+    Route::put(
+        '/finance-department-budgets-{departmentBudget}',
+        [departmentBudgetsController::class, 'update']
+    )->name('finance.department-budgets.update');
+
+//    Route::resource('quotations', QuotationController::class);
+
+    Route::get('/quotations', [QuotationController::class, 'index'])->name('quotations.index');
+
+    Route::get('/quotations-create', [QuotationController::class, 'create'])->name('quotations.create');
+
+    Route::post('/quotations', [QuotationController::class, 'store'])->name('quotations.store');
+    Route::get('/quotations-{quotation}', [QuotationController::class, 'show'])->name('quotations.show');
+    Route::get('/quotations/{quotation}/edit', [QuotationController::class, 'edit'])->name('quotations.edit');
+    Route::put('/quotations/{quotation}', [QuotationController::class, 'update'])->name('quotations.update');
+    Route::delete('/quotations/{quotation}', [QuotationController::class, 'destroy'])->name('quotations.destroy');
+//    Route::get('/quotations/{quotation}/print', [QuotationController::class, 'print'])->name('quotations.print');
+//    Route::get('/quotations/{quotation}/download', [QuotationController::class, 'download'])->name('quotations.download')
+
+
+//     PO
+
+    Route::get('/purchase-orders', [PurchaseOrderController::class, 'index'])
+        ->name('purchase-orders.index')
+        ->middleware('can:purchase_orders.view');
+
+    Route::get('/purchase-orders-create-{quotation}', [PurchaseOrderController::class, 'create'])
+        ->name('purchase-orders.create')
+        ->middleware('can:purchase_orders.create');
+
+    Route::post('/purchase-orders', [PurchaseOrderController::class, 'store'])
+        ->name('purchase-orders.store')
+        ->middleware('can:purchase_orders.create');
+
+    Route::get('/purchase-orders/{purchaseOrder}', [PurchaseOrderController::class, 'show'])
+        ->name('purchase-orders.show')
+        ->middleware('can:purchase_orders.view');
+
+    Route::get('/purchase-orders/{purchaseOrder}/download', [PurchaseOrderController::class, 'download'])
+        ->name('purchase-orders.download')
+        ->middleware('can:purchase_orders.view');
+
+    Route::delete('/purchase-orders/{purchaseOrder}', [PurchaseOrderController::class, 'destroy'])
+        ->name('purchase-orders.destroy')
+        ->middleware('can:purchase_orders.delete');
 
 
 });
-
 
 require __DIR__.'/auth.php';

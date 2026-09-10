@@ -1,84 +1,478 @@
-<!doctype html>
-<html lang="en">
-<!--begin::Head-->
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>AdminLTE 4 | Sidebar Mini</title>
+@extends('layouts.admin')
 
-    <!--begin::Accessibility Meta Tags-->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-    <meta name="color-scheme" content="light dark" />
-    <meta name="theme-color" content="#007bff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1a1a1a" media="(prefers-color-scheme: dark)" />
-    <!--end::Accessibility Meta Tags-->
+@section('title', 'Request')
 
-    <!--begin::Primary Meta Tags-->
-    <meta name="title" content="AdminLTE 4 | Sidebar Mini" />
-    <meta name="author" content="ColorlibHQ" />
-    <meta
-        name="description"
-        content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS. Fully accessible with WCAG 2.1 AA compliance."
-    />
-    <meta
-        name="keywords"
-        content="bootstrap 5, bootstrap, bootstrap 5 admin dashboard, bootstrap 5 dashboard, bootstrap 5 charts, bootstrap 5 calendar, bootstrap 5 datepicker, bootstrap 5 tables, bootstrap 5 datatable, vanilla js datatable, colorlibhq, colorlibhq dashboard, colorlibhq admin dashboard, accessible admin panel, WCAG compliant"
-    />
-    <!--end::Primary Meta Tags-->
+@section('content')
 
-    <!--begin::Accessibility Features-->
-    <!-- Skip links will be dynamically added by accessibility.js -->
-    <meta name="supported-color-schemes" content="light dark" />
-    <link rel="preload" href="../css/adminlte.css" as="style" />
-    <!--end::Accessibility Features-->
+    <style>
 
-    <!--begin::Fonts-->
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
-        integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="
-        crossorigin="anonymous"
-        media="print"
-        onload="this.media = 'all'"
-    />
-    <!--end::Fonts-->
+        /* =========================================================
+           A4 DOCUMENT
+        ========================================================== */
 
-    <!--begin::Third Party Plugin(OverlayScrollbars)-->
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/styles/overlayscrollbars.min.css"
-        crossorigin="anonymous"
-    />
-    <!--end::Third Party Plugin(OverlayScrollbars)-->
+        body {
+            background: #f1f3f5;
+        }
 
-    <!--begin::Third Party Plugin(Bootstrap Icons)-->
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
-        crossorigin="anonymous"
-    />
-    <!--end::Third Party Plugin(Bootstrap Icons)-->
+        .request-wrapper {
+            position: relative;
+            width: fit-content;
+            margin: 0 auto;
+        }
 
-    <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="../css/adminlte.css" />
-    <!--end::Required Plugin(AdminLTE)-->
-</head>
-<!--end::Head-->
-<!--begin::Body-->
-<body class="layout-fixed sidebar-expand-lg sidebar-mini bg-body-tertiary">
-<!--begin::App Wrapper-->
-<div class="app-wrapper">
+        .request-page {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 15px auto;
+            background: #fff;
+            padding: 10mm 11mm;
+            box-sizing: border-box;
+            box-shadow: 0 3px 18px rgba(0, 0, 0, .12);
+        }
 
-    @include('components.navbar')
+        /* =========================================================
+           DOWNLOAD ACTION
+        ========================================================== */
 
-    @include('components.sidebar')
-    <!--begin::App Main-->
+        .request-actions {
+            position: absolute;
+            top: 25px;
+            right: 15px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all .2s ease;
+        }
 
-    <main class="app-main">
+        .request-wrapper:hover .request-actions {
+            opacity: 1;
+            visibility: visible;
+        }
 
-        <style>
-            * {
-                box-sizing: border-box;
+        .request-download-btn {
+            border: 0;
+            background: #4f8136;
+            color: #fff;
+            padding: 8px 13px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
+        }
+
+        .request-download-btn:hover {
+            background: #3f692b;
+            color: #fff;
+        }
+
+        /* =========================================================
+           DOCUMENT
+        ========================================================== */
+
+        .request-preview {
+            width: 100%;
+            background: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #111;
+            font-size: 12px;
+        }
+
+        /* =========================================================
+           TOP
+        ========================================================== */
+
+        .request-top {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            min-height: 135px;
+        }
+
+        .request-brand {
+            font-size: 32px;
+            font-weight: 800;
+            font-style: italic;
+            color: #555;
+            letter-spacing: -2px;
+        }
+
+        .request-meta {
+            margin-top: 10px;
+            font-size: 10px;
+            line-height: 1.6;
+        }
+
+        .request-meta .blue {
+            color: #0879c9;
+        }
+
+        .request-information {
+            font-size: 11px;
+            line-height: 1.7;
+            text-align: justify;
+            text-justify: inter-word;
+        }
+
+        .request-information strong {
+            font-weight: 800;
+        }
+
+        /* =========================================================
+           ORANGE RULE
+        ========================================================== */
+
+        .request-rule {
+            height: 2px;
+            background: #f47721;
+            margin: 8px 12px 14px;
+        }
+
+        /* =========================================================
+           TITLE
+        ========================================================== */
+
+        .request-title-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            border: 1px solid #222;
+            min-height: 45px;
+        }
+
+        .request-title {
+            background: #4f8136;
+            color: #000;
+            font-size: 17px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .request-date {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        /* =========================================================
+           REQUEST REFERENCE
+        ========================================================== */
+
+        .request-reference-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 11px;
+        }
+
+        .request-reference {
+            font-weight: 700;
+        }
+
+        .request-type {
+            font-weight: 700;
+            text-align: right;
+        }
+
+        /* =========================================================
+           ITEMS TABLE
+        ========================================================== */
+
+        .request-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-top: 9px;
+            font-size: 10px;
+        }
+
+        .request-table th,
+        .request-table td {
+            border: 1px solid #222;
+            padding: 8px 5px;
+            vertical-align: middle;
+        }
+
+        .request-table th {
+            background: #d9d9d9;
+            text-align: center;
+            font-weight: 800;
+            font-size: 10px;
+        }
+
+        .request-table th:nth-child(1) {
+            width: 7%;
+        }
+
+        .request-table th:nth-child(2) {
+            width: 38%;
+        }
+
+        .request-table th:nth-child(3) {
+            width: 11%;
+        }
+
+        .request-table th:nth-child(4) {
+            width: 10%;
+        }
+
+        .request-table th:nth-child(5) {
+            width: 17%;
+        }
+
+        .request-table th:nth-child(6) {
+            width: 17%;
+        }
+
+        .request-table td {
+            text-align: center;
+        }
+
+        .request-table td:nth-child(2) {
+            text-align: left;
+            word-break: break-word;
+        }
+
+        .request-table td:nth-child(5),
+        .request-table td:nth-child(6) {
+            text-align: right;
+        }
+
+        .request-empty {
+            text-align: center !important;
+            color: #777;
+            padding: 20px !important;
+        }
+
+        /* =========================================================
+           TOTALS
+        ========================================================== */
+
+        .request-total-section {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: 1fr 190px;
+            align-items: stretch;
+        }
+
+        .request-total-label {
+            background: #d9d9d9;
+            border: 1px solid #222;
+            border-right: 0;
+            font-weight: 800;
+            text-align: center;
+            padding: 8px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .request-money {
+            border: 1px solid #222;
+            font-size: 10px;
+        }
+
+        .request-money-row {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+        }
+
+        .request-money-row > div {
+            border-bottom: 1px solid #222;
+            padding: 7px;
+        }
+
+        .request-money-row:last-child > div {
+            border-bottom: 0;
+        }
+
+        .request-money-row .label {
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .request-money-row .value {
+            text-align: right;
+            font-weight: 800;
+            padding-right: 8px;
+        }
+
+        /* =========================================================
+           APPROVAL SECTION
+        ========================================================== */
+
+        .request-approval-title {
+            margin-top: 28px;
+            border: 1px solid #222;
+            background: #d9d9d9;
+            padding: 8px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .request-approval {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .request-approval-box {
+            border: 1px solid #222;
+            min-height: 85px;
+            text-align: center;
+        }
+
+        .request-approval-header {
+            background: #d9d9d9;
+            border-bottom: 1px solid #222;
+            padding: 7px;
+            font-size: 10px;
+            font-weight: 800;
+        }
+
+        .request-approval-body {
+            padding: 12px 5px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .request-approved {
+            color: #4f8136;
+        }
+
+        .request-rejected {
+            color: #8b0000;
+        }
+
+        .request-pending {
+            color: #555;
+        }
+
+        /* =========================================================
+           LOWER SECTION
+        ========================================================== */
+
+        .request-lower {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 28px;
+        }
+
+        .request-terms {
+            text-align: center;
+            font-size: 10px;
+            font-weight: 700;
+            line-height: 1.8;
+            padding-top: 3px;
+        }
+
+        .request-signature {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* =========================================================
+           FOOTER
+        ========================================================== */
+
+        .request-footer {
+            margin-top: 120px;
+            border-top: 1px solid #f47721;
+            padding-top: 8px;
+            font-size: 9px;
+            line-height: 1.5;
+            text-align: center;
+        }
+
+        .request-footer b {
+            display: inline;
+            width: auto;
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================== */
+
+        @media (max-width: 900px) {
+
+            body {
+                background: #fff;
             }
+
+            .request-wrapper {
+                width: 100%;
+            }
+
+            .request-page {
+                width: 100%;
+                min-height: auto;
+                margin: 0;
+                padding: 20px;
+                box-shadow: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .request-page {
+                padding: 15px;
+            }
+
+            .request-top {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .request-information {
+                text-align: justify;
+            }
+
+            .request-title {
+                font-size: 14px;
+            }
+
+            .request-table {
+                font-size: 8px;
+            }
+
+            .request-table th,
+            .request-table td {
+                padding: 5px 3px;
+            }
+
+            .request-total-section {
+                grid-template-columns: 1fr;
+            }
+
+            .request-total-label {
+                border-right: 1px solid #222;
+                border-bottom: 0;
+            }
+
+            .request-approval {
+                grid-template-columns: 1fr;
+            }
+
+            .request-lower {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+
+        /* =========================================================
+           PRINT A4
+        ========================================================== */
+
+        @media print {
 
             @page {
                 size: A4;
@@ -87,513 +481,213 @@
 
             html,
             body {
-                margin: 0;
-                background: #eee;
-            }
-
-            body {
-                font-family: sans-serif;
-                color: #111;
-            }
-
-
-            /* =====================================================
-               PAGE
-            ===================================================== */
-
-            .page {
                 width: 210mm;
                 min-height: 297mm;
-                margin: 12px auto;
-                background: #fff;
-                position: relative;
-                padding: 12mm 12mm 18mm;
-                overflow: hidden;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #fff !important;
             }
 
-            .content {
-                position: relative;
-                z-index: 1;
+            .request-actions {
+                display: none !important;
             }
 
-
-            /* =====================================================
-               HEADER
-            ===================================================== */
-
-            .top {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 14mm;
-                min-height: 53mm;
+            .request-wrapper {
+                width: 210mm;
+                margin: 0;
             }
 
-            .brand {
-                display: flex;
-                align-items: flex-start;
-                gap: 7px;
+            .request-page {
+                width: 210mm;
+                min-height: 297mm;
+                margin: 0;
+                padding: 10mm 11mm;
+                box-shadow: none;
             }
 
-            .logo {
-                width: 39mm;
-                height: 25mm;
-                border: 3px solid #555;
-                border-right-color: transparent;
-                border-bottom-color: transparent;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                position: relative;
-                margin-top: 1mm;
-            }
-
-            .logo b {
-                font-size: 23px;
-                font-style: italic;
-                color: #555;
-                letter-spacing: -2px;
-            }
-
-            .logo small {
-                position: absolute;
-                top: 17mm;
-                left: 8mm;
-                font-size: 6px;
-                font-weight: 700;
-                color: #555;
-            }
-
-            .logo:after {
-                content: "";
-                position: absolute;
-                width: 9mm;
-                height: 5mm;
-                border-radius: 70% 20%;
-                border-top: 5px solid #e31b23;
-                transform: rotate(-25deg);
-                left: 12mm;
-                top: 22mm;
-            }
-
-            .left-meta {
-                margin-top: 2mm;
-                font-size: 11.2px;
-                line-height: 1.28;
-            }
-
-            .left-meta .blue {
-                color: #0879c9;
-                text-decoration: underline;
-            }
-
-            .address {
-                font-size: 12px;
-                line-height: 1.27;
-            }
-
-            .rule {
-                height: 1px;
-                background: #f47721;
-                margin: 2mm 10mm 3mm;
-            }
-
-
-            /* =====================================================
-               TITLE
-            ===================================================== */
-
-            .title-row {
-                display: grid;
-                grid-template-columns: 2fr 1fr;
-                border: 1px solid #222;
-                height: 9mm;
-            }
-
-            .title {
-                background: #4f8136;
-                color: #000;
-                font-size: 17px;
-                font-weight: 800;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .date {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 11.5px;
-            }
-
-            .client-row {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-top: 1mm;
-                font-size: 11px;
-            }
-
-            .quote-no {
-                font-weight: 700;
-                margin-top: 2mm;
-                text-align: right;
-                font-size: 11px;
-            }
-
-
-            /* =====================================================
-               TABLE
-            ===================================================== */
-
-            table {
+            .request-preview {
                 width: 100%;
-                border-collapse: collapse;
-                table-layout: fixed;
-                margin-top: 1mm;
-                font-size: 10.5px;
             }
+        }
 
-            th,
-            td {
-                border: 1px solid #222;
-                padding: 2.8mm 1.2mm;
-                vertical-align: middle;
-            }
-
-            th {
-                background: #d9d9d9;
-                text-align: center;
-                font-weight: 800;
-            }
-
-            th:nth-child(1) {
-                width: 5.8%;
-            }
-
-            th:nth-child(2) {
-                width: 59%;
-            }
-
-            th:nth-child(3) {
-                width: 8%;
-            }
-
-            th:nth-child(4) {
-                width: 7%;
-            }
-
-            th:nth-child(5) {
-                width: 9%;
-            }
-
-            th:nth-child(6) {
-                width: 11.2%;
-            }
-
-            td:nth-child(1),
-            td:nth-child(3),
-            td:nth-child(4),
-            td:nth-child(5),
-            td:nth-child(6) {
-                text-align: center;
-            }
-
-            td:nth-child(5),
-            td:nth-child(6) {
-                text-align: right;
-                padding-right: 2mm;
-            }
+    </style>
 
 
-            /* =====================================================
-               TOTAL
-            ===================================================== */
+    {{-- =========================================================
+         REQUEST WRAPPER
+    ========================================================== --}}
 
-            .subtotal {
-                margin-top: 5mm;
-                display: grid;
-                grid-template-columns: 1fr 58mm;
-                align-items: stretch;
-            }
+    <div class="request-wrapper">
 
-            .sub-label {
-                background: #d9d9d9;
-                border: 1px solid #222;
-                border-right: 0;
-                font-weight: 800;
-                text-align: center;
-                padding: 1mm;
-                font-size: 14px;
-            }
+        {{-- =====================================================
+             DOWNLOAD BUTTON
+        ====================================================== --}}
 
-            .money {
-                border: 1px solid #222;
-                font-size: 12px;
-            }
+        <div class="request-actions">
 
-            .money-row {
-                display: grid;
-                grid-template-columns: 1fr 1.25fr;
-            }
+            <button
+                type="button"
+                class="request-download-btn"
+                onclick="downloadRequest()"
+                title="Download"
+            >
+                <i class="bi bi-download"></i>
+            </button>
 
-            .money-row > div {
-                border-bottom: 1px solid #222;
-                padding: 1mm;
-            }
-
-            .money-row:last-child > div {
-                border-bottom: 0;
-            }
-
-            .money-row .label {
-                font-weight: 800;
-                text-align: center;
-            }
-
-            .money-row .val {
-                text-align: right;
-                font-weight: 800;
-                padding-right: 4mm;
-            }
+        </div>
 
 
-            /* =====================================================
-               APPROVAL WORKFLOW
-            ===================================================== */
+        <div class="request-page">
 
-            .lower {
-                width: 100%;
-                margin-top: 10mm;
-            }
+            <div class="request-preview">
 
-            .approvals-section {
-                width: 92%;
-                margin: 0 auto;
-            }
+                {{-- =================================================
+                     COMPANY + REQUEST INFORMATION
+                ================================================== --}}
 
-            .approval-title {
-                width: 100%;
-                font-size: 11pt;
-                font-weight: 700;
-                text-transform: uppercase;
-                /*text-align: center;*/
-                border-bottom: 1px solid #222;
-                padding-bottom: 3mm;
-                margin-bottom: 5mm;
-            }
+                <section class="request-top">
 
-            /*
-             * Les trois blocs sont sur une seule ligne.
-             * La largeur est divisée équitablement.
-             */
-            .approvals {
-                width: 100%;
-                display: table;
-                table-layout: fixed;
-                border-collapse: separate;
-
-                /*
-                 * Même espace entre Procurement / Finance / CEO
-                 */
-                border-spacing: 5mm 0;
-            }
-
-            .approval-box {
-                display: table-cell;
-                width: 33.333%;
-                vertical-align: top;
-
-                border: 1px solid #cfcfcf;
-
-                padding: 4mm;
-
-                height: 24mm;
-
-                background: #fff;
-
-                text-align: center;
-            }
-
-            .approval-role {
-                font-size: 9pt;
-                font-weight: 700;
-                text-transform: uppercase;
-                margin-bottom: 4mm;
-                color: #222;
-            }
-
-            .approval-status {
-                font-size: 9pt;
-                font-weight: 700;
-                text-align: center;
-                color: #198754;
-            }
-
-            .approval-status.rejected {
-                color: #dc3545;
-            }
-
-            .approval-status.pending {
-                color: #6c757d;
-            }
-
-            .approval-status i {
-                font-size: 9pt;
-                margin-right: 2px;
-            }
-
-
-            /* =====================================================
-               FOOTER
-            ===================================================== */
-
-            .footer {
-                position: absolute;
-                left: 25mm;
-                right: 25mm;
-                bottom: 22mm;
-                border-top: 1px solid #f47721;
-                padding-top: 2mm;
-                font-size: 8px;
-            }
-
-            .footer b {
-                display: inline-block;
-                width: 24mm;
-            }
-
-            .note {
-                font-size: 8px;
-                color: #8b0000;
-                text-align: center;
-                margin-top: 2mm;
-                font-weight: 700;
-            }
-
-
-            /* =====================================================
-               PRINT
-            ===================================================== */
-
-            @media print {
-
-                html,
-                body {
-                    background: #fff;
-                }
-
-                .page {
-                    margin: 0;
-                    box-shadow: none;
-                }
-            }
-        </style>
-
-
-        <div class="page">
-
-            <div class="content">
-
-
-                <!-- =================================================
-                     HEADER
-                ================================================== -->
-
-                <section class="top">
-
+                    {{-- COMPANY --}}
                     <div>
 
-                        <div class="brand">
+                        <div class="request-brand">
 
-                            <div class="logo">
-                                <b>AMC</b>
-                                <small>AFRICA COMPANY</small>
-                            </div>
+                            <img
+                                src="{{ asset('logo/logo.png') }}"
+                                alt="AMC SARL"
+                                style="width: 120px; height: auto;"
+                            >
 
                         </div>
 
-
-                        <div class="left-meta">
+                        <div class="request-meta">
 
                             RCCM : CD/LSH/RCCM/21-B-00395<br>
+
                             Id. Nat: 05-F4300-N77755L<br>
+
                             NIF: A2158758R<br>
+
                             TVA : 6634/2022<br>
+
                             ARSP : 4885676212<br>
+
                             Tél. : +243 970 520 222<br>
 
                             Email:
                             <span class="blue">
-                            info@amc-sarl.com
-                        </span>
+                                info@amc-sarl.com
+                            </span>
 
                         </div>
 
                     </div>
 
 
-                    <div class="address">
+                    {{-- REQUEST INFORMATION --}}
+                    <div class="request-information">
 
-                        <div>[SITE / ENTREPÔT]</div>
-                        <div>[ADRESSE]</div>
-                        <div>[VILLE, PROVINCE]</div>
-                        <div>[PAYS]</div>
+                        <div>
+                            <strong>REQUEST INFORMATION</strong>
+                        </div>
 
                         <br>
 
-                        <div>Tél: [TÉLÉPHONE]</div>
-                        <div>[ADRESSE COMPLÉMENTAIRE]</div>
+                        <div>
+                            Reference:
+                            <strong>
+                                {{ $requestModel->reference ?? '-' }}
+                            </strong>
+                        </div>
+
+                        <div>
+                            Date:
+                            <strong>
+                                {{ $requestModel->created_at?->format('d/m/Y') ?? '-' }}
+                            </strong>
+                        </div>
+
+                        <div>
+                            Requester:
+                            <strong>
+                                {{ $requestModel->user?->name ?? '-' }}
+                            </strong>
+                        </div>
+
+                        <div>
+                            Department:
+                            <strong>
+                                {{ $requestModel->department?->name ?? '-' }}
+                            </strong>
+                        </div>
 
                     </div>
 
                 </section>
 
 
-                <div class="rule"></div>
+                {{-- =================================================
+                     ORANGE LINE
+                ================================================== --}}
+
+                <div class="request-rule"></div>
 
 
-                <!-- =================================================
+                {{-- =================================================
                      REQUEST TITLE
-                ================================================== -->
+                ================================================== --}}
 
-                <div class="title-row">
+                <div class="request-title-row">
 
-                    <div class="title">
-                        REQUEST : {{ $requestModel->reference ?? '-' }}
+                    <div class="request-title">
+
+                        REQUEST :
+
+                        <span style="margin-left: 7px;">
+                            {{ $requestModel->reference ?? '-' }}
+                        </span>
+
                     </div>
 
-                    <div class="date">
-                        Kolwezi,
+                    <div class="request-date">
+
                         {{ $requestModel->created_at?->format('d/m/Y') ?? '-' }}
+
                     </div>
 
                 </div>
 
 
-                <div class="client-row">
+                {{-- =================================================
+                     REQUEST REFERENCE
+                ================================================== --}}
 
-                    <div>
-                        Client:
-                        <strong>
-                            {{ $requestModel->id }}
-                        </strong>
+                <div class="request-reference-row">
+
+                    <div class="request-reference">
+
+                        Request Reference:
+
+                        <span>
+                            {{ $requestModel->reference ?? '-' }}
+                        </span>
+
+                    </div>
+
+                    <div class="request-type">
+
+                        PURCHASE REQUEST
+
                     </div>
 
                 </div>
 
 
-                <div class="quote-no">
-                    QUOTE {{ $requestModel->reference ?? '-' }}
-                </div>
-
-
-                <!-- =================================================
+                {{-- =================================================
                      ITEMS
-                ================================================== -->
+                ================================================== --}}
 
-                <table>
+                <table class="request-table">
 
                     <thead>
 
@@ -620,13 +714,12 @@
                         </th>
 
                         <th>
-                            Currency
+                            Amount
                         </th>
 
                     </tr>
 
                     </thead>
-
 
                     <tbody>
 
@@ -638,72 +731,24 @@
                                 {{ $index + 1 }}
                             </td>
 
-
                             <td>
-                                {{ $item->name }}
+                                {{ $item->name ?? '-' }}
                             </td>
 
-
                             <td>
-
-                                {{ rtrim(
-                                    rtrim(
-                                        number_format(
-                                            $item->quantity,
-                                            2,
-                                            '.',
-                                            ''
-                                        ),
-                                        '0'
-                                    ),
-                                    '.'
-                                ) }}
-
+                                {{ number_format((float) ($item->quantity ?? 0), 2) }}
                             </td>
 
-
                             <td>
-                                {{ $item->unit ?: '-' }}
+                                {{ $item->unit ?? '-' }}
                             </td>
 
-
                             <td>
-
-                                @if($item->unit_price !== null)
-
-                                    {{ number_format(
-                                        $item->unit_price,
-                                        2,
-                                        '.',
-                                        ','
-                                    ) }}
-
-                                @else
-
-                                    -
-
-                                @endif
-
+                                $ {{ number_format((float) ($item->unit_price ?? 0), 2) }}
                             </td>
 
-
                             <td>
-
-                                @if($item->total_price !== null)
-
-                                    {{ number_format(
-                                        $item->total_price,
-                                        2,
-                                        '.',
-                                        ','
-                                    ) }}
-
-                                @else
-
-                                    -
-
-                                @endif
-
+                                $ {{ number_format((float) ($item->total_price ?? 0), 2) }}
                             </td>
 
                         </tr>
@@ -712,11 +757,8 @@
 
                         <tr>
 
-                            <td
-                                colspan="6"
-                                style="text-align:center;"
-                            >
-                                No items found.
+                            <td colspan="6" class="request-empty">
+                                No items available
                             </td>
 
                         </tr>
@@ -728,79 +770,66 @@
                 </table>
 
 
-                <!-- =================================================
+                {{-- =================================================
                      TOTALS
-                ================================================== -->
+                ================================================== --}}
 
-                <div class="subtotal">
+                @php
 
-                    <div class="sub-label">
-                        SUB TOTAL
+                    $subtotal = (float) ($requestModel->total_amount ?? 0);
+
+                    $vat = ($subtotal * 16) / 100;
+
+                    $grandTotal = $subtotal + $vat;
+
+                @endphp
+
+
+                <div class="request-total-section">
+
+                    <div class="request-total-label">
+                        TOTALS
                     </div>
 
+                    <div class="request-money">
 
-                    <div class="money">
-
-                        <div class="money-row">
+                        {{-- SUB TOTAL --}}
+                        <div class="request-money-row">
 
                             <div class="label">
-                                $
+                                SUB TOTAL
                             </div>
 
-                            <div class="val">
-
-                                {{ number_format(
-                                    $requestModel->total_amount,
-                                    2,
-                                    '.',
-                                    ','
-                                ) }}
-
+                            <div class="value">
+                                $ {{ number_format($subtotal, 2) }}
                             </div>
 
                         </div>
 
 
-                        <div class="money-row">
+                        {{-- VAT --}}
+                        <div class="request-money-row">
 
                             <div class="label">
                                 VAT 16%
                             </div>
 
-                            <div class="val">
-
-                                $ &nbsp;
-
-                                {{ number_format(
-                                    ($requestModel->total_amount * 16) / 100,
-                                    2,
-                                    '.',
-                                    ','
-                                ) }}
-
+                            <div class="value">
+                                $ {{ number_format($vat, 2) }}
                             </div>
 
                         </div>
 
 
-                        <div class="money-row">
+                        {{-- TOTAL --}}
+                        <div class="request-money-row">
 
                             <div class="label">
                                 TOTAL
                             </div>
 
-                            <div class="val">
-
-                                $ &nbsp;
-
-                                {{ number_format(
-                                    $requestModel->total_amount +
-                                    (($requestModel->total_amount * 16) / 100),
-                                    2,
-                                    '.',
-                                    ','
-                                ) }}
-
+                            <div class="value">
+                                $ {{ number_format($grandTotal, 2) }}
                             </div>
 
                         </div>
@@ -810,183 +839,159 @@
                 </div>
 
 
-                <!-- =================================================
+                {{-- =================================================
                      APPROVAL WORKFLOW
-                ================================================== -->
+                ================================================== --}}
 
-                <section class="lower">
+                <div class="request-approval-title">
 
-                    <div class="approvals-section">
+                    APPROVAL WORKFLOW
 
-                        <div class="approval-title">
-                            Approval
+                </div>
+
+
+                @php
+
+                    $procurementStep = $requestModel->steps
+                        ->firstWhere('step.value', 'procurement');
+
+                    $financeStep = $requestModel->steps
+                        ->firstWhere('step.value', 'finance');
+
+                    $ceoStep = $requestModel->steps
+                        ->firstWhere('step.value', 'ceo');
+
+                @endphp
+
+
+                <section class="request-approval">
+
+                    {{-- PROCUREMENT --}}
+                    <div class="request-approval-box">
+
+                        <div class="request-approval-header">
+                            PROCUREMENT
                         </div>
 
+                        <div class="request-approval-body">
 
-                        <div class="approvals">
+                            @if($procurementStep)
 
+                                @if($procurementStep->decision?->value === 'approved')
 
-                            {{-- PROCUREMENT --}}
+                                    <span class="request-approved">
+                                        APPROVED
+                                    </span>
 
-                            @php
-                                $procurementStep = $requestModel->steps
-                                    ->firstWhere('step.value', 'procurement');
-                            @endphp
+                                @elseif($procurementStep->decision?->value === 'rejected')
 
-
-                            <div class="approval-box">
-
-                                <div class="approval-role">
-                                    Procurement
-                                </div>
-
-
-                                @if($procurementStep)
-
-                                    @if($procurementStep->decision->value === 'approved')
-
-                                        <div class="approval-status">
-
-                                            <i class="bi bi-check-circle me-1"></i>
-
-                                            Approved
-
-                                        </div>
-
-                                    @else
-
-                                        <div class="approval-status rejected">
-
-                                            <i class="bi bi-x-circle me-1"></i>
-
-                                            Rejected
-
-                                        </div>
-
-                                    @endif
+                                    <span class="request-rejected">
+                                        REJECTED
+                                    </span>
 
                                 @else
 
-                                    <div class="approval-status pending">
-
-                                        <i class="bi bi-clock me-1"></i>
-
-                                        Pending
-
-                                    </div>
+                                    <span class="request-pending">
+                                        {{ strtoupper($procurementStep->decision?->value ?? 'PENDING') }}
+                                    </span>
 
                                 @endif
 
-                            </div>
+                            @else
+
+                                <span class="request-pending">
+                                    PENDING
+                                </span>
+
+                            @endif
+
+                        </div>
+
+                    </div>
 
 
-                            {{-- FINANCE --}}
+                    {{-- FINANCE --}}
+                    <div class="request-approval-box">
 
-                            @php
-                                $financeStep = $requestModel->steps
-                                    ->firstWhere('step.value', 'finance');
-                            @endphp
+                        <div class="request-approval-header">
+                            FINANCE
+                        </div>
 
+                        <div class="request-approval-body">
 
-                            <div class="approval-box">
+                            @if($financeStep)
 
-                                <div class="approval-role">
-                                    Finance
-                                </div>
+                                @if($financeStep->decision?->value === 'approved')
 
+                                    <span class="request-approved">
+                                        APPROVED
+                                    </span>
 
-                                @if($financeStep)
+                                @elseif($financeStep->decision?->value === 'rejected')
 
-                                    @if($financeStep->decision->value === 'approved')
-
-                                        <div class="approval-status">
-
-                                            <i class="bi bi-check-circle me-1"></i>
-
-                                            Approved
-
-                                        </div>
-
-                                    @else
-
-                                        <div class="approval-status rejected">
-
-                                            <i class="bi bi-x-circle me-1"></i>
-
-                                            Rejected
-
-                                        </div>
-
-                                    @endif
+                                    <span class="request-rejected">
+                                        REJECTED
+                                    </span>
 
                                 @else
 
-                                    <div class="approval-status pending">
-
-                                        <i class="bi bi-clock me-1"></i>
-
-                                        Pending
-
-                                    </div>
+                                    <span class="request-pending">
+                                        {{ strtoupper($financeStep->decision?->value ?? 'PENDING') }}
+                                    </span>
 
                                 @endif
 
-                            </div>
+                            @else
+
+                                <span class="request-pending">
+                                    PENDING
+                                </span>
+
+                            @endif
+
+                        </div>
+
+                    </div>
 
 
-                            {{-- CEO --}}
+                    {{-- CEO --}}
+                    <div class="request-approval-box">
 
-                            @php
-                                $ceoStep = $requestModel->steps
-                                    ->firstWhere('step.value', 'ceo');
-                            @endphp
+                        <div class="request-approval-header">
+                            CEO
+                        </div>
 
+                        <div class="request-approval-body">
 
-                            <div class="approval-box">
+                            @if($ceoStep)
 
-                                <div class="approval-role">
-                                    CEO
-                                </div>
+                                @if($ceoStep->decision?->value === 'approved')
 
+                                    <span class="request-approved">
+                                        APPROVED
+                                    </span>
 
-                                @if($ceoStep)
+                                @elseif($ceoStep->decision?->value === 'rejected')
 
-                                    @if($ceoStep->decision->value === 'approved')
-
-                                        <div class="approval-status">
-
-                                            <i class="bi bi-check-circle me-1"></i>
-
-                                            Approved
-
-                                        </div>
-
-                                    @else
-
-                                        <div class="approval-status rejected">
-
-                                            <i class="bi bi-x-circle me-1"></i>
-
-                                            Rejected
-
-                                        </div>
-
-                                    @endif
+                                    <span class="request-rejected">
+                                        REJECTED
+                                    </span>
 
                                 @else
 
-                                    <div class="approval-status pending">
-
-                                        <i class="bi bi-clock me-1"></i>
-
-                                        Pending
-
-                                    </div>
+                                    <span class="request-pending">
+                                        {{ strtoupper($ceoStep->decision?->value ?? 'PENDING') }}
+                                    </span>
 
                                 @endif
 
-                            </div>
+                            @else
 
+                                <span class="request-pending">
+                                    PENDING
+                                </span>
+
+                            @endif
 
                         </div>
 
@@ -995,127 +1000,128 @@
                 </section>
 
 
+                {{-- =================================================
+                     TERMS + SIGNATURE
+                ================================================== --}}
+
+                <section class="request-lower">
+
+                    {{-- TERMS --}}
+                    <div class="request-terms">
+
+                        Request type:
+
+                        <span>
+                            Internal Purchase Request
+                        </span>
+
+                        <br>
+
+                        Approval required before procurement.
+
+                        <br><br>
+
+                        Currency:
+
+                        <span>
+                            USD
+                        </span>
+
+                    </div>
+
+
+                    {{-- SIGNATURE --}}
+                    <div class="request-signature">
+
+                        <div>
+                            AMC
+                        </div>
+
+                        <div style="margin-top:5px; margin-bottom:35px;">
+                            LUSHIKA KAFUKU Patient
+                        </div>
+
+                        <br><br>
+
+                        Manager
+
+                    </div>
+
+                </section>
+
+
+                {{-- =================================================
+                     ADDRESS - VERY BOTTOM
+                ================================================== --}}
+
+                <div class="request-footer">
+
+                    <b>Adresse</b> :
+
+                    ADRESSE : Av. Katakokombe Q/Kamanyola,
+                    V/Kolwezi, Lualaba/RDC
+
+                </div>
+
             </div>
-
-
-            <!-- =====================================================
-                 FOOTER
-            ====================================================== -->
-
-            <div class="footer">
-
-                <b>Adresse</b> :
-                [ADRESSE — VILLE / PROVINCE / PAYS]
-
-            </div>
-
-
-            <div class="note">
-
-               -------
-
-            </div>
-
 
         </div>
 
-    </main>
-
-    <!--end::App Main-->
-    <!--begin::Footer-->
-    @include('components.footer')
-    <!--end::Footer-->
-</div>
-<!--end::App Wrapper-->
-<!--begin::Script-->
-<!--begin::Third Party Plugin(OverlayScrollbars)-->
-<script
-    src="https://cdn.jsdelivr.net/npm/overlayscrollbars@2.11.0/browser/overlayscrollbars.browser.es6.min.js"
-    crossorigin="anonymous"
-></script>
-<!--end::Third Party Plugin(OverlayScrollbars)--><!--begin::Required Plugin(popperjs for Bootstrap 5)-->
-<script
-    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-    crossorigin="anonymous"
-></script>
-<!--end::Required Plugin(popperjs for Bootstrap 5)--><!--begin::Required Plugin(Bootstrap 5)-->
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js"
-    crossorigin="anonymous"
-></script>
-<!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-<script src="../js/adminlte.js"></script>
-<!--end::Required Plugin(AdminLTE)--><!--begin::OverlayScrollbars Configure-->
-
-<!--end::OverlayScrollbars Configure--><!--begin::Color Mode Toggle (#6010)-->
-<script>
-    (() => {
-        'use strict';
-
-        const STORAGE_KEY = 'lte-theme';
-
-        const getStoredTheme = () => localStorage.getItem(STORAGE_KEY);
-        const setStoredTheme = (theme) => localStorage.setItem(STORAGE_KEY, theme);
-
-        const prefersDark = () => globalThis.matchMedia('(prefers-color-scheme: dark)').matches;
-
-        const getPreferredTheme = () => {
-            const stored = getStoredTheme();
-            if (stored) return stored;
-            return prefersDark() ? 'dark' : 'light';
-        };
-
-        const setTheme = (theme) => {
-            const resolved = theme === 'auto' ? (prefersDark() ? 'dark' : 'light') : theme;
-            document.documentElement.setAttribute('data-bs-theme', resolved);
-        };
-
-        setTheme(getPreferredTheme());
-
-        const showActiveTheme = (theme) => {
-            // Highlight the active dropdown option
-            document.querySelectorAll('[data-bs-theme-value]').forEach((el) => {
-                el.classList.remove('active');
-                el.setAttribute('aria-pressed', 'false');
-                const check = el.querySelector('.bi-check-lg');
-                if (check) check.classList.add('d-none');
-            });
-            const active = document.querySelector(`[data-bs-theme-value="${theme}"]`);
-            if (active) {
-                active.classList.add('active');
-                active.setAttribute('aria-pressed', 'true');
-                const check = active.querySelector('.bi-check-lg');
-                if (check) check.classList.remove('d-none');
-            }
-            // Sync the topbar trigger icon
-            document.querySelectorAll('[data-lte-theme-icon]').forEach((icon) => {
-                icon.classList.toggle('d-none', icon.dataset.lteThemeIcon !== theme);
-            });
-        };
-
-        globalThis.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-            const stored = getStoredTheme();
-            if (!stored || stored === 'auto') setTheme(getPreferredTheme());
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            showActiveTheme(getPreferredTheme());
-            document.querySelectorAll('[data-bs-theme-value]').forEach((toggle) => {
-                toggle.addEventListener('click', () => {
-                    const theme = toggle.getAttribute('data-bs-theme-value');
-                    setStoredTheme(theme);
-                    setTheme(theme);
-                    showActiveTheme(theme);
-                });
-            });
-        });
-    })();
-</script>
-<!--end::Color Mode Toggle-->
-<!--end::Script-->
-</body>
-<!--end::Body-->
-</html>
+    </div>
 
 
+    {{-- =========================================================
+         HTML2PDF
+    ========================================================== --}}
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <script>
+
+        function downloadRequest() {
+
+            const element = document.querySelector('.request-page');
+
+            const requestReference = @json(
+                $requestModel->reference ?? 'Request'
+            );
+
+            const safeReference = requestReference
+                .toString()
+                .replace(/[^a-zA-Z0-9_-]/g, '-');
+
+            const options = {
+
+                margin: 0,
+
+                filename: 'Request-' + safeReference + '.pdf',
+
+                image: {
+                    type: 'jpeg',
+                    quality: 0.98
+                },
+
+                html2canvas: {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                },
+
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait'
+                }
+
+            };
+
+            html2pdf()
+                .set(options)
+                .from(element)
+                .save();
+
+        }
+
+    </script>
+
+@endsection

@@ -614,234 +614,156 @@
     ========================================================== --}}
 
     <script>
-
         document.addEventListener('DOMContentLoaded', function () {
 
+            const form = document.getElementById('requestForm');
+            const itemsContainer = document.getElementById('itemsContainer');
+            const addItemBtn = document.getElementById('addItemBtn');
+            const saveBtn = document.getElementById('saveBtn');
+            const saveSpinner = document.getElementById('saveSpinner');
+            const saveText = document.getElementById('saveText');
 
-            const form =
-                document.getElementById('requestForm');
-
-            const itemsContainer =
-                document.getElementById('itemsContainer');
-
-            const addItemBtn =
-                document.getElementById('addItemBtn');
-
-            const saveBtn =
-                document.getElementById('saveBtn');
-
-            const saveSpinner =
-                document.getElementById('saveSpinner');
-
-            const saveText =
-                document.getElementById('saveText');
-
-
-            let itemIndex =
-                itemsContainer.querySelectorAll('.item-card').length;
-
+            let itemIndex = itemsContainer.querySelectorAll('.item-card').length;
 
             /* =====================================================
                ADD ITEM
             ====================================================== */
 
-            addItemBtn.addEventListener(
-                'click',
-                function () {
+            addItemBtn.addEventListener('click', function () {
 
+                const index = itemIndex++;
 
-                    const index =
-                        itemIndex++;
+                const itemCard = document.createElement('div');
 
+                itemCard.className = 'item-card';
+                itemCard.dataset.itemIndex = index;
 
-                    const itemCard =
-                        document.createElement('div');
+                itemCard.innerHTML = `
+                <div class="item-card-header">
 
+                    <span class="item-number">
+                        <i class="bi bi-box me-1"></i>
+                        Item
+                        <span class="item-number-value"></span>
+                    </span>
 
-                    itemCard.className =
-                        'item-card';
+                    <button
+                        type="button"
+                        class="btn btn-sm btn-outline-danger remove-item-btn"
+                    >
+                        <i class="bi bi-trash me-1"></i>
+                        Remove
+                    </button>
 
+                </div>
 
-                    itemCard.dataset.itemIndex =
-                        index;
+                <div class="row g-3">
 
+                    <div class="col-12 col-md-6">
 
-                    itemCard.innerHTML = `
+                        <label class="form-label">
+                            Item Name
+                            <span class="text-danger">*</span>
+                        </label>
 
-                        <div class="item-card-header">
+                        <input
+                            type="text"
+                            name="items[${index}][name]"
+                            class="form-control"
+                            placeholder="Example: Cement"
+                            maxlength="255"
+                            required
+                        >
 
-                            <span class="item-number">
+                    </div>
 
-                                <i class="bi bi-box me-1"></i>
+                    <div class="col-12 col-md-3">
 
-                                Item
+                        <label class="form-label">
+                            Quantity
+                            <span class="text-danger">*</span>
+                        </label>
 
-                                <span class="item-number-value"></span>
+                        <input
+                            type="number"
+                            name="items[${index}][quantity]"
+                            class="form-control"
+                            value="1"
+                            min="0.01"
+                            step="0.01"
+                            required
+                        >
 
-                            </span>
+                    </div>
 
+                    <div class="col-12 col-md-3">
 
-                            <button
-                                type="button"
-                                class="btn btn-sm btn-outline-danger remove-item-btn"
-                            >
+                        <label class="form-label">
+                            Unit
+                        </label>
 
-                                <i class="bi bi-trash me-1"></i>
+                        <input
+                            type="text"
+                            name="items[${index}][unit]"
+                            class="form-control"
+                            placeholder="pcs, kg, m³..."
+                            maxlength="100"
+                        >
 
-                                Remove
+                    </div>
 
-                            </button>
+                </div>
+            `;
 
-                        </div>
+                itemsContainer.appendChild(itemCard);
 
+                updateItemNumbers();
+                updateRemoveButtons();
+                reindexItems();
 
-                        <div class="row g-3">
+                const nameInput = itemCard.querySelector(
+                    'input[name*="[name]"]'
+                );
 
-
-                            <div class="col-12 col-md-6">
-
-                                <label class="form-label">
-
-                                    Item Name
-
-                                    <span class="text-danger">*</span>
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="items[${index}][name]"
-                                    class="form-control"
-                                    placeholder="Example: Cement"
-                                    maxlength="255"
-                                    required
-                                >
-
-                            </div>
-
-
-                            <div class="col-12 col-md-3">
-
-                                <label class="form-label">
-
-                                    Quantity
-
-                                    <span class="text-danger">*</span>
-
-                                </label>
-
-                                <input
-                                    type="number"
-                                    name="items[${index}][quantity]"
-                                    class="form-control"
-                                    value="1"
-                                    min="0.01"
-                                    step="0.01"
-                                    required
-                                >
-
-                            </div>
-
-
-                            <div class="col-12 col-md-3">
-
-                                <label class="form-label">
-
-                                    Unit
-
-                                </label>
-
-                                <input
-                                    type="text"
-                                    name="items[${index}][unit]"
-                                    class="form-control"
-                                    placeholder="pcs, kg, m³..."
-                                    maxlength="100"
-                                >
-
-                            </div>
-
-
-                        </div>
-
-                    `;
-
-
-                    itemsContainer.appendChild(itemCard);
-
-
-                    updateItemNumbers();
-
-                    updateRemoveButtons();
-
-
-                    const nameInput =
-                        itemCard.querySelector(
-                            'input[name*="[name]"]'
-                        );
-
-
-                    if (nameInput) {
-                        nameInput.focus();
-                    }
-
+                if (nameInput) {
+                    nameInput.focus();
                 }
-            );
+            });
 
 
             /* =====================================================
                REMOVE ITEM
             ====================================================== */
 
-            itemsContainer.addEventListener(
-                'click',
-                function (event) {
+            itemsContainer.addEventListener('click', function (event) {
 
+                const button = event.target.closest('.remove-item-btn');
 
-                    const button =
-                        event.target.closest(
-                            '.remove-item-btn'
-                        );
-
-
-                    if (!button) {
-                        return;
-                    }
-
-
-                    const itemCard =
-                        button.closest('.item-card');
-
-
-                    if (!itemCard) {
-                        return;
-                    }
-
-
-                    const itemCount =
-                        itemsContainer.querySelectorAll(
-                            '.item-card'
-                        ).length;
-
-
-                    /*
-                     * At least one item is required.
-                     */
-
-                    if (itemCount <= 1) {
-                        return;
-                    }
-
-
-                    itemCard.remove();
-
-
-                    updateItemNumbers();
-
-                    updateRemoveButtons();
-
+                if (!button) {
+                    return;
                 }
-            );
+
+                const itemCard = button.closest('.item-card');
+
+                if (!itemCard) {
+                    return;
+                }
+
+                const itemCards = itemsContainer.querySelectorAll('.item-card');
+
+                /*
+                 * At least one item is required.
+                 */
+                if (itemCards.length <= 1) {
+                    return;
+                }
+
+                itemCard.remove();
+
+                updateItemNumbers();
+                updateRemoveButtons();
+                reindexItems();
+            });
 
 
             /* =====================================================
@@ -850,33 +772,57 @@
 
             function updateItemNumbers() {
 
+                const cards = itemsContainer.querySelectorAll('.item-card');
 
-                const cards =
-                    itemsContainer.querySelectorAll(
-                        '.item-card'
+                cards.forEach(function (card, index) {
+
+                    const number = card.querySelector(
+                        '.item-number-value'
                     );
 
-
-                cards.forEach(
-                    function (card, index) {
-
-
-                        const number =
-                            card.querySelector(
-                                '.item-number-value'
-                            );
-
-
-                        if (number) {
-
-                            number.textContent =
-                                index + 1;
-
-                        }
-
+                    if (number) {
+                        number.textContent = index + 1;
                     }
-                );
+                });
+            }
 
+
+            /* =====================================================
+               REINDEX ITEMS
+            ====================================================== */
+
+            function reindexItems() {
+
+                const cards = itemsContainer.querySelectorAll('.item-card');
+
+                cards.forEach(function (card, index) {
+
+                    card.dataset.itemIndex = index;
+
+                    const nameInput = card.querySelector(
+                        'input[name*="[name]"]'
+                    );
+
+                    const quantityInput = card.querySelector(
+                        'input[name*="[quantity]"]'
+                    );
+
+                    const unitInput = card.querySelector(
+                        'input[name*="[unit]"]'
+                    );
+
+                    if (nameInput) {
+                        nameInput.name = `items[${index}][name]`;
+                    }
+
+                    if (quantityInput) {
+                        quantityInput.name = `items[${index}][quantity]`;
+                    }
+
+                    if (unitInput) {
+                        unitInput.name = `items[${index}][unit]`;
+                    }
+                });
             }
 
 
@@ -886,34 +832,20 @@
 
             function updateRemoveButtons() {
 
+                const cards = itemsContainer.querySelectorAll('.item-card');
 
-                const cards =
-                    itemsContainer.querySelectorAll(
-                        '.item-card'
+                cards.forEach(function (card) {
+
+                    const button = card.querySelector(
+                        '.remove-item-btn'
                     );
 
-
-                cards.forEach(
-                    function (card) {
-
-
-                        const button =
-                            card.querySelector(
-                                '.remove-item-btn'
-                            );
-
-
-                        if (!button) {
-                            return;
-                        }
-
-
-                        button.disabled =
-                            cards.length === 1;
-
+                    if (!button) {
+                        return;
                     }
-                );
 
+                    button.disabled = cards.length === 1;
+                });
             }
 
 
@@ -921,80 +853,61 @@
                SUBMIT
             ====================================================== */
 
-            form.addEventListener(
-                'submit',
-                function (event) {
+            form.addEventListener('submit', function (event) {
 
+                /*
+                 * Browser validation
+                 */
+                if (!form.checkValidity()) {
 
-                    /*
-                     * Browser validation
-                     */
+                    event.preventDefault();
 
-                    if (!form.checkValidity()) {
+                    const invalidField = form.querySelector(':invalid');
 
-                        event.preventDefault();
-
-
-                        const invalidField =
-                            form.querySelector(':invalid');
-
-
-                        if (invalidField) {
-
-                            invalidField.focus();
-
-                            invalidField.reportValidity();
-
-                        }
-
-
-                        return;
-
+                    if (invalidField) {
+                        invalidField.focus();
+                        invalidField.reportValidity();
                     }
 
-
-                    /*
-                     * At least one item
-                     */
-
-                    const itemCards =
-                        itemsContainer.querySelectorAll(
-                            '.item-card'
-                        );
+                    return;
+                }
 
 
-                    if (itemCards.length === 0) {
+                /*
+                 * At least one item
+                 */
+                const itemCards = itemsContainer.querySelectorAll(
+                    '.item-card'
+                );
 
-                        event.preventDefault();
+                if (itemCards.length === 0) {
 
+                    event.preventDefault();
 
-                        alert(
-                            'Please add at least one item to the request.'
-                        );
-
-
-                        return;
-
-                    }
-
-
-                    /*
-                     * Prevent double submit
-                     */
-
-                    saveBtn.disabled = true;
-
-
-                    saveSpinner.classList.remove(
-                        'd-none'
+                    alert(
+                        'Please add at least one item to the request.'
                     );
 
-
-                    saveText.textContent =
-                        'Submitting...';
-
+                    return;
                 }
-            );
+
+
+                /*
+                 * Make sure indexes are clean
+                 * before submitting.
+                 */
+                reindexItems();
+
+
+                /*
+                 * Prevent double submit
+                 */
+                saveBtn.disabled = true;
+
+                saveSpinner.classList.remove('d-none');
+
+                saveText.innerHTML = 'Submitting...';
+            });
 
 
             /* =====================================================
@@ -1002,11 +915,10 @@
             ====================================================== */
 
             updateItemNumbers();
-
             updateRemoveButtons();
+            reindexItems();
 
         });
-
     </script>
 
 @endsection
