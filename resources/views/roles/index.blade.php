@@ -5,6 +5,7 @@
     {{-- =========================================================
         PAGE HEADER
     ========================================================== --}}
+
     <div class="app-content-header">
 
         <div class="container-fluid">
@@ -12,7 +13,11 @@
             <div class="row">
 
                 <div class="col-sm-6">
-                    <h3 class="mb-0">Roles</h3>
+
+                    <h3 class="mb-0">
+                        Roles
+                    </h3>
+
                 </div>
 
                 <div class="col-sm-6">
@@ -43,6 +48,7 @@
     {{-- =========================================================
         PAGE CONTENT
     ========================================================== --}}
+
     <div class="app-content">
 
         <div class="container-fluid">
@@ -84,25 +90,28 @@
 
                                 <tr>
 
-                                    {{-- # --}}
+                                    {{-- =================================================
+                                        1. NUMBER
+                                    ================================================== --}}
+
                                     <td>
                                         {{ $loop->iteration }}
                                     </td>
 
 
-                                    {{-- ROLE --}}
+                                    {{-- =================================================
+                                        2. ROLE
+                                    ================================================== --}}
+
                                     <td>
 
                                         <div class="role-wrapper">
-
-
 
                                             <div class="role-info">
 
                                                 <div class="role-name">
                                                     {{ $role->name }}
                                                 </div>
-
 
                                             </div>
 
@@ -111,57 +120,70 @@
                                     </td>
 
 
+                                    {{-- =================================================
+                                        3. PERMISSIONS
+                                    ================================================== --}}
 
-
-
-                                    {{-- PERMISSIONS --}}
                                     <td>
 
-                                        @forelse($role->permissions->sortBy('name') as $permission)
+                                        @forelse(
+                                            $role->permissions->sortBy('name')
+                                            as $permission
+                                        )
 
                                             <span class="permission-badge">
-                                                    {{ $permission->name }}
-                                                </span>
+                                                {{ $permission->name }}
+                                            </span>
 
                                         @empty
 
                                             <span class="text-muted">
-                                                    No permissions
-                                                </span>
+                                                No permissions
+                                            </span>
 
                                         @endforelse
 
                                     </td>
 
 
-                                    {{-- TOTAL --}}
+                                    {{-- =================================================
+                                        4. TOTAL PERMISSIONS
+                                    ================================================== --}}
+
                                     <td>
 
-                                            <span class="permission-total">
-                                                {{ $role->permissions->count() }}
-                                            </span>
+                                        <span class="permission-total">
+                                            {{ $role->permissions->count() }}
+                                        </span>
 
                                     </td>
 
 
-                                    {{-- ACTIONS --}}
+                                    {{-- =================================================
+                                        5. ACTIONS
+                                    ================================================== --}}
+
                                     <td>
 
                                         <div class="action-buttons">
 
                                             {{-- VIEW --}}
+
                                             <a
-{{--                                                href="{{ route('roles.show', $role->id) }}"--}}
+                                                href="#"
                                                 class="btn btn-sm btn-info action-btn"
                                                 title="View Role"
                                             >
+
                                                 <i class="bi bi-eye"></i>
+
                                             </a>
 
 
                                             {{-- EDIT --}}
+
                                             <a
-                                                href="#"
+                                                href="{{ route('roles.edit', $role) }}"
                                                 class="btn btn-sm btn-warning action-btn"
                                                 title="Edit Role"
                                             >
@@ -170,14 +192,21 @@
 
 
                                             {{-- DELETE --}}
-                                            <button
-                                                type="button"
-                                                class="btn btn-sm btn-danger action-btn"
-                                                title="Delete Role"
-                                                onclick="confirmDelete({{ $role->id }}, '{{ addslashes($role->name) }}')"
-                                            >
-                                                <i class="bi bi-trash"></i>
-                                            </button>
+
+{{--                                            <button--}}
+{{--                                                type="button"--}}
+{{--                                                class="btn btn-sm btn-danger action-btn"--}}
+{{--                                                title="Delete Role"--}}
+{{--                                                onclick="confirmDelete(--}}
+{{--                                                    {{ $role->id }},--}}
+{{--                                                    '{{ addslashes($role->name) }}'--}}
+{{--                                                )"--}}
+{{--                                            >--}}
+
+{{--                                                <i class="bi bi-trash"></i>--}}
+
+{{--                                            </button>--}}
+
 
                                             <form
                                                 id="delete-role-{{ $role->id }}"
@@ -185,8 +214,11 @@
                                                 method="POST"
                                                 style="display:none;"
                                             >
+
                                                 @csrf
+
                                                 @method('DELETE')
+
                                             </form>
 
                                         </div>
@@ -215,6 +247,7 @@
     {{-- =========================================================
         CSS
     ========================================================== --}}
+
     <style>
 
         /* =========================================================
@@ -234,26 +267,32 @@
         .role-table-wrapper {
             width: 100%;
             overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
         }
 
 
         #rolesTable {
+            width: 100% !important;
             min-width: 1150px;
+            margin: 0 !important;
             font-size: 14px;
+            border-collapse: collapse;
         }
 
 
-        #rolesTable th {
+        #rolesTable thead th {
             background: #f8f9fa;
             padding: 11px 10px;
             white-space: nowrap;
             vertical-align: middle;
+            font-weight: 600;
         }
 
 
         #rolesTable tbody td {
             padding: 10px;
-            height: 60px;
+            min-height: 60px;
             vertical-align: middle;
         }
 
@@ -418,6 +457,7 @@
 
         .datatable-search .dataTables_filter input {
             margin-left: 0 !important;
+
             height: 38px;
             min-width: 220px;
 
@@ -468,9 +508,12 @@
 
         .datatable-length select {
             height: 38px;
+
             border: 1px solid #ced4da;
             border-radius: 0;
+
             margin: 0 5px;
+
             padding: 4px 25px 4px 8px;
         }
 
@@ -548,10 +591,12 @@
                 flex-wrap: wrap;
             }
 
+
             .datatable-search {
                 width: 100%;
                 flex: 100%;
             }
+
 
             .datatable-search .dataTables_filter input {
                 width: 100%;
@@ -569,7 +614,9 @@
 
             .datatable-top {
                 display: grid;
+
                 grid-template-columns: 1fr 1fr;
+
                 gap: 8px;
             }
 
@@ -608,7 +655,19 @@
             .datatable-bottom {
                 flex-direction: column;
                 align-items: flex-start;
+
                 gap: 10px;
+            }
+
+
+            #rolesTable {
+                min-width: 1150px;
+                font-size: 13px;
+            }
+
+
+            #rolesTable tbody td {
+                padding: 8px;
             }
 
         }
@@ -651,140 +710,220 @@
     {{-- =========================================================
         JAVASCRIPT
     ========================================================== --}}
+
     <script>
 
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener(
+            'DOMContentLoaded',
+            function () {
 
-            const table = $('#rolesTable').DataTable({
+                $('#rolesTable').DataTable({
 
-                pageLength: {{ \App\Enums\PerPage::FIVE->value }},
+                    responsive: false,
 
-                lengthMenu: [
-                    @json($perPageValues),
-                    @json($perPageLabels)
-                ],
+                    autoWidth: false,
 
-                order: [
-                    [1, 'asc']
-                ],
+                    pageLength:
+                        {{ \App\Enums\PerPage::FIVE->value }},
 
-                responsive: false,
+                    lengthMenu: [
 
-                autoWidth: false,
+                        @json($perPageValues),
 
-                language: {
+                        @json($perPageLabels)
 
-                    search: 'Search:',
+                    ],
 
-                    searchPlaceholder: 'Search role...',
+                    order: [
+                        [1, 'asc']
+                    ],
 
-                    lengthMenu: 'Show _MENU_ roles',
+                    language: {
 
-                    info: 'Showing _START_ to _END_ of _TOTAL_ roles',
+                        search:
+                            'Search:',
 
-                    infoEmpty: 'Showing 0 to 0 of 0 roles',
+                        searchPlaceholder:
+                            'Search role...',
 
-                    infoFiltered: '(filtered from _MAX_ total roles)',
+                        lengthMenu:
+                            'Show _MENU_ roles',
 
-                    zeroRecords: 'No matching roles found',
+                        info:
+                            'Showing _START_ to _END_ of _TOTAL_ roles',
 
-                    emptyTable: 'No roles available',
+                        infoEmpty:
+                            'Showing 0 to 0 of 0 roles',
 
-                    paginate: {
-                        first: 'First',
-                        last: 'Last',
-                        next: 'Next',
-                        previous: 'Previous'
-                    }
+                        infoFiltered:
+                            '(filtered from _MAX_ total roles)',
 
-                },
+                        zeroRecords:
+                            'No matching roles found',
 
-                dom:
-                    '<"datatable-top"' +
-                    '<"datatable-search"f>' +
-                    '<"datatable-add">' +
-                    '<"datatable-length"l>' +
-                    '<"datatable-buttons"B>' +
-                    '>' +
-                    '<"datatable-table"tr>' +
-                    '<"datatable-bottom"' +
-                    '<"datatable-info"i>' +
-                    '<"datatable-pagination"p>' +
-                    '>',
+                        emptyTable:
+                            'No roles available',
 
-                buttons: [
+                        paginate: {
 
-                    {
-                        extend: 'copy',
-                        text: '<i class="bi bi-copy"></i> Copy',
-                        exportOptions: {
-                            columns: ':not(:last-child)'
+                            first:
+                                'First',
+
+                            last:
+                                'Last',
+
+                            next:
+                                'Next',
+
+                            previous:
+                                'Previous'
+
                         }
+
                     },
 
-                    {
-                        extend: 'excel',
-                        text: '<i class="bi bi-file-earmark-excel"></i> Excel',
-                        exportOptions: {
-                            columns: ':not(:last-child)'
+                    dom:
+
+                        '<"datatable-top"' +
+
+                        '<"datatable-search"f>' +
+
+                        '<"datatable-add">' +
+
+                        '<"datatable-length"l>' +
+
+                        '<"datatable-buttons"B>' +
+
+                        '>' +
+
+                        '<"datatable-table"tr>' +
+
+                        '<"datatable-bottom"' +
+
+                        '<"datatable-info"i>' +
+
+                        '<"datatable-pagination"p>' +
+
+                        '>',
+
+                    buttons: [
+
+                        {
+
+                            extend:
+                                'copy',
+
+                            text:
+                                '<i class="bi bi-copy"></i> Copy',
+
+                            exportOptions: {
+
+                                columns:
+                                    ':not(:last-child)'
+
+                            }
+
+                        },
+
+                        {
+
+                            extend:
+                                'excel',
+
+                            text:
+                                '<i class="bi bi-file-earmark-excel"></i> Excel',
+
+                            exportOptions: {
+
+                                columns:
+                                    ':not(:last-child)'
+
+                            }
+
+                        },
+
+                        {
+
+                            extend:
+                                'pdf',
+
+                            text:
+                                '<i class="bi bi-file-earmark-pdf"></i> PDF',
+
+                            exportOptions: {
+
+                                columns:
+                                    ':not(:last-child)'
+
+                            }
+
+                        },
+
+                        {
+
+                            extend:
+                                'print',
+
+                            text:
+                                '<i class="bi bi-printer"></i> Print',
+
+                            exportOptions: {
+
+                                columns:
+                                    ':not(:last-child)'
+
+                            }
+
                         }
-                    },
 
-                    {
-                        extend: 'pdf',
-                        text: '<i class="bi bi-file-earmark-pdf"></i> PDF',
-                        exportOptions: {
-                            columns: ':not(:last-child)'
-                        }
-                    },
+                    ]
 
-                    {
-                        extend: 'print',
-                        text: '<i class="bi bi-printer"></i> Print',
-                        exportOptions: {
-                            columns: ':not(:last-child)'
-                        }
-                    }
-
-                ]
-
-            });
+                });
 
 
-            // =====================================================
-            // ADD ROLE BUTTON
-            // =====================================================
+                // =====================================================
+                // ADD ROLE BUTTON
+                // =====================================================
 
-            $('.datatable-add').html(`
-                <a
-                    {{--href="{{ route('roles.create') }}"--}}
-                    class="btn btn-primary btn-sm"
-                >
-                    <i class="bi bi-plus-lg me-1"></i>
-                    Add Role
-                </a>
-            `);
+                $('.datatable-add').html(`
 
-        });
+                    <a
+                        href="#"
+                        class="btn btn-primary btn-sm"
+                    >
 
+                        <i class="bi bi-plus-lg me-1"></i>
 
-        // =========================================================
-        // DELETE CONFIRMATION
-        // =========================================================
+                        Add Role
+
+                    </a>
+
+                `);
+
+            }
+
+        );
+
 
         function confirmDelete(roleId, roleName)
         {
-            if (confirm(
-                'Are you sure you want to delete the role "' +
-                roleName +
-                '"?'
-            )) {
+
+            if (
+                confirm(
+                    'Are you sure you want to delete the role "' +
+                    roleName +
+                    '"?'
+                )
+            ) {
 
                 document
-                    .getElementById('delete-role-' + roleId)
+                    .getElementById(
+                        'delete-role-' + roleId
+                    )
                     .submit();
 
             }
+
         }
 
     </script>

@@ -1,6 +1,7 @@
 <?php
 
-namespace database\seeders;
+namespace Database\Seeders;
+
 
 use App\Enums\ContractType;
 use App\Enums\EmployeeType;
@@ -11,6 +12,7 @@ use App\Models\Department;
 use App\Models\Employee;
 use App\Models\JobTitle;
 use App\Models\Section;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class EmployeeSeeder extends Seeder
@@ -19,13 +21,9 @@ class EmployeeSeeder extends Seeder
     {
         $employees = [
 
-            /*
-            |--------------------------------------------------------------------------
-            | EMPLOYEE 1 - GENERAL MANAGEMENT
-            |--------------------------------------------------------------------------
-            */
             [
                 'employee_id' => 'AMC-001',
+                'user_id' => 1,
 
                 'first_name' => 'John',
                 'middle_name' => 'Michael',
@@ -42,7 +40,7 @@ class EmployeeSeeder extends Seeder
                 'employee_email' => 'john.doe@example.com',
                 'employee_address' => 'Kolwezi, Lualaba',
 
-                'department_code' => 'DEP-GM',
+                'department_code' => 'DEP-MD',
                 'section_code' => 'SEC-GM',
                 'job_title_code' => 'JOB-GM-MD',
 
@@ -57,13 +55,9 @@ class EmployeeSeeder extends Seeder
                 'spouse_phone' => null,
             ],
 
-            /*
-            |--------------------------------------------------------------------------
-            | EMPLOYEE 2 - OPERATIONS & PROJECTS
-            |--------------------------------------------------------------------------
-            */
             [
                 'employee_id' => 'AMC-002',
+                'user_id' => 2,
 
                 'first_name' => 'Patrick',
                 'middle_name' => null,
@@ -95,13 +89,9 @@ class EmployeeSeeder extends Seeder
                 'spouse_phone' => '+243 970 100 002',
             ],
 
-            /*
-            |--------------------------------------------------------------------------
-            | EMPLOYEE 3 - MASONRY
-            |--------------------------------------------------------------------------
-            */
             [
                 'employee_id' => 'AMC-003',
+                'user_id' => 3,
 
                 'first_name' => 'David',
                 'middle_name' => 'Paul',
@@ -133,13 +123,9 @@ class EmployeeSeeder extends Seeder
                 'spouse_phone' => null,
             ],
 
-            /*
-            |--------------------------------------------------------------------------
-            | EMPLOYEE 4 - HUMAN RESOURCES
-            |--------------------------------------------------------------------------
-            */
             [
                 'employee_id' => 'AMC-004',
+                'user_id' => 4,
 
                 'first_name' => 'Sarah',
                 'middle_name' => 'Grace',
@@ -171,13 +157,9 @@ class EmployeeSeeder extends Seeder
                 'spouse_phone' => '+243 970 100 004',
             ],
 
-            /*
-            |--------------------------------------------------------------------------
-            | EMPLOYEE 5 - FINANCE
-            |--------------------------------------------------------------------------
-            */
             [
                 'employee_id' => 'AMC-005',
+                'user_id' => 5,
 
                 'first_name' => 'Daniel',
                 'middle_name' => 'Junior',
@@ -209,13 +191,9 @@ class EmployeeSeeder extends Seeder
                 'spouse_phone' => '+243 970 100 005',
             ],
 
-            /*
-            |--------------------------------------------------------------------------
-            | EMPLOYEE 6 - SAFETY
-            |--------------------------------------------------------------------------
-            */
             [
                 'employee_id' => 'AMC-006',
+                'user_id' => 6,
 
                 'first_name' => 'Michel',
                 'middle_name' => 'Joseph',
@@ -247,13 +225,9 @@ class EmployeeSeeder extends Seeder
                 'spouse_phone' => '+243 970 100 006',
             ],
 
-            /*
-            |--------------------------------------------------------------------------
-            | EMPLOYEE 7 - TRANSPORT
-            |--------------------------------------------------------------------------
-            */
             [
                 'employee_id' => 'AMC-007',
+                'user_id' => 7,
 
                 'first_name' => 'Kevin',
                 'middle_name' => null,
@@ -285,13 +259,9 @@ class EmployeeSeeder extends Seeder
                 'spouse_phone' => null,
             ],
 
-            /*
-            |--------------------------------------------------------------------------
-            | EMPLOYEE 8 - LOGISTICS
-            |--------------------------------------------------------------------------
-            */
             [
                 'employee_id' => 'AMC-008',
+                'user_id' => 8,
 
                 'first_name' => 'Esther',
                 'middle_name' => 'Rose',
@@ -323,13 +293,9 @@ class EmployeeSeeder extends Seeder
                 'spouse_phone' => '+243 970 100 008',
             ],
 
-            /*
-            |--------------------------------------------------------------------------
-            | EMPLOYEE 9 - PROCUREMENT
-            |--------------------------------------------------------------------------
-            */
             [
                 'employee_id' => 'AMC-009',
+                'user_id' => 9,
 
                 'first_name' => 'Alice',
                 'middle_name' => 'Marie',
@@ -361,13 +327,9 @@ class EmployeeSeeder extends Seeder
                 'spouse_phone' => null,
             ],
 
-            /*
-            |--------------------------------------------------------------------------
-            | EMPLOYEE 10 - INFORMATION TECHNOLOGY
-            |--------------------------------------------------------------------------
-            */
             [
                 'employee_id' => 'AMC-010',
+                'user_id' => 10,
 
                 'first_name' => 'Rachel',
                 'middle_name' => null,
@@ -399,13 +361,9 @@ class EmployeeSeeder extends Seeder
                 'spouse_phone' => null,
             ],
 
-            /*
-            |--------------------------------------------------------------------------
-            | EMPLOYEE 11 - SECURITY
-            |--------------------------------------------------------------------------
-            */
             [
                 'employee_id' => 'AMC-011',
+                'user_id' => 11,
 
                 'first_name' => 'Paul',
                 'middle_name' => null,
@@ -437,13 +395,9 @@ class EmployeeSeeder extends Seeder
                 'spouse_phone' => null,
             ],
 
-            /*
-            |--------------------------------------------------------------------------
-            | EMPLOYEE 12 - CLEANING
-            |--------------------------------------------------------------------------
-            */
             [
                 'employee_id' => 'AMC-012',
+                'user_id' => 12,
 
                 'first_name' => 'Marie',
                 'middle_name' => 'Louise',
@@ -475,80 +429,59 @@ class EmployeeSeeder extends Seeder
                 'spouse_phone' => null,
             ],
 
-            /*
-            |--------------------------------------------------------------------------
-            | EMPLOYEE 13 - RESTAURATION
-            |--------------------------------------------------------------------------
-            */
-            [
-                'employee_id' => 'AMC-013',
-
-                'first_name' => 'Joseph',
-                'middle_name' => null,
-                'last_name' => 'Mukendi',
-
-                'gender' => Gender::MALE->value,
-                'date_of_birth' => '1993-09-14',
-                'number_card' => 'CARD-0013',
-                'country' => 'DR Congo',
-                'marital_status' => MaritalStatus::SINGLE->value,
-
-                'employee_work_phone' => '+243 810 000 013',
-                'employee_phone' => '+243 970 000 013',
-                'employee_email' => 'joseph.mukendi@example.com',
-                'employee_address' => 'Kolwezi, Lualaba',
-
-                'department_code' => 'DEP-RES',
-                'section_code' => 'SEC-RES',
-                'job_title_code' => 'JOB-RES-FF',
-
-                'contract_type' => ContractType::CDD->value,
-                'end_contract_date' => null,
-                'work_location' => WorkLocation::HEAD_OFFICE->value,
-                'supervisor' => 'Managing Director',
-                'employee_type' => EmployeeType::FULL_TIME->value,
-
-                'spouse_status' => null,
-                'spouse_full_name' => null,
-                'spouse_phone' => null,
-            ],
+//            [
+//                'employee_id' => 'AMC-013',
+//                'user_id' => 13,
+//
+//                'first_name' => 'Joseph',
+//                'middle_name' => null,
+//                'last_name' => 'Mukendi',
+//
+//                'gender' => Gender::MALE->value,
+//                'date_of_birth' => '1993-09-14',
+//                'number_card' => 'CARD-0013',
+//                'country' => 'DR Congo',
+//                'marital_status' => MaritalStatus::SINGLE->value,
+//
+//                'employee_work_phone' => '+243 810 000 013',
+//                'employee_phone' => '+243 970 000 013',
+//                'employee_email' => 'joseph.mukendi@example.com',
+//                'employee_address' => 'Kolwezi, Lualaba',
+//
+//                'department_code' => 'DEP-RES',
+//                'section_code' => 'SEC-RES',
+//                'job_title_code' => 'JOB-RES-FF',
+//
+//                'contract_type' => ContractType::CDD->value,
+//                'end_contract_date' => null,
+//                'work_location' => WorkLocation::HEAD_OFFICE->value,
+//                'supervisor' => 'Managing Director',
+//                'employee_type' => EmployeeType::FULL_TIME->value,
+//
+//                'spouse_status' => null,
+//                'spouse_full_name' => null,
+//                'spouse_phone' => null,
+//            ],
         ];
+
 
         foreach ($employees as $data) {
 
-            /*
-            |--------------------------------------------------------------------------
-            | FIND DEPARTMENT BY CODE
-            |--------------------------------------------------------------------------
-            */
             $department = Department::where('code', $data['department_code'])
                 ->firstOrFail();
 
-            /*
-            |--------------------------------------------------------------------------
-            | FIND SECTION BY CODE
-            |--------------------------------------------------------------------------
-            */
             $section = Section::where('code', $data['section_code'])
                 ->where('department_id', $department->id)
                 ->firstOrFail();
 
-            /*
-            |--------------------------------------------------------------------------
-            | FIND JOB TITLE BY CODE
-            |--------------------------------------------------------------------------
-            */
             $jobTitle = JobTitle::where('code', $data['job_title_code'])
                 ->where('section_id', $section->id)
                 ->firstOrFail();
 
-            /*
-            |--------------------------------------------------------------------------
-            | CREATE EMPLOYEE
-            |--------------------------------------------------------------------------
-            */
             Employee::create([
+
                 'employee_id' => $data['employee_id'],
+                'user_id' => $data['user_id'],
 
                 'first_name' => $data['first_name'],
                 'middle_name' => $data['middle_name'],

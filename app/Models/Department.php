@@ -31,4 +31,10 @@ class Department extends Model
         return $this->hasMany(Employee::class);
     }
 
+    public function budgets(): HasMany
+    {
+        return $this->hasMany( DepartmentBudget::class, 'department_id' );
+
+    }
+
 }

@@ -7,6 +7,8 @@
         use App\Enums\RequestStatus;
     @endphp
 
+
+
     <div class="app-content-header">
 
         <div class="container-fluid">
@@ -49,6 +51,10 @@
     </div>
 
 
+    {{-- =========================================================
+        CONTENT
+    ========================================================== --}}
+
     <div class="app-content">
 
         <div class="container-fluid">
@@ -63,6 +69,10 @@
                             id="requestsTable"
                             class="table table-bordered table-hover align-middle"
                         >
+
+                            {{-- =================================================
+                                TABLE HEADER
+                            ================================================== --}}
 
                             <thead>
 
@@ -89,9 +99,13 @@
                             </thead>
 
 
+                            {{-- =================================================
+                                TABLE BODY
+                            ================================================== --}}
+
                             <tbody>
 
-                            @forelse($requests as $request)
+                            @foreach($requests as $request)
 
                                 @php
 
@@ -104,7 +118,9 @@
 
                                 <tr>
 
-                                    {{-- 1. # --}}
+                                    {{-- =================================================
+                                        1. #
+                                    ================================================== --}}
 
                                     <td class="text-center">
 
@@ -113,7 +129,9 @@
                                     </td>
 
 
-                                    {{-- 2. Reference --}}
+                                    {{-- =================================================
+                                        2. REFERENCE
+                                    ================================================== --}}
 
                                     <td>
 
@@ -126,7 +144,9 @@
                                     </td>
 
 
-                                    {{-- 3. Title --}}
+                                    {{-- =================================================
+                                        3. TITLE
+                                    ================================================== --}}
 
                                     <td>
 
@@ -153,7 +173,9 @@
                                     </td>
 
 
-                                    {{-- 4. Requester --}}
+                                    {{-- =================================================
+                                        4. REQUESTER
+                                    ================================================== --}}
 
                                     <td>
 
@@ -177,7 +199,9 @@
                                     </td>
 
 
-                                    {{-- 5. Items --}}
+                                    {{-- =================================================
+                                        5. ITEMS
+                                    ================================================== --}}
 
                                     <td>
 
@@ -187,30 +211,31 @@
 
                                                 <div class="request-item-row">
 
-                                                    <span class="fw-semibold">
+                                                        <span class="fw-semibold">
 
-                                                        {{ $item->name }}
+                                                            {{ $item->name }}
 
-                                                    </span>
+                                                        </span>
 
 
                                                     <span class="text-muted">
 
-                                                        ×
-                                                        {{ rtrim(
-                                                            rtrim(
-                                                                number_format(
-                                                                    $item->quantity,
-                                                                    2,
-                                                                    '.',
-                                                                    ''
-                                                                ),
-                                                                '0'
-                                                            ),
-                                                            '.'
-                                                        ) }}
+                                                            ×
 
-                                                    </span>
+                                                            {{ rtrim(
+                                                                rtrim(
+                                                                    number_format(
+                                                                        $item->quantity,
+                                                                        2,
+                                                                        '.',
+                                                                        ''
+                                                                    ),
+                                                                    '0'
+                                                                ),
+                                                                '.'
+                                                            ) }}
+
+                                                        </span>
 
 
                                                     @if($item->unit)
@@ -229,9 +254,9 @@
 
                                                 <span class="text-muted">
 
-                                                    No items
+                                                        No items
 
-                                                </span>
+                                                    </span>
 
                                             @endforelse
 
@@ -240,7 +265,6 @@
                                     </td>
 
 
-                                    {{-- 6. Status --}}
 
                                     <td>
 
@@ -252,9 +276,9 @@
                                                     class="badge status-badge status-procurement"
                                                 >
 
-                                                    Pending Procurement
+                                                        Pending Procurement
 
-                                                </span>
+                                                    </span>
 
                                                 @break
 
@@ -265,9 +289,9 @@
                                                     class="badge status-badge status-finance"
                                                 >
 
-                                                    Pending Finance
+                                                        Pending Finance
 
-                                                </span>
+                                                    </span>
 
                                                 @break
 
@@ -278,9 +302,9 @@
                                                     class="badge status-badge status-ceo"
                                                 >
 
-                                                    Pending CEO
+                                                        Pending CEO
 
-                                                </span>
+                                                    </span>
 
                                                 @break
 
@@ -291,9 +315,9 @@
                                                     class="badge status-badge status-approved"
                                                 >
 
-                                                    Approved
+                                                        Approved
 
-                                                </span>
+                                                    </span>
 
                                                 @break
 
@@ -304,9 +328,9 @@
                                                     class="badge status-badge status-rejected"
                                                 >
 
-                                                    Rejected
+                                                        Rejected
 
-                                                </span>
+                                                    </span>
 
                                                 @break
 
@@ -317,16 +341,14 @@
                                                     class="badge status-badge status-default"
                                                 >
 
-                                                    {{ $status ?? '-' }}
+                                                        {{ $status ?? '-' }}
 
-                                                </span>
+                                                    </span>
 
                                         @endswitch
 
                                     </td>
 
-
-                                    {{-- 7. Created Date --}}
 
                                     <td
                                         data-order="{{ $request->created_at?->format('Y-m-d H:i:s') }}"
@@ -337,13 +359,16 @@
                                     </td>
 
 
-                                    {{-- 8. Actions --}}
+                                    {{-- =================================================
+                                        8. ACTIONS
+                                    ================================================== --}}
 
                                     <td>
 
                                         <div class="request-actions">
 
 
+                                            {{-- VIEW --}}
 
                                             <a
                                                 href="{{ route('requests.show', $request) }}"
@@ -354,6 +379,11 @@
                                                 <i class="bi bi-eye"></i>
 
                                             </a>
+
+
+                                            {{-- =================================================
+                                                PROCUREMENT
+                                            ================================================== --}}
 
                                             @if(
                                                 auth()->user()->hasRole('Procurement') &&
@@ -373,7 +403,9 @@
                                             @endif
 
 
-                                            {{-- Finance --}}
+                                            {{-- =================================================
+                                                FINANCE
+                                            ================================================== --}}
 
                                             @if(
                                                 auth()->user()->hasRole('Finance') &&
@@ -393,7 +425,9 @@
                                             @endif
 
 
-                                            {{-- CEO --}}
+                                            {{-- =================================================
+                                                CEO
+                                            ================================================== --}}
 
                                             @if(
                                                 auth()->user()->hasRole('CEO') &&
@@ -418,43 +452,7 @@
 
                                 </tr>
 
-
-                            @empty
-
-                                <tr>
-
-                                    <td
-                                        colspan="8"
-                                        class="text-center py-5"
-                                    >
-
-                                        <div class="empty-requests">
-
-                                            <i
-                                                class="bi bi-file-earmark-text fs-1 text-muted"
-                                            ></i>
-
-
-                                            <div class="mt-2 fw-semibold">
-
-                                                No requests found
-
-                                            </div>
-
-
-                                            <small class="text-muted">
-
-                                                Start by creating your first request.
-
-                                            </small>
-
-                                        </div>
-
-                                    </td>
-
-                                </tr>
-
-                            @endforelse
+                            @endforeach
 
                             </tbody>
 
@@ -471,443 +469,762 @@
     </div>
 
 
+    {{-- =========================================================
+        CSS
+    ========================================================== --}}
+
     <style>
 
+        /* =====================================================
+           CARD
+        ====================================================== */
+
         .request-card {
+
             border-radius: 0 !important;
+
             border: 1px solid #dee2e6;
+
         }
 
+
+        /* =====================================================
+           TABLE WRAPPER
+        ====================================================== */
 
         .request-table-wrapper {
+
             width: 100%;
+
             overflow-x: auto;
+
             overflow-y: hidden;
+
             -webkit-overflow-scrolling: touch;
+
         }
 
 
+        /* =====================================================
+           TABLE
+        ====================================================== */
+
         #requestsTable {
+
             width: 100% !important;
+
             min-width: 1150px;
+
             margin: 0 !important;
+
             font-size: 14px;
+
             border-collapse: collapse;
+
         }
 
 
         #requestsTable thead th {
+
             white-space: nowrap;
+
             vertical-align: middle;
+
             font-weight: 600;
+
             background: #f8f9fa;
+
             color: #212529;
+
             padding: 11px 10px;
+
         }
 
 
         #requestsTable tbody td {
+
             vertical-align: middle;
+
             padding: 10px;
+
         }
 
 
         #requestsTable tbody tr {
+
             min-height: 60px;
+
         }
 
+
+        /* =====================================================
+           REFERENCE
+        ====================================================== */
 
         .request-reference {
+
             white-space: nowrap;
+
         }
 
+
+        /* =====================================================
+           TITLE
+        ====================================================== */
 
         .request-title {
+
             max-width: 260px;
+
             overflow: hidden;
+
             text-overflow: ellipsis;
+
             white-space: nowrap;
+
         }
 
+
+        /* =====================================================
+           DESCRIPTION
+        ====================================================== */
 
         .request-description {
+
             display: block;
+
             max-width: 260px;
+
             overflow: hidden;
+
             text-overflow: ellipsis;
+
             white-space: nowrap;
+
         }
 
+
+        /* =====================================================
+           AVATAR
+        ====================================================== */
 
         .request-avatar {
+
             width: 38px;
+
             height: 38px;
+
             min-width: 38px;
+
             display: flex;
+
             align-items: center;
+
             justify-content: center;
+
             background: #f1f1f1;
+
             color: #777;
+
             border: 1px solid #dee2e6;
+
             border-radius: 0;
+
             font-size: 18px;
+
         }
 
 
+        /* =====================================================
+           ITEMS
+        ====================================================== */
+
         .request-items {
+
             min-width: 200px;
+
             max-width: 300px;
+
         }
 
 
         .request-item-row {
+
             display: flex;
+
             align-items: center;
+
             gap: 5px;
+
             line-height: 1.5;
+
             white-space: nowrap;
+
         }
 
 
         .request-item-row + .request-item-row {
+
             border-top: 1px solid #f1f1f1;
+
             padding-top: 3px;
+
             margin-top: 3px;
+
         }
 
 
+        /* =====================================================
+           STATUS BADGES
+        ====================================================== */
+
         .status-badge {
+
             border-radius: 0 !important;
+
             padding: 6px 9px;
+
             font-weight: 500;
+
             white-space: nowrap;
+
         }
 
 
         .status-finance {
+
             background: #ffc107 !important;
+
             color: #212529;
+
         }
 
 
         .status-procurement {
+
             background: #0dcaf0 !important;
+
             color: #212529;
+
         }
 
 
         .status-ceo {
+
             background: #6f42c1 !important;
+
             color: #fff;
+
         }
 
 
         .status-approved {
+
             background: #198754 !important;
+
             color: #fff;
+
         }
 
 
         .status-rejected {
+
             background: #dc3545 !important;
+
             color: #fff;
+
         }
 
 
         .status-default {
+
             background: #6c757d !important;
+
             color: #fff;
+
         }
 
 
+        /* =====================================================
+           ACTIONS
+        ====================================================== */
+
         .request-actions {
+
             display: flex;
+
             align-items: center;
+
             gap: 4px;
+
         }
 
 
         .action-btn {
+
             width: 32px;
+
             height: 32px;
+
             padding: 0;
+
             display: inline-flex;
+
             align-items: center;
+
             justify-content: center;
+
             border-radius: 0 !important;
+
         }
 
+
+        /* =====================================================
+           DATATABLE TOP
+        ====================================================== */
 
         .datatable-top {
+
             width: 100%;
+
             display: flex;
+
             align-items: center;
+
             gap: 10px;
+
             margin-bottom: 15px;
+
         }
 
 
+        /* =====================================================
+           SEARCH
+        ====================================================== */
+
         .datatable-search {
+
             display: flex;
+
             align-items: center;
+
             flex: 0 1 auto;
+
         }
 
 
         .datatable-search label {
+
             margin: 0;
+
             display: flex;
+
             align-items: center;
+
             font-weight: 500;
+
             white-space: nowrap;
+
         }
 
 
         .datatable-search input {
+
             width: 260px;
+
             height: 38px;
+
             margin-left: 8px;
+
             padding: 6px 10px;
+
             border: 1px solid #ced4da;
+
             border-radius: 0 !important;
+
             outline: none;
+
         }
 
 
         .datatable-search input:focus {
+
             border-color: #FF6600;
+
             box-shadow: 0 0 0 0.15rem rgba(255, 102, 0, .15);
+
         }
 
 
+        /* =====================================================
+           ADD BUTTON
+        ====================================================== */
+
         .datatable-add {
+
             display: flex;
+
             align-items: center;
+
             flex-shrink: 0;
+
         }
 
 
         .datatable-add .btn {
+
             height: 38px;
+
             border-radius: 0 !important;
+
             white-space: nowrap;
+
         }
 
 
+        /* =====================================================
+           LENGTH
+        ====================================================== */
+
         .datatable-length {
+
             display: flex;
+
             align-items: center;
+
             margin-left: auto;
+
             flex-shrink: 0;
+
         }
 
 
         .dataTables_length select,
+
         .dt-length select {
+
             height: 36px;
+
             border-radius: 0 !important;
+
         }
 
 
+        /* =====================================================
+           BUTTONS
+        ====================================================== */
+
         .datatable-buttons {
+
             display: flex;
+
             align-items: center;
+
             justify-content: flex-end;
+
             flex-wrap: wrap;
+
             gap: 4px;
+
             flex-shrink: 0;
+
         }
 
 
         .datatable-buttons .dt-button {
+
             margin: 0 !important;
+
             min-height: 38px;
+
             padding: 6px 12px;
+
             border-radius: 0 !important;
+
             border: none !important;
+
             box-shadow: none !important;
+
         }
 
 
         .datatable-buttons .dt-button:hover {
+
             opacity: .9;
+
         }
 
+
+        /* =====================================================
+           DATATABLE TABLE
+        ====================================================== */
 
         .datatable-table {
+
             width: 100%;
+
         }
 
 
+        /* =====================================================
+           DATATABLE BOTTOM
+        ====================================================== */
+
         .datatable-bottom {
+
             width: 100%;
+
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
+
             gap: 15px;
+
             margin-top: 15px;
+
         }
 
 
         .datatable-info {
+
             display: flex;
+
             align-items: center;
+
         }
 
 
         .datatable-pagination {
+
             display: flex;
+
             align-items: center;
+
             justify-content: flex-end;
+
         }
 
 
-        .empty-requests {
-            padding: 20px;
-        }
-
+        /* =====================================================
+           RESPONSIVE - TABLET
+        ====================================================== */
 
         @media (max-width: 1100px) {
 
             .datatable-top {
+
                 flex-wrap: wrap;
+
             }
 
 
             .datatable-length {
+
                 margin-left: 0;
+
             }
 
         }
 
+
+        /* =====================================================
+           RESPONSIVE - MOBILE
+        ====================================================== */
 
         @media (max-width: 768px) {
 
             .app-content-header .row {
+
                 row-gap: 8px;
+
             }
 
 
             .app-content-header .breadcrumb {
+
                 float: none !important;
+
                 justify-content: flex-start;
+
             }
 
 
             .datatable-top {
+
                 display: grid;
+
                 grid-template-columns: 1fr auto;
+
                 gap: 10px;
+
                 align-items: center;
+
             }
 
 
             .datatable-search {
+
                 width: 100%;
+
                 min-width: 0;
+
             }
 
 
             .datatable-search label {
+
                 width: 100%;
+
             }
 
 
             .datatable-search input {
+
                 width: 100%;
+
                 min-width: 0;
+
                 margin-left: 8px;
+
             }
 
 
             .datatable-add {
+
                 width: auto;
+
             }
 
 
             .datatable-add .btn {
+
                 width: auto;
+
                 padding-left: 10px;
+
                 padding-right: 10px;
+
             }
 
 
             .datatable-length {
+
                 width: 100%;
+
                 margin-left: 0;
+
             }
 
 
             .datatable-buttons {
+
                 width: 100%;
+
                 justify-content: flex-start;
+
                 overflow-x: auto;
+
                 flex-wrap: nowrap;
+
                 padding-bottom: 2px;
+
             }
 
 
             .datatable-buttons .dt-button {
+
                 white-space: nowrap;
+
                 flex-shrink: 0;
+
             }
 
 
             .datatable-bottom {
+
                 flex-direction: column;
+
                 align-items: flex-start;
+
             }
 
 
             .datatable-pagination {
+
                 width: 100%;
+
                 justify-content: flex-start;
+
                 overflow-x: auto;
+
             }
 
 
             #requestsTable {
+
                 min-width: 1150px;
+
                 font-size: 13px;
+
             }
 
 
             #requestsTable tbody td {
+
                 padding: 8px;
+
             }
 
 
             .request-card .card-body {
+
                 padding: 10px;
+
             }
 
 
             .request-items {
+
                 min-width: 180px;
+
             }
 
         }
 
 
+        /* =====================================================
+           RESPONSIVE - SMALL MOBILE
+        ====================================================== */
+
         @media (max-width: 480px) {
 
             .datatable-top {
+
                 grid-template-columns: 1fr;
+
             }
 
 
             .datatable-add {
+
                 width: 100%;
+
             }
 
 
             .datatable-add .btn {
+
                 width: 100%;
+
             }
 
 
             .datatable-search input {
+
                 width: 100%;
+
             }
 
         }
@@ -915,11 +1232,20 @@
     </style>
 
 
+    {{-- =========================================================
+        DATATABLE SCRIPT
+    ========================================================== --}}
+
     @push('scripts')
 
         <script>
 
             document.addEventListener('DOMContentLoaded', function () {
+
+
+                /* =================================================
+                   INITIALIZE DATATABLE
+                ================================================== */
 
                 $('#requestsTable').DataTable({
 
@@ -927,16 +1253,39 @@
 
                     autoWidth: false,
 
+
+                    /* =============================================
+                       PAGINATION
+                    ============================================== */
+
                     pageLength: {{ PerPage::FIVE->value }},
 
                     lengthMenu: [
+
                         @json(PerPage::values()),
-                        @json([...PerPage::values(), 'All'])
+
+                        @json([
+                            ...PerPage::values(),
+                            'All'
+                        ])
+
                     ],
 
+
+                    /* =============================================
+                       DEFAULT ORDER
+                    ============================================== */
+
                     order: [
+
                         [6, 'desc']
+
                     ],
+
+
+                    /* =============================================
+                       LANGUAGE
+                    ============================================== */
 
                     language: {
 
@@ -953,6 +1302,12 @@
                         infoFiltered: '(filtered from _MAX_ total requests)',
 
                         zeroRecords: 'No matching requests found',
+
+                        /*
+                         * Important:
+                         * This message is displayed by DataTables
+                         * when the tbody contains no real rows.
+                         */
 
                         emptyTable: 'No requests found',
 
@@ -971,31 +1326,54 @@
                     },
 
 
+                    /* =============================================
+                       DATATABLE DOM
+                    ============================================== */
+
                     dom:
+
                         '<"datatable-top"' +
+
                         '<"datatable-search"f>' +
+
                         '<"datatable-add">' +
+
                         '<"datatable-length"l>' +
+
                         '<"datatable-buttons"B>' +
+
                         '>' +
+
                         '<"datatable-table"tr>' +
+
                         '<"datatable-bottom"' +
+
                         '<"datatable-info"i>' +
+
                         '<"datatable-pagination"p>' +
+
                         '>',
 
+
+                    /* =============================================
+                       EXPORT BUTTONS
+                    ============================================== */
 
                     buttons: [
 
                         {
                             extend: 'copy',
 
-                            text: '<i class="bi bi-copy me-1"></i> Copy',
+                            text:
+                                '<i class="bi bi-copy me-1"></i> Copy',
 
-                            className: 'btn btn-secondary',
+                            className:
+                                'btn btn-secondary',
 
                             exportOptions: {
+
                                 columns: ':not(:last-child)'
+
                             }
 
                         },
@@ -1004,14 +1382,19 @@
                         {
                             extend: 'excel',
 
-                            text: '<i class="bi bi-file-earmark-excel me-1"></i> Excel',
+                            text:
+                                '<i class="bi bi-file-earmark-excel me-1"></i> Excel',
 
-                            className: 'btn btn-success',
+                            className:
+                                'btn btn-success',
 
-                            title: 'Request List',
+                            title:
+                                'Request List',
 
                             exportOptions: {
+
                                 columns: ':not(:last-child)'
+
                             }
 
                         },
@@ -1020,18 +1403,25 @@
                         {
                             extend: 'pdf',
 
-                            text: '<i class="bi bi-file-earmark-pdf me-1"></i> PDF',
+                            text:
+                                '<i class="bi bi-file-earmark-pdf me-1"></i> PDF',
 
-                            className: 'btn btn-danger',
+                            className:
+                                'btn btn-danger',
 
-                            title: 'Request List',
+                            title:
+                                'Request List',
 
-                            orientation: 'landscape',
+                            orientation:
+                                'landscape',
 
-                            pageSize: 'A4',
+                            pageSize:
+                                'A4',
 
                             exportOptions: {
+
                                 columns: ':not(:last-child)'
+
                             }
 
                         },
@@ -1040,14 +1430,19 @@
                         {
                             extend: 'print',
 
-                            text: '<i class="bi bi-printer me-1"></i> Print',
+                            text:
+                                '<i class="bi bi-printer me-1"></i> Print',
 
-                            className: 'btn btn-primary',
+                            className:
+                                'btn btn-primary',
 
-                            title: 'Request List',
+                            title:
+                                'Request List',
 
                             exportOptions: {
+
                                 columns: ':not(:last-child)'
+
                             }
 
                         }
@@ -1055,7 +1450,15 @@
                     ],
 
 
+                    /* =============================================
+                       COLUMN DEFINITIONS
+                    ============================================== */
+
                     columnDefs: [
+
+                        /* -----------------------------------------
+                           #
+                        ------------------------------------------ */
 
                         {
                             targets: 0,
@@ -1069,6 +1472,10 @@
                         },
 
 
+                        /* -----------------------------------------
+                           REFERENCE
+                        ------------------------------------------ */
+
                         {
                             targets: 1,
 
@@ -1078,6 +1485,10 @@
 
                         },
 
+
+                        /* -----------------------------------------
+                           TITLE
+                        ------------------------------------------ */
 
                         {
                             targets: 2,
@@ -1089,6 +1500,10 @@
                         },
 
 
+                        /* -----------------------------------------
+                           REQUESTER
+                        ------------------------------------------ */
+
                         {
                             targets: 3,
 
@@ -1098,6 +1513,10 @@
 
                         },
 
+
+                        /* -----------------------------------------
+                           ITEMS
+                        ------------------------------------------ */
 
                         {
                             targets: 4,
@@ -1111,6 +1530,10 @@
                         },
 
 
+                        /* -----------------------------------------
+                           STATUS
+                        ------------------------------------------ */
+
                         {
                             targets: 5,
 
@@ -1123,6 +1546,10 @@
                         },
 
 
+                        /* -----------------------------------------
+                           CREATED DATE
+                        ------------------------------------------ */
+
                         {
                             targets: 6,
 
@@ -1134,6 +1561,10 @@
 
                         },
 
+
+                        /* -----------------------------------------
+                           ACTIONS
+                        ------------------------------------------ */
 
                         {
                             targets: 7,
@@ -1151,6 +1582,10 @@
                 });
 
 
+                /* =================================================
+                   ADD NEW REQUEST BUTTON
+                ================================================== */
+
                 const addRequestContainer =
                     document.querySelector('.datatable-add');
 
@@ -1160,18 +1595,18 @@
                     addRequestContainer.innerHTML = `
 
                         <a
-                    href="{{ route('requests.create') }}"
-                    class="btn btn-primary"
-                    title="Create Request"
-                >
+                            href="{{ route('requests.create') }}"
+                            class="btn btn-primary"
+                            title="Create Request"
+                        >
 
-                    <i class="bi bi-plus-lg me-1"></i>
+                            <i class="bi bi-plus-lg me-1"></i>
 
-                    New Request
+                            New Request
 
-                </a>
+                        </a>
 
-`;
+                    `;
 
                 }
 

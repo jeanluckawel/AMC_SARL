@@ -4,6 +4,7 @@
 
 @section('content')
 
+
     @php
         use App\Enums\PerPage;
 
@@ -29,7 +30,6 @@
                     </h3>
 
                 </div>
-
 
                 <div class="col-sm-6">
 
@@ -82,8 +82,6 @@
                             class="table table-bordered table-hover align-middle"
                         >
 
-
-
                             <thead>
 
                             <tr>
@@ -113,10 +111,14 @@
                             </thead>
 
 
-
                             <tbody>
 
-                            @forelse($departments as $department)
+                            {{-- IMPORTANT:
+                                 Do NOT use @forelse + @empty here.
+                                 DataTables expects every <tr> to have 5 <td>.
+                            --}}
+
+                            @foreach($departments as $department)
 
                                 <tr>
 
@@ -161,8 +163,8 @@
                                         @empty
 
                                             <span class="text-muted">
-                    No section
-                </span>
+                                            No section
+                                        </span>
 
                                         @endforelse
 
@@ -198,8 +200,8 @@
                                         @empty
 
                                             <span class="text-muted">
-                    No job title
-                </span>
+                                            No job title
+                                        </span>
 
                                         @endforelse
 
@@ -221,7 +223,9 @@
                                                 class="btn btn-sm btn-info action-btn"
                                                 title="View Department"
                                             >
+
                                                 <i class="bi bi-eye"></i>
+
                                             </a>
 
 
@@ -232,7 +236,9 @@
                                                 class="btn btn-sm btn-warning action-btn"
                                                 title="Edit Department"
                                             >
+
                                                 <i class="bi bi-pencil"></i>
+
                                             </a>
 
 
@@ -254,7 +260,9 @@
                                                     title="Delete Department"
                                                     onclick="confirmDelete(this)"
                                                 >
+
                                                     <i class="bi bi-trash"></i>
+
                                                 </button>
 
                                             </form>
@@ -265,33 +273,7 @@
 
                                 </tr>
 
-
-                            @empty
-
-                                <tr>
-
-                                    <td
-                                        colspan="5"
-                                        class="text-center py-5"
-                                    >
-
-                                        <div class="empty-departments">
-
-                                            <div class="mt-2 fw-semibold">
-                                                No departments found
-                                            </div>
-
-                                            <small class="text-muted">
-                                                Start by adding your first department.
-                                            </small>
-
-                                        </div>
-
-                                    </td>
-
-                                </tr>
-
-                            @endforelse
+                            @endforeach
 
                             </tbody>
 
@@ -340,11 +322,8 @@
 
                         </h5>
 
-
                         <small class="text-muted">
-
                             Create a new company department
-
                         </small>
 
                     </div>
@@ -386,8 +365,8 @@
                                 Department Name
 
                                 <span class="text-danger">
-                                    *
-                                </span>
+                                *
+                            </span>
 
                             </label>
 
@@ -1190,8 +1169,7 @@
 
                         search: 'Search:',
 
-                        searchPlaceholder:
-                            '',
+                        searchPlaceholder: '',
 
                         lengthMenu:
                             'Show _MENU_ departments',
@@ -1263,17 +1241,26 @@
                     buttons: [
 
                         {
+
                             extend: 'copy',
 
                             text:
                                 '<i class="bi bi-copy me-1"></i> Copy',
 
                             className:
-                                'btn btn-secondary'
+                                'btn btn-secondary',
+
+                            exportOptions: {
+
+                                columns: ':not(:last-child)'
+
+                            }
+
                         },
 
 
                         {
+
                             extend: 'excel',
 
                             text:
@@ -1295,6 +1282,7 @@
 
 
                         {
+
                             extend: 'pdf',
 
                             text:
@@ -1322,6 +1310,7 @@
 
 
                         {
+
                             extend: 'print',
 
                             text:

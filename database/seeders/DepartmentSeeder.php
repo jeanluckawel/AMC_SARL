@@ -1,6 +1,7 @@
 <?php
 
-namespace database\seeders;
+namespace Database\Seeders;
+
 
 use App\Models\Department;
 use App\Models\JobTitle;
@@ -11,14 +12,10 @@ class DepartmentSeeder extends Seeder
 {
     public function run(): void
     {
-        /*
-        |--------------------------------------------------------------------------
-        | 1. GENERAL MANAGEMENT
-        |--------------------------------------------------------------------------
-        */
+
         $department = Department::create([
-            'name' => 'General Management',
-            'code' => 'DEP-GM',
+            'name' => 'Management',
+            'code' => 'DEP-MD',
         ]);
 
         $section = Section::create([

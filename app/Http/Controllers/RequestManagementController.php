@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Enums\RequestDecision;
 use App\Enums\RequestStatus;
-use App\Enums\RequestStep;
 use App\Enums\RequestStep as RequestStepEnum;
 use App\Models\RequestModel;
+use App\Models\RequestStep;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request as HttpRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
@@ -1072,11 +1073,6 @@ class RequestManagementController extends Controller
 //    procurement
 
 
-    /**
-     * =========================================================
-     * PROCUREMENT - PENDING REQUESTS
-     * =========================================================
-     */
     public function ProcurementPending(): View
     {
 //        abort_unless(
@@ -1111,7 +1107,8 @@ class RequestManagementController extends Controller
      */
     public function processProcurement(
         RequestModel $requestModel
-    ): View {
+    ): View
+    {
 //        abort_unless(
 //            auth()->user()->hasRole('Procurement'),
 //            403
@@ -1128,11 +1125,11 @@ class RequestManagementController extends Controller
          * Only pending Procurement requests
          * can be processed.
          */
-        abort_unless(
-            $requestModel->status ===
-                RequestStatus::PENDING_PROCUREMENT,
-            404
-        );
+//        abort_unless(
+//            $requestModel->status ===
+//            RequestStatus::PENDING_CEO,
+//            404
+//        );
 
         return view(
             'procurement.process',
@@ -1147,9 +1144,10 @@ class RequestManagementController extends Controller
      * =========================================================
      */
     public function approveProcurement(
-        HttpRequest $request,
+        HttpRequest  $request,
         RequestModel $requestModel
-    ): RedirectResponse {
+    ): RedirectResponse
+    {
 //
 //        abort_unless(
 //            auth()->user()->hasRole('Procurement'),
@@ -1218,7 +1216,7 @@ class RequestManagementController extends Controller
              */
             abort_unless(
                 $requestModel->status ===
-                    RequestStatus::PENDING_PROCUREMENT,
+                RequestStatus::PENDING_PROCUREMENT,
                 422
             );
 
@@ -1231,7 +1229,7 @@ class RequestManagementController extends Controller
                 ->steps()
                 ->where(
                     'step',
-                    RequestStep::PROCUREMENT->value
+                    RequestStepEnum::PROCUREMENT->value,
                 )
                 ->exists();
 
@@ -1276,7 +1274,7 @@ class RequestManagementController extends Controller
                  * Unit price entered by Procurement.
                  */
                 $unitPrice =
-                    (float) $data['unit_price'];
+                    (float)$data['unit_price'];
 
 
                 /*
@@ -1284,7 +1282,7 @@ class RequestManagementController extends Controller
                  * not from the browser.
                  */
                 $quantity =
-                    (float) $item->quantity;
+                    (float)$item->quantity;
 
 
                 /*
@@ -1345,7 +1343,7 @@ class RequestManagementController extends Controller
                     auth()->id(),
 
                 'step' =>
-                    RequestStep::PROCUREMENT->value,
+                    RequestStepEnum::PROCUREMENT->value,
 
                 'decision' =>
                     RequestDecision::APPROVED->value,
@@ -1374,9 +1372,10 @@ class RequestManagementController extends Controller
      * =========================================================
      */
     public function rejectProcurement(
-        HttpRequest $request,
+        HttpRequest  $request,
         RequestModel $requestModel
-    ): RedirectResponse {
+    ): RedirectResponse
+    {
 //
 //        abort_unless(
 //            auth()->user()->hasRole('Procurement'),
@@ -1431,7 +1430,7 @@ class RequestManagementController extends Controller
                 ->steps()
                 ->where(
                     'step',
-                    RequestStep::PROCUREMENT->value
+                    RequestStepEnum::PROCUREMENT->value,
                 )
                 ->exists();
 
@@ -1450,7 +1449,7 @@ class RequestManagementController extends Controller
                     auth()->id(),
 
                 'step' =>
-                    RequestStep::PROCUREMENT->value,
+                    RequestStepEnum::PROCUREMENT->value,
 
                 'decision' =>
                     RequestDecision::REJECTED->value,
@@ -1484,55 +1483,516 @@ class RequestManagementController extends Controller
             );
     }
 
-public function approvedProcurementRequests(): View
-{
-    $requests = RequestModel::with([
-        'requester',
-        'items',
-        'attachments',
-        'steps.user',
-    ])
-        ->whereHas('steps', function ($query) {
+    public function approvedProcurementRequests(): View
+    {
+        $requests = RequestModel::with([
+            'requester',
+            'items',
+            'attachments',
+            'steps.user',
+        ])
+            ->whereHas('steps', function ($query) {
+                $query
+                    ->where(
+                        'step',
+                        RequestStepEnum::PROCUREMENT->value,
+                    )
+                    ->where(
+                        'decision',
+                        RequestDecision::APPROVED->value
+                    );
+            })
+            ->latest('updated_at')
+            ->get();
+
+        return view(
+            'requests.approved-procurement',
+            compact('requests')
+        );
+    }
+
+    public function rejectedRProcurementequests(): View
+    {
+        $requests = RequestModel::with([
+            'requester',
+            'items',
+            'attachments',
+            'steps.user',
+        ])
+            ->where(
+                'status',
+                RequestStatus::REJECTED
+            )
+            ->latest('rejected_at')
+            ->get();
+
+        return view(
+            'requests.rejected-procurement',
+            compact('requests')
+        );
+    }
+//
+    public function FinancePending()
+    {
+        $requests = RequestModel::with([
+            'requester.employee.department',
+            'items',
+            'attachments',
+            'steps.user',
+        ])
+            ->where('status', RequestStatus::PENDING_FINANCE)
+            ->latest('created_at')
+            ->get();
+
+
+        return view('finance.pending', compact('requests'));
+
+    }
+
+
+    public function processFinance(
+        RequestModel $requestModel
+    ): View
+    {
+        /*
+         * Only pending Finance requests
+         * can be processed.
+         */
+        abort_unless(
+            $requestModel->status ===
+            RequestStatus::PENDING_FINANCE,
+            404
+        );
+
+        $requestModel->load([
+            'requester.employee.department.budgets',
+            'items',
+            'attachments',
+            'steps.user',
+        ]);
+
+        return view(
+            'finance.process',
+            compact('requestModel')
+        );
+    }
+
+    public function approveFinanceRequest(
+        RequestModel $requestModel
+    ): \Illuminate\Http\RedirectResponse {
+
+        DB::transaction(function () use ($requestModel) {
+
+            // La demande doit être actuellement chez Finance
+            abort_unless(
+                $requestModel->status === RequestStatus::PENDING_FINANCE,
+                422
+            );
+
+            // Éviter une double validation Finance
+            $alreadyApproved = $requestModel->steps()
+                ->where(
+                    'step',
+                    RequestStepEnum::FINANCE->value
+                )
+                ->where(
+                    'decision',
+                    RequestDecision::APPROVED->value
+                )
+                ->exists();
+
+            abort_if(
+                $alreadyApproved,
+                422,
+                'This request has already been approved by Finance.'
+            );
+
+            // Enregistrer l'approbation Finance
+            $requestModel->steps()->create([
+                'user_id' => Auth::id(),
+
+                'step' => RequestStepEnum::FINANCE->value,
+
+                'decision' => RequestDecision::APPROVED->value,
+
+                'comment' => null,
+
+                'processed_at' => now(),
+            ]);
+
+            // Envoyer la demande au CEO
+            $requestModel->update([
+                'status' => RequestStatus::PENDING_CEO,
+            ]);
+        });
+
+        return redirect()
+            ->route('finance.pending')
+            ->with(
+                'success',
+                'Request approved by Finance and sent to CEO.'
+            );
+    }
+    public function rejectFinanceRequest(
+        RequestModel $requestModel
+    ): RedirectResponse {
+
+        request()->validate([
+            'comment' => ['required', 'string', 'max:2000'],
+        ]);
+
+        DB::transaction(function () use ($requestModel) {
+
+            RequestStep::create([
+                'request_id'   => $requestModel->id,
+                'user_id'      => Auth::id(),
+                'step'         => RequestStepEnum::FINANCE->value,
+                'decision'     => RequestDecision::REJECTED->value,
+                'comment'      => request('comment'),
+                'processed_at' => now(),
+            ]);
+
+            $requestModel->update([
+                'status'      => RequestStatus::REJECTED,
+                'rejected_at' => now(),
+            ]);
+        });
+
+        return redirect()
+            ->route('finance.pending')
+            ->with('success', 'Request rejected.');
+    }
+
+    public function approvedFinanceRequests(): View
+    {
+        $requests = RequestModel::whereHas('steps', function ($query) {
+            $query->where('step', RequestStepEnum::FINANCE->value)
+                ->where('decision', RequestDecision::APPROVED->value);
+        })
+            ->with(['requester', 'items', 'steps'])
+            ->latest()
+            ->get();
+
+        return view('finance.approved', compact('requests'));
+    }
+
+    public function rejectedFinanceRequests(): View
+    {
+        $requests = RequestModel::whereHas('steps', function ($query) {
+            $query->where('step', RequestStepEnum::FINANCE->value)
+                ->where('decision', RequestDecision::REJECTED->value);
+        })
+            ->with([
+                'requester',
+                'items',
+                'steps',
+            ])
+            ->latest()
+            ->get();
+
+        return view('finance.rejected', compact('requests'));
+    }
+
+
+// ceo
+    public function CeoPending()
+    {
+        $requests = RequestModel::with([
+            'requester.employee.department',
+            'items',
+            'attachments',
+            'steps.user',
+        ])
+            ->where('status', RequestStatus::PENDING_CEO)
+            ->latest('created_at')
+            ->get();
+
+
+        return view('ceo.pending', compact('requests'));
+
+    }
+
+    /**
+     * =========================================================
+     * CEO - PROCESS REQUEST
+     * =========================================================
+     */
+    public function processCeo(
+        RequestModel $requestModel
+    ): View {
+        /*
+         * La demande doit être en attente du CEO.
+         */
+        abort_unless(
+            $requestModel->status === RequestStatus::PENDING_CEO,
+            404
+        );
+
+        /*
+         * Charger toutes les données nécessaires
+         * pour la page de traitement.
+         */
+        $requestModel->load([
+            'requester.employee.department',
+            'items',
+            'attachments',
+            'steps.user',
+        ]);
+
+        return view(
+            'ceo.process',
+            compact('requestModel')
+        );
+    }
+
+    /**
+     * =========================================================
+     * CEO - APPROVE REQUEST
+     * =========================================================
+     */
+    public function approveCeoRequest(
+        HttpRequest $request,
+        RequestModel $requestModel
+    ): RedirectResponse {
+
+        /*
+         * Commentaire facultatif.
+         */
+        $validated = $request->validate([
+            'comment' => [
+                'nullable',
+                'string',
+                'max:2000',
+            ],
+        ]);
+
+        DB::transaction(function () use (
+            $requestModel,
+            $validated
+        ) {
+
+            /*
+             * Reload + lock pour éviter qu'une
+             * même demande soit traitée deux fois.
+             */
+            $requestModel = RequestModel::query()
+                ->lockForUpdate()
+                ->findOrFail($requestModel->id);
+
+            /*
+             * La demande doit toujours être
+             * en attente du CEO.
+             */
+            abort_unless(
+                $requestModel->status ===
+                RequestStatus::PENDING_CEO,
+                422
+            );
+
+            /*
+             * Vérifier que le CEO n'a pas
+             * déjà traité cette demande.
+             */
+            $alreadyProcessed = $requestModel
+                ->steps()
+                ->where(
+                    'step',
+                    RequestStepEnum::CEO->value
+                )
+                ->exists();
+
+            abort_if(
+                $alreadyProcessed,
+                422,
+                'This request has already been processed by CEO.'
+            );
+
+            /*
+             * Enregistrer l'approbation CEO.
+             */
+            $requestModel->steps()->create([
+                'user_id' => Auth::id(),
+
+                'step' =>
+                    RequestStepEnum::CEO->value,
+
+                'decision' =>
+                    RequestDecision::APPROVED->value,
+
+                'comment' =>
+                    $validated['comment'] ?? null,
+
+                'processed_at' =>
+                    now(),
+            ]);
+
+            /*
+             * Approbation définitive.
+             */
+            $requestModel->update([
+                'status' =>
+                    RequestStatus::APPROVED,
+
+                'approved_at' =>
+                    now(),
+            ]);
+        });
+
+        return redirect()
+            ->route('ceo.pending')
+            ->with(
+                'success',
+                'Request approved definitively by CEO.'
+            );
+    }
+
+    /**
+     * =========================================================
+     * CEO - CANCEL / REJECT REQUEST
+     * =========================================================
+     */
+    public function cancelCeoRequest(
+        HttpRequest $request,
+        RequestModel $requestModel
+    ): RedirectResponse {
+
+        $request->validate([
+            'comment' => ['required', 'string', 'max:2000'],
+        ]);
+
+        DB::transaction(function () use ($requestModel, $request) {
+
+            /*
+             * La demande doit être en attente du CEO.
+             */
+            abort_unless(
+                $requestModel->status === RequestStatus::PENDING_CEO,
+                422
+            );
+
+            /*
+             * Récupérer le step CEO existant.
+             */
+            $ceoStep = $requestModel->steps()
+                ->where(
+                    'step',
+                    RequestStepEnum::CEO->value
+                )
+                ->first();
+
+            /*
+             * Si le step CEO existe déjà,
+             * on le met à jour.
+             *
+             * Sinon, on le crée.
+             */
+            if ($ceoStep) {
+
+                $ceoStep->update([
+                    'user_id' => Auth::id(),
+                    'decision' => RequestDecision::REJECTED->value,
+                    'comment' => $request->comment,
+                    'processed_at' => now(),
+                ]);
+
+            } else {
+
+                RequestStep::create([
+                    'request_id' => $requestModel->id,
+                    'user_id' => Auth::id(),
+                    'step' => RequestStepEnum::CEO->value,
+                    'decision' => RequestDecision::REJECTED->value,
+                    'comment' => $request->comment,
+                    'processed_at' => now(),
+                ]);
+            }
+
+            /*
+             * Rejeter définitivement la demande.
+             */
+            $requestModel->update([
+                'status' => RequestStatus::REJECTED,
+                'rejected_at' => now(),
+            ]);
+        });
+
+        return redirect()
+            ->route('ceo.pending')
+            ->with(
+                'success',
+                'Request rejected by CEO.'
+            );
+    }
+    /**
+     * =========================================================
+     * CEO - APPROVED REQUESTS
+     * =========================================================
+     */
+    public function approvedCeoRequests(): View
+    {
+        $requests = RequestModel::whereHas('steps', function ($query) {
+
             $query
                 ->where(
                     'step',
-                    RequestStep::PROCUREMENT->value
+                    RequestStepEnum::CEO->value
                 )
                 ->where(
                     'decision',
                     RequestDecision::APPROVED->value
                 );
+
         })
-        ->latest('updated_at')
-        ->get();
+            ->with([
+                'requester',
+                'items',
+                'attachments',
+                'steps.user',
+            ])
+            ->latest('approved_at')
+            ->get();
 
-    return view(
-        'requests.approved-procurement',
-        compact('requests')
-    );
-}
+        return view(
+            'ceo.approved',
+            compact('requests')
+        );
+    }
 
-public function rejectedRProcurementequests(): View
-{
-    $requests = RequestModel::with([
-        'requester',
-        'items',
-        'attachments',
-        'steps.user',
-    ])
-        ->where(
-            'status',
-            RequestStatus::REJECTED
-        )
-        ->latest('rejected_at')
-        ->get();
 
-    return view(
-        'requests.rejected-procurement',
-        compact('requests')
-    );
-}
+    /**
+     * =========================================================
+     * CEO - REJECTED REQUESTS
+     * =========================================================
+     */
+    public function rejectedCeoRequests(): View
+    {
+        $requests = RequestModel::whereHas('steps', function ($query) {
 
+            $query
+                ->where(
+                    'step',
+                    RequestStepEnum::CEO->value
+                )
+                ->where(
+                    'decision',
+                    RequestDecision::REJECTED->value
+                );
+
+        })
+            ->with([
+                'requester',
+                'items',
+                'attachments',
+                'steps.user',
+            ])
+            ->latest('rejected_at')
+            ->get();
+
+        return view(
+            'ceo.rejected',
+            compact('requests')
+        );
+    }
 
 
 }

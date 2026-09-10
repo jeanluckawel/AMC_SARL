@@ -16,6 +16,8 @@ return new class extends Migration
 
             $table->string('employee_id')->unique();
 
+            $table->foreignId('user_id')->nullable()->unique()->constrained('users')->nullOnDelete();
+
             $table->string('first_name');
             $table->string('middle_name')->nullable();
             $table->string('last_name');
