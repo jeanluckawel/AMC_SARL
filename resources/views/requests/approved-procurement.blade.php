@@ -37,13 +37,6 @@
                     </ol>
                 </div>
 
-            </div>
-        </div>
-    </div>
-
-
-    <div class="app-content">
-        <div class="container-fluid">
 
             {{-- =====================================================
                 SUCCESS MESSAGE
@@ -146,9 +139,10 @@
 
                             <tr>
 
-                                <th>
-                                    #
-                                </th>
+                                <h5 class="mb-1">
+{{--                                    <i class="bi bi-check-circle text-success me-2"></i>--}}
+                                    Approved Requests
+                                </h5>
 
                                 <th>
                                     Reference

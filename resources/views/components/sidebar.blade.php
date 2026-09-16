@@ -149,7 +149,7 @@
 
                         </li>
 
-                    @endcan
+
 
 
                     {{-- Rejected --}}
