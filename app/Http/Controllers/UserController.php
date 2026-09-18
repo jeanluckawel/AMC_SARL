@@ -180,59 +180,78 @@ class UserController extends Controller
         return view('users.create', compact('roles','employees'));
     }
 
-    public function store(Request $request): RedirectResponse
-    {
-        $validated = $request->validate([
-            'employee_id' => [
-                'required',
-                'exists:employees,employee_id',
-            ],
 
-            'email' => [
-                'required',
-                'email',
-                'unique:users,email',
-            ],
+public function store(Request $request): RedirectResponse
+{
+    $validated = $request->validate([
+        'employee_id' => [
+            'required',
+            'exists:employees,employee_id',
+        ],
 
-            'password' => [
-                'required',
-                'string',
-                'min:8',
-                'confirmed',
-            ],
+        'email' => [
+            'required',
+            'email',
+            'unique:users,email',
+        ],
 
-            'role' => [
-                'required',
-                'exists:roles,name',
-            ],
-        ]);
+        'password' => [
+            'required',
+            'string',
+            'min:8',
+            'confirmed',
+        ],
 
-        $employee = Employee::where(
-            'employee_id',
-            $validated['employee_id']
-        )->firstOrFail();
+        'role' => [
+            'required',
+            'exists:roles,name',
+        ],
+    ]);
 
-        $name = trim(
-            $employee->first_name . ' ' . $employee->last_name
-        );
+    // Récupérer l'employé existant
+    $employee = Employee::where(
+        'employee_id',
+        $validated['employee_id']
+    )->firstOrFail();
 
-        $user = User::create([
-            'name' => $name,
-            'email' => $validated['email'],
-            'password' => Hash::make(
-                $validated['password']
-            ),
-        ]);
-
-        $user->assignRole($validated['role']);
-
+    // Vérifier que l'employé n'a pas déjà un compte utilisateur
+    if ($employee->user_id !== null) {
         return redirect()
-            ->route('users.index')
+            ->back()
+            ->withInput()
             ->with(
-                'success',
-                'User created successfully.'
+                'error',
+                'Cet employé possède déjà un compte utilisateur.'
             );
     }
+
+    // Construire le nom du User à partir de l'employé
+    $name = trim(
+        $employee->first_name . ' ' . $employee->last_name
+    );
+
+    // Créer le User
+    $user = User::create([
+        'name' => $name,
+        'email' => $validated['email'],
+        'password' => Hash::make($validated['password']),
+    ]);
+
+    // Attribuer le rôle
+    $user->assignRole($validated['role']);
+
+    // Mettre à jour l'employé existant
+    // user_id n'a pas besoin d'être dans $fillable
+    $employee->user_id = $user->id;
+    $employee->save();
+
+    return redirect()
+        ->route('users.index')
+        ->with(
+            'success',
+            'User created successfully.'
+        );
+}
 
     public function editPassword(User $user): \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\View\View
     {

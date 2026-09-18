@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Employee extends Model
 {
     protected $fillable = [
-
         'employee_id',
 
 
@@ -23,15 +22,12 @@ class Employee extends Model
         'country',
         'marital_status',
 
-
         'employee_work_phone',
         'employee_phone',
         'employee_email',
         'employee_address',
 
-
         'photo',
-
 
         'department_id',
         'section_id',
@@ -42,13 +38,10 @@ class Employee extends Model
         'supervisor',
         'employee_type',
 
-
-
         'spouse_status',
         'spouse_full_name',
         'spouse_phone',
     ];
-
     protected $casts = [
         'date_of_birth' => 'date',
         'hire_date' => 'date',
