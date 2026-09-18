@@ -237,20 +237,6 @@
                                             </div>
 
 
-                                            <div class="row mb-2">
-
-                                                <div class="col-md-4">
-                                                    <strong>Status:</strong>
-                                                </div>
-
-                                                <div class="col-md-8">
-
-                                <span class="badge bg-success">
-{{--                                    {{ ucfirst($request->status) }}--}}
-                                </span>
-
-                                                </div>
-
                                             </div>
 
                                         </div>
@@ -375,7 +361,7 @@
 
             </div>
 
-        </div>
+
 
 
         {{-- =========================================================
