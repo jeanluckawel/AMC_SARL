@@ -307,7 +307,7 @@
                 @canany(['ceo.view', 'ceo.approve', 'ceo.reject'])
 
                     <li class="nav-header">
-                        CEO
+                        DG
                     </li>
 
 
