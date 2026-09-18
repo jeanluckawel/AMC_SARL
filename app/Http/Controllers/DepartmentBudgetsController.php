@@ -7,7 +7,8 @@ use App\Models\DepartmentBudget;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-class departmentBudgetsController extends Controller
+class DepartmentBudgetsController extends Controller
+
 {
 
     public function departmentBudgets(): View
@@ -16,6 +17,9 @@ class departmentBudgetsController extends Controller
 //            auth()->user()->hasRole('Finance'),
 //            403
 //        );
+
+
+
 
 
 

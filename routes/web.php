@@ -3,7 +3,7 @@
 use App\Enums\RequestDecision;
 use App\Http\Controllers\AuditLogController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\departmentBudgetsController;
+use App\Http\Controllers\DepartmentBudgetsController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
@@ -290,23 +290,23 @@ Route::middleware([
 
     Route::get(
         '/finance-department-budgets-create-{department}',
-        [departmentBudgetsController::class, 'create']
+        [DepartmentBudgetsController::class, 'create']
     )->name('finance.department-budgets.create');
 
     Route::post(
         '/finance-department-budgets',
-        [departmentBudgetsController::class, 'store']
+        [DepartmentBudgetsController::class, 'store']
     )->name('finance.department-budgets.store');
 
 
     Route::get(
         '/finance-department-budgets-edit-{departmentBudget}',
-        [departmentBudgetsController::class, 'edit']
+        [DepartmentBudgetsController::class, 'edit']
     )->name('finance.department-budgets.edit');
 
     Route::put(
         '/finance-department-budgets-{departmentBudget}',
-        [departmentBudgetsController::class, 'update']
+        [DepartmentBudgetsController::class, 'update']
     )->name('finance.department-budgets.update');
 
 //    Route::resource('quotations', QuotationController::class);
