@@ -61,4 +61,9 @@ class RequestModel extends Model
             'request_id'
         );
     }
+
+    public function department(): BelongsTo
+    {
+        return $this->belongsTo(Department::class);
+    }
 }

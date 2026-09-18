@@ -10,9 +10,6 @@
     @endphp
 
 
-    {{-- =========================================================
-        PAGE HEADER
-    ========================================================== --}}
     <div class="app-content-header">
 
         <div class="container-fluid">
@@ -20,18 +17,24 @@
             <div class="row align-items-center">
 
                 <div class="col-md-6 col-12">
+
                     <h3 class="mb-0">
                         Users
                     </h3>
+
                 </div>
 
+
                 <div class="col-md-6 col-12">
+
                     <ol class="breadcrumb float-md-end mb-0">
 
                         <li class="breadcrumb-item">
+
                             <a href="{{ url('/') }}">
                                 Home
                             </a>
+
                         </li>
 
                         <li class="breadcrumb-item active">
@@ -39,6 +42,7 @@
                         </li>
 
                     </ol>
+
                 </div>
 
             </div>
@@ -51,6 +55,7 @@
     {{-- =========================================================
         PAGE CONTENT
     ========================================================== --}}
+
     <div class="app-content">
 
         <div class="container-fluid">
@@ -59,9 +64,11 @@
 
                 <div class="card-body">
 
+
                     {{-- =================================================
                         TABLE WRAPPER
                     ================================================== --}}
+
                     <div class="user-table-wrapper">
 
                         <table
@@ -70,45 +77,76 @@
                         >
 
                             <thead>
+
                             <tr>
+
                                 <th>#</th>
+
                                 <th>User</th>
+
                                 <th>Email</th>
+
                                 <th>Role</th>
+
                                 <th>Created Date</th>
+
                                 <th>Actions</th>
+
                             </tr>
+
                             </thead>
 
 
                             <tbody>
 
-                            @forelse($users as $user)
+                            {{-- IMPORTANT:
+                                 Do NOT use @forelse + @empty here.
+                                 DataTables expects every real <tr>
+                                 to contain exactly 6 cells.
+                            --}}
+
+                            @foreach($users as $user)
 
                                 <tr>
 
-                                    {{-- NUMBER --}}
+
+                                    {{-- =================================================
+                                        NUMBER
+                                    ================================================== --}}
+
                                     <td class="text-center">
+
                                         {{ $loop->iteration }}
+
                                     </td>
 
 
-                                    {{-- USER --}}
+                                    {{-- =================================================
+                                        USER
+                                    ================================================== --}}
+
                                     <td>
 
                                         <div class="d-flex align-items-center">
 
+
                                             {{-- AVATAR --}}
+
                                             <div class="user-avatar user-avatar-default me-2">
+
                                                 <i class="bi bi-person-fill"></i>
+
                                             </div>
 
 
                                             {{-- USER INFO --}}
+
                                             <div class="user-info">
 
                                                 <div class="fw-semibold user-name">
+
                                                     {{ $user->name }}
+
                                                 </div>
 
                                             </div>
@@ -118,41 +156,60 @@
                                     </td>
 
 
-                                    {{-- EMAIL --}}
+                                    {{-- =================================================
+                                        EMAIL
+                                    ================================================== --}}
+
                                     <td>
+
                                         {{ $user->email }}
+
                                     </td>
 
 
-                                    {{-- ROLE --}}
+                                    {{-- =================================================
+                                        ROLE
+                                    ================================================== --}}
+
                                     <td>
 
                                         @forelse($user->roles as $role)
 
                                             <span class="badge user-role-badge">
-                                                {{ $role->name }}
-                                            </span>
+
+                                            {{ $role->name }}
+
+                                        </span>
 
                                         @empty
 
                                             <span class="text-muted">
-                                                No role
-                                            </span>
+                                            No role
+                                        </span>
 
                                         @endforelse
 
                                     </td>
 
 
-                                    {{-- CREATED DATE --}}
+                                    {{-- =================================================
+                                        CREATED DATE
+                                    ================================================== --}}
+
                                     <td
                                         data-order="{{ $user->created_at?->format('Y-m-d H:i:s') }}"
                                     >
+
                                         {{ $user->created_at?->format('d/m/Y') ?? '-' }}
+
                                     </td>
 
 
-                                    {{-- ACTIONS --}}
+                                    {{-- =================================================
+                                        ACTIONS
+                                    ================================================== --}}
+
+
                                     <td>
 
                                         <div class="user-actions">
@@ -169,11 +226,21 @@
 
                                             {{-- EDIT --}}
                                             <a
-                                                href="#"
+                                                href="{{ route('users.edit', $user) }}"
                                                 class="btn btn-sm btn-warning action-btn"
                                                 title="Edit User"
                                             >
                                                 <i class="bi bi-pencil"></i>
+                                            </a>
+
+
+                                            {{-- CHANGE PASSWORD --}}
+                                            <a
+                                                href="{{ route('users.edit-password', $user) }}"
+                                                class="btn btn-sm btn-primary action-btn"
+                                                title="Change Password"
+                                            >
+                                                <i class="bi bi-key"></i>
                                             </a>
 
 
@@ -185,6 +252,7 @@
                                             >
 
                                                 @csrf
+
                                                 @method('DELETE')
 
                                                 <button
@@ -202,37 +270,11 @@
 
                                     </td>
 
-                                </tr>
 
-                            @empty
-
-                                {{-- EMPTY --}}
-                                <tr>
-
-                                    <td
-                                        colspan="6"
-                                        class="text-center py-5"
-                                    >
-
-                                        <div class="empty-users">
-
-                                            <i class="bi bi-people fs-1 text-muted"></i>
-
-                                            <div class="mt-2 fw-semibold">
-                                                No users found
-                                            </div>
-
-                                            <small class="text-muted">
-                                                Start by adding your first user.
-                                            </small>
-
-                                        </div>
-
-                                    </td>
 
                                 </tr>
 
-                            @endforelse
+                            @endforeach
 
                             </tbody>
 
@@ -252,15 +294,20 @@
     {{-- =========================================================
         CSS
     ========================================================== --}}
+
     <style>
+
 
         /* =========================================================
            CARD
         ========================================================== */
 
         .user-card {
+
             border-radius: 0 !important;
+
             border: 1px solid #dee2e6;
+
         }
 
 
@@ -269,10 +316,15 @@
         ========================================================== */
 
         .user-table-wrapper {
+
             width: 100%;
+
             overflow-x: auto;
+
             overflow-y: hidden;
+
             -webkit-overflow-scrolling: touch;
+
         }
 
 
@@ -281,33 +333,52 @@
         ========================================================== */
 
         #usersTable {
+
             width: 100% !important;
+
             min-width: 900px;
+
             margin: 0 !important;
+
             font-size: 14px;
+
             border-collapse: collapse;
+
         }
 
 
         #usersTable thead th {
+
             white-space: nowrap;
+
             vertical-align: middle;
+
             font-weight: 600;
+
             background: #f8f9fa;
+
             color: #212529;
+
             padding: 11px 10px;
+
         }
 
 
         #usersTable tbody td {
+
             vertical-align: middle;
+
             padding: 10px;
+
             white-space: nowrap;
+
         }
 
 
         #usersTable tbody tr {
+
             height: 60px;
+
         }
 
 
@@ -316,29 +387,47 @@
         ========================================================== */
 
         .user-avatar {
+
             width: 42px;
+
             height: 42px;
+
             min-width: 42px;
+
             object-fit: cover;
+
             border-radius: 0;
+
             border: 1px solid #dee2e6;
+
         }
 
 
         .user-avatar-default {
+
             display: flex;
+
             align-items: center;
+
             justify-content: center;
+
             background: #f1f1f1;
+
             color: #777;
+
             font-size: 20px;
+
         }
 
 
         .user-name {
+
             max-width: 220px;
+
             overflow: hidden;
+
             text-overflow: ellipsis;
+
         }
 
 
@@ -347,12 +436,19 @@
         ========================================================== */
 
         .user-role-badge {
+
             background: #FF6600 !important;
+
             color: #fff;
+
             border-radius: 0 !important;
+
             padding: 6px 9px;
+
             font-weight: 500;
+
             margin-right: 3px;
+
         }
 
 
@@ -361,20 +457,32 @@
         ========================================================== */
 
         .user-actions {
+
             display: flex;
+
             align-items: center;
+
             gap: 4px;
+
         }
 
 
         .action-btn {
+
             width: 32px;
+
             height: 32px;
+
             padding: 0;
+
             display: inline-flex;
+
             align-items: center;
+
             justify-content: center;
+
             border-radius: 0 !important;
+
         }
 
 
@@ -383,11 +491,17 @@
         ========================================================== */
 
         .datatable-top {
+
             width: 100%;
+
             display: flex;
+
             align-items: center;
+
             gap: 10px;
+
             margin-bottom: 15px;
+
         }
 
 
@@ -396,38 +510,62 @@
         ========================================================== */
 
         .datatable-search {
+
             display: flex;
+
             align-items: center;
+
             flex: 0 1 auto;
+
         }
 
 
         .datatable-search label {
+
             margin: 0;
+
             display: flex;
+
             align-items: center;
+
             font-weight: 500;
+
             white-space: nowrap;
+
         }
 
 
         .datatable-search input {
+
             width: 260px;
+
             height: 38px;
+
             margin-left: 8px;
+
             padding: 6px 10px;
+
             border: 1px solid #ced4da;
+
             border-radius: 0 !important;
+
             outline: none;
+
             transition:
                 border-color .15s ease-in-out,
                 box-shadow .15s ease-in-out;
+
         }
 
 
         .datatable-search input:focus {
+
             border-color: #FF6600;
-            box-shadow: 0 0 0 0.15rem rgba(255, 102, 0, .15);
+
+            box-shadow:
+                0 0 0 0.15rem
+                rgba(255, 102, 0, .15);
+
         }
 
 
@@ -436,16 +574,24 @@
         ========================================================== */
 
         .datatable-add {
+
             display: flex;
+
             align-items: center;
+
             flex-shrink: 0;
+
         }
 
 
         .datatable-add .btn {
+
             height: 38px;
+
             border-radius: 0 !important;
+
             white-space: nowrap;
+
         }
 
 
@@ -454,17 +600,25 @@
         ========================================================== */
 
         .datatable-length {
+
             display: flex;
+
             align-items: center;
+
             margin-left: auto;
+
             flex-shrink: 0;
+
         }
 
 
         .dataTables_length select,
         .dt-length select {
+
             height: 36px;
+
             border-radius: 0 !important;
+
         }
 
 
@@ -473,27 +627,43 @@
         ========================================================== */
 
         .datatable-buttons {
+
             display: flex;
+
             align-items: center;
+
             justify-content: flex-end;
+
             flex-wrap: wrap;
+
             gap: 4px;
+
             flex-shrink: 0;
+
         }
 
 
         .datatable-buttons .dt-button {
+
             margin: 0 !important;
+
             min-height: 38px;
+
             padding: 6px 12px;
+
             border-radius: 0 !important;
+
             border: none !important;
+
             box-shadow: none !important;
+
         }
 
 
         .datatable-buttons .dt-button:hover {
+
             opacity: .9;
+
         }
 
 
@@ -502,7 +672,9 @@
         ========================================================== */
 
         .datatable-table {
+
             width: 100%;
+
         }
 
 
@@ -511,25 +683,39 @@
         ========================================================== */
 
         .datatable-bottom {
+
             width: 100%;
+
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
+
             gap: 15px;
+
             margin-top: 15px;
+
         }
 
 
         .datatable-info {
+
             display: flex;
+
             align-items: center;
+
         }
 
 
         .datatable-pagination {
+
             display: flex;
+
             align-items: center;
+
             justify-content: flex-end;
+
         }
 
 
@@ -538,7 +724,9 @@
         ========================================================== */
 
         .empty-users {
+
             padding: 20px;
+
         }
 
 
@@ -549,11 +737,16 @@
         @media (max-width: 1100px) {
 
             .datatable-top {
+
                 flex-wrap: wrap;
+
             }
 
+
             .datatable-length {
+
                 margin-left: 0;
+
             }
 
         }
@@ -565,120 +758,172 @@
 
         @media (max-width: 768px) {
 
+
             /* Header */
 
             .app-content-header .row {
+
                 row-gap: 8px;
+
             }
 
 
             .app-content-header .breadcrumb {
+
                 float: none !important;
+
                 justify-content: flex-start;
+
             }
 
 
             /* Datatable top */
 
             .datatable-top {
+
                 display: grid;
+
                 grid-template-columns: 1fr auto;
+
                 gap: 10px;
+
                 align-items: center;
+
             }
 
 
             /* Search */
 
             .datatable-search {
+
                 width: 100%;
+
                 min-width: 0;
+
             }
 
 
             .datatable-search label {
+
                 width: 100%;
+
             }
 
 
             .datatable-search input {
+
                 width: 100%;
+
                 min-width: 0;
+
                 margin-left: 8px;
+
             }
 
 
             /* Add button */
 
             .datatable-add {
+
                 width: auto;
+
             }
 
 
             .datatable-add .btn {
+
                 width: auto;
+
                 padding-left: 10px;
+
                 padding-right: 10px;
+
             }
 
 
             /* Length */
 
             .datatable-length {
+
                 width: 100%;
+
                 margin-left: 0;
+
             }
 
 
             /* Export buttons */
 
             .datatable-buttons {
+
                 width: 100%;
+
                 justify-content: flex-start;
+
                 overflow-x: auto;
+
                 flex-wrap: nowrap;
+
                 padding-bottom: 2px;
+
             }
 
 
             .datatable-buttons .dt-button {
+
                 white-space: nowrap;
+
                 flex-shrink: 0;
+
             }
 
 
             /* Bottom */
 
             .datatable-bottom {
+
                 flex-direction: column;
+
                 align-items: flex-start;
+
             }
 
 
             .datatable-pagination {
+
                 width: 100%;
+
                 justify-content: flex-start;
+
                 overflow-x: auto;
+
             }
 
 
             /* Table */
 
             #usersTable {
+
                 min-width: 900px;
+
                 font-size: 13px;
+
             }
 
 
             #usersTable tbody td {
+
                 padding: 8px;
+
             }
 
 
             /* Card */
 
             .user-card .card-body {
+
                 padding: 10px;
+
             }
 
         }
@@ -691,27 +936,37 @@
         @media (max-width: 480px) {
 
             .datatable-top {
+
                 grid-template-columns: 1fr;
+
             }
 
 
             .datatable-add {
+
                 width: 100%;
+
             }
 
 
             .datatable-add .btn {
+
                 width: 100%;
+
             }
 
 
             .datatable-search input {
+
                 width: 100%;
+
             }
 
 
             .datatable-buttons {
+
                 overflow-x: auto;
+
             }
 
         }
@@ -722,6 +977,7 @@
     {{-- =========================================================
         DATATABLE
     ========================================================== --}}
+
     @push('scripts')
 
         <script>
@@ -739,7 +995,8 @@
                        PAGINATION
                     ===================================================== */
 
-                    pageLength: {{ PerPage::FIVE->value }},
+                    pageLength:
+                        {{ PerPage::FIVE->value }},
 
                     lengthMenu: [
 
@@ -755,7 +1012,9 @@
                     ===================================================== */
 
                     order: [
+
                         [1, 'asc']
+
                     ],
 
 
@@ -767,9 +1026,11 @@
 
                         search: 'Search:',
 
-                        searchPlaceholder: 'Search user...',
+                        searchPlaceholder:
+                            'Search user...',
 
-                        lengthMenu: 'Show _MENU_ users',
+                        lengthMenu:
+                            'Show _MENU_ users',
 
                         info:
                             'Showing _START_ to _END_ of _TOTAL_ users',
@@ -806,18 +1067,27 @@
                     ===================================================== */
 
                     dom:
+
                         '<"datatable-top"' +
+
                         '<"datatable-search"f>' +
+
                         '<"datatable-add">' +
+
                         '<"datatable-length"l>' +
+
                         '<"datatable-buttons"B>' +
+
                         '>' +
 
                         '<"datatable-table"tr>' +
 
                         '<"datatable-bottom"' +
+
                         '<"datatable-info"i>' +
+
                         '<"datatable-pagination"p>' +
+
                         '>',
 
 
@@ -828,17 +1098,27 @@
                     buttons: [
 
                         {
+
                             extend: 'copy',
 
                             text:
                                 '<i class="bi bi-copy me-1"></i> Copy',
 
                             className:
-                                'btn btn-secondary'
+                                'btn btn-secondary',
+
+                            exportOptions: {
+
+                                columns:
+                                    ':not(:last-child)'
+
+                            }
+
                         },
 
 
                         {
+
                             extend: 'excel',
 
                             text:
@@ -851,12 +1131,17 @@
                                 'User List',
 
                             exportOptions: {
-                                columns: ':not(:last-child)'
+
+                                columns:
+                                    ':not(:last-child)'
+
                             }
+
                         },
 
 
                         {
+
                             extend: 'pdf',
 
                             text:
@@ -875,12 +1160,17 @@
                                 'A4',
 
                             exportOptions: {
-                                columns: ':not(:last-child)'
+
+                                columns:
+                                    ':not(:last-child)'
+
                             }
+
                         },
 
 
                         {
+
                             extend: 'print',
 
                             text:
@@ -893,8 +1183,12 @@
                                 'User List',
 
                             exportOptions: {
-                                columns: ':not(:last-child)'
+
+                                columns:
+                                    ':not(:last-child)'
+
                             }
+
                         }
 
                     ],
@@ -907,6 +1201,7 @@
                     columnDefs: [
 
                         {
+
                             targets: 0,
 
                             searchable: false,
@@ -914,10 +1209,12 @@
                             orderable: false,
 
                             width: '50px'
+
                         },
 
 
                         {
+
                             targets: 4,
 
                             searchable: false,
@@ -925,10 +1222,12 @@
                             orderable: true,
 
                             width: '110px'
+
                         },
 
 
                         {
+
                             targets: 5,
 
                             searchable: false,
@@ -936,6 +1235,7 @@
                             orderable: false,
 
                             width: '120px'
+
                         }
 
                     ]
@@ -950,24 +1250,23 @@
                 const addUserContainer =
                     document.querySelector('.datatable-add');
 
-
                 if (addUserContainer) {
 
                     addUserContainer.innerHTML = `
 
-                        <a
-                            {{--href="{{ route('users.create') }}"--}}
-                            class="btn btn-primary"
-                            title="Add User"
-                        >
+        <a
+            href="{{ route('users.create') }}"
+            class="btn btn-primary"
+            title="Add User"
+        >
 
-                            <i class="bi bi-person-plus me-1"></i>
+            <i class="bi bi-person-plus me-1"></i>
 
-                            Add User
+            Add User
 
-                        </a>
+        </a>
 
-                    `;
+    `;
 
                 }
 

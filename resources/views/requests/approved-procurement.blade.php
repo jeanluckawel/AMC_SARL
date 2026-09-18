@@ -3,302 +3,362 @@
 
 @section('content')
 
-    <main class="app-main">
+    @php
+        use App\Enums\PerPage;
+    @endphp
 
-        {{-- ======================================================
-            PAGE HEADER
-        ======================================================= --}}
+    <div class="app-content-header">
+        <div class="container-fluid">
+            <div class="row align-items-center">
 
-        <div class="app-content-header">
+                <div class="col-md-6 col-12">
+                    <h3 class="mb-0">
+                        Approved Requests
+                    </h3>
+                </div>
 
-            <div class="container-fluid">
+                <div class="col-md-6 col-12">
+                    <ol class="breadcrumb float-md-end mb-0">
 
-                <div class="row align-items-center">
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('dashboard') }}">
+                                Home
+                            </a>
+                        </li>
 
-                    <div class="col-sm-6">
+                        <li class="breadcrumb-item">
+                            Requests
+                        </li>
 
-                        <div class="d-flex align-items-center">
+                        <li class="breadcrumb-item active">
+                            Approved
+                        </li>
+
+                    </ol>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 
-                            <div>
+    <div class="app-content">
+        <div class="container-fluid">
 
-                                <h3 class="mb-1">
-                                    Approved Requests
-                                </h3>
+            {{-- =====================================================
+                SUCCESS MESSAGE
+            ====================================================== --}}
+            @if(session('success'))
 
-                                <p class="text-muted mb-0">
-                                    Requests that have been fully approved.
-                                </p>
+                <div class="alert alert-success alert-dismissible fade show">
 
-                            </div>
+                    <i class="bi bi-check-circle me-1"></i>
+
+                    {{ session('success') }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"
+                    ></button>
+
+                </div>
+
+            @endif
+
+
+            {{-- =====================================================
+                ERROR MESSAGE
+            ====================================================== --}}
+            @if(session('error'))
+
+                <div class="alert alert-danger alert-dismissible fade show">
+
+                    <i class="bi bi-exclamation-triangle me-1"></i>
+
+                    {{ session('error') }}
+
+                    <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"
+                    ></button>
+
+                </div>
+
+            @endif
+
+
+            {{-- =====================================================
+                CARD
+            ====================================================== --}}
+            <div class="card shadow-sm request-card">
+
+                {{-- Card header --}}
+                <div class="card-header bg-white">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <h5 class="mb-0">
+                                Approved Requests
+                            </h5>
+
+                            <small class="text-muted">
+                                Requests that have been fully approved
+                            </small>
 
                         </div>
 
-                    </div>
+                        <span class="badge approved-count">
 
-                    <div class="col-sm-6">
+                            {{ $requests->count() }}
 
-                        <ol class="breadcrumb float-sm-end mb-0">
+                            {{ $requests->count() === 1 ? 'Request' : 'Requests' }}
 
-                            <li class="breadcrumb-item">
-                                <a href="{{ route('dashboard') }}">
-                                    Home
-                                </a>
-                            </li>
-
-                            <li class="breadcrumb-item">
-                                Requests
-                            </li>
-
-                            <li class="breadcrumb-item active">
-                                Approved
-                            </li>
-
-                        </ol>
+                        </span>
 
                     </div>
 
                 </div>
 
-            </div>
 
-        </div>
+                {{-- =====================================================
+                    CARD BODY
+                ====================================================== --}}
+                <div class="card-body">
 
+                    <div class="request-table-wrapper">
 
-        {{-- ======================================================
-            CONTENT
-        ======================================================= --}}
+                        <table
+                            id="approvedTable"
+                            class="table table-bordered table-hover align-middle"
+                            style="width:100%"
+                        >
 
-        <div class="app-content">
+                            {{-- =====================================================
+                                TABLE HEADER
+                            ====================================================== --}}
+                            <thead>
 
-            <div class="container-fluid">
+                            <tr>
 
-                {{-- Success message --}}
+                                <th>
+                                    #
+                                </th>
 
-                @if(session('success'))
+                                <th>
+                                    Reference
+                                </th>
 
-                    <div class="alert alert-success alert-dismissible fade show">
+                                <th>
+                                    Title
+                                </th>
 
-                        <i class="bi bi-check-circle me-2"></i>
+                                <th>
+                                    Requester
+                                </th>
 
-                        {{ session('success') }}
+                                <th>
+                                    Items
+                                </th>
 
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="alert"
-                        ></button>
+                                <th>
+                                    Total Amount
+                                </th>
 
-                    </div>
+                                <th>
+                                    Approved Date
+                                </th>
 
-                @endif
+                                <th class="text-center">
+                                    Actions
+                                </th>
 
+                            </tr>
 
-                {{-- Card --}}
-
-                <div class="card request-card shadow-sm">
-
-                    <div class="card-header bg-white border-bottom">
-
-                        <div class="d-flex justify-content-between align-items-center">
-
-                            <div>
-
-                                <h5 class="mb-1">
-{{--                                    <i class="bi bi-check-circle text-success me-2"></i>--}}
-                                    Approved Requests
-                                </h5>
-
-                                <small class="text-muted">
-                                    {{ $requests->count() }} approved request(s)
-                                </small>
-
-                            </div>
-
-                        </div>
-
-                    </div>
+                            </thead>
 
 
-                    <div class="card-body p-0">
+                            {{-- =====================================================
+                                TABLE BODY
 
-                        <div class="table-responsive">
+                                IMPORTANT:
+                                On ne met PAS de <tr colspan="8"> ici.
 
-                            <table
-                                id="approvedTable"
-                                class="table table-hover align-middle mb-0"
-                                style="min-width: 1100px;"
-                            >
+                                Si $requests est vide, le tbody reste simplement
+                                vide et DataTables affiche language.emptyTable.
+                            ====================================================== --}}
+                            <tbody>
 
-                                <thead class="table-light">
+                            @foreach($requests as $request)
 
                                 <tr>
 
-                                    <th class="text-center" width="60">
-                                        #
-                                    </th>
+                                    {{-- =================================================
+                                        1. #
+                                    ================================================== --}}
+                                    <td class="text-center">
+                                        {{ $loop->iteration }}
+                                    </td>
 
-                                    <th>
-                                        Reference
-                                    </th>
 
-                                    <th>
-                                        Title
-                                    </th>
+                                    {{-- =================================================
+                                        2. REFERENCE
+                                    ================================================== --}}
+                                    <td>
 
-                                    <th>
-                                        Requester
-                                    </th>
+                                        <span class="fw-semibold request-reference">
+                                            {{ $request->reference ?? '—' }}
+                                        </span>
 
-                                    <th class="text-center">
-                                        Items
-                                    </th>
+                                    </td>
 
-                                    <th class="text-end">
-                                        Total Amount
-                                    </th>
 
-                                    <th class="text-center">
-                                        Approved Date
-                                    </th>
+                                    {{-- =================================================
+                                        3. TITLE
+                                    ================================================== --}}
+                                    <td>
 
-                                    <th class="text-center">
-                                        Actions
-                                    </th>
+                                        <div class="fw-semibold">
+                                            {{ $request->title ?? '—' }}
+                                        </div>
 
-                                </tr>
+                                        @if(!empty($request->description))
 
-                                </thead>
+                                            <small class="text-muted">
+                                                {{ Str::limit($request->description, 80) }}
+                                            </small>
 
-                                <tbody>
+                                        @endif
 
-                                @forelse($requests as $request)
+                                    </td>
 
-                                    <tr>
 
-                                        <td class="text-center fw-semibold">
-                                            {{ $loop->iteration }}
-                                        </td>
+                                    {{-- =================================================
+                                        4. REQUESTER
+                                    ================================================== --}}
+                                    <td>
 
-                                        <td>
+                                        <div class="d-flex align-items-center">
 
-                                            <span class="fw-semibold">
-                                                {{ $request->reference }}
-                                            </span>
+                                            <div class="request-avatar me-2">
 
-                                        </td>
+                                                <i class="bi bi-person-fill"></i>
 
-                                        <td>
-
-                                            <div class="fw-semibold">
-                                                {{ $request->title }}
                                             </div>
 
-                                            @if($request->description)
+                                            <div>
 
-                                                <small class="text-muted">
-                                                    {{ Str::limit($request->description, 60) }}
-                                                </small>
+                                                <div class="fw-semibold">
 
-                                            @endif
+                                                    {{ $request->requester?->name ?? 'Unknown' }}
 
-                                        </td>
+                                                </div>
 
-                                        <td>
-                                            {{ $request->requester?->name ?? 'N/A' }}
-                                        </td>
+                                            </div>
 
-                                        <td class="text-center">
+                                        </div>
 
-                                            <span class="badge text-bg-secondary">
-                                                {{ $request->items->count() }}
-                                            </span>
+                                    </td>
 
-                                        </td>
 
-                                        <td class="text-end fw-semibold">
+                                    {{-- =================================================
+                                        5. ITEMS
+                                    ================================================== --}}
+                                    <td class="text-center">
+
+                                        <span class="badge items-badge">
+
+                                            {{ $request->items?->count() ?? 0 }}
+
+                                        </span>
+
+                                    </td>
+
+
+                                    {{-- =================================================
+                                        6. TOTAL AMOUNT
+                                    ================================================== --}}
+                                    <td
+                                        class="text-end"
+                                        data-order="{{ (float) ($request->total_amount ?? 0) }}"
+                                    >
+
+                                        <span class="fw-semibold">
 
                                             {{ number_format(
-                                                (float) $request->total_amount,
+                                                (float) ($request->total_amount ?? 0),
                                                 2,
                                                 '.',
                                                 ','
                                             ) }}
 
-                                        </td>
+                                        </span>
 
-                                        <td class="text-center">
+                                    </td>
 
-                                            @if($request->approved_at)
 
-                                                <div>
-                                                    {{ $request->approved_at->format('d/m/Y') }}
-                                                </div>
+                                    {{-- =================================================
+                                        7. APPROVED DATE
+                                    ================================================== --}}
+                                    <td
+                                        data-order="{{ $request->approved_at?->timestamp ?? 0 }}"
+                                    >
 
-                                                <small class="text-muted">
-                                                    {{ $request->approved_at->format('H:i') }}
-                                                </small>
+                                        @if($request->approved_at)
 
-                                            @else
+                                            <div class="fw-semibold">
+                                                {{ $request->approved_at->format('d/m/Y') }}
+                                            </div>
 
-                                                <span class="text-muted">
-                                                    —
-                                                </span>
+                                            <small class="text-muted">
+                                                {{ $request->approved_at->format('H:i') }}
+                                            </small>
 
-                                            @endif
+                                        @else
 
-                                        </td>
+                                            <span class="text-muted">
+                                                —
+                                            </span>
 
-                                        <td class="text-center">
+                                        @endif
+
+                                    </td>
+
+
+                                    {{-- =================================================
+                                        8. ACTIONS
+                                    ================================================== --}}
+                                    <td class="text-center">
+
+                                        <div class="request-actions">
 
                                             <a
                                                 href="{{ route('requests.show', $request) }}"
                                                 class="btn btn-sm btn-info action-btn"
                                                 title="View Request"
+                                                aria-label="View Request"
                                             >
 
                                                 <i class="bi bi-eye"></i>
 
                                             </a>
 
-                                        </td>
+                                        </div>
 
-                                    </tr>
+                                    </td>
 
-                                @empty
+                                </tr>
 
-                                    <tr>
+                            @endforeach
 
-                                        <td
-                                            colspan="8"
-                                            class="text-center py-5"
-                                        >
+                            </tbody>
 
-                                            <div class="empty-state">
-
-                                                <i class="bi bi-check-circle display-5 text-muted"></i>
-
-                                                <h5 class="mt-3">
-                                                    No Approved Requests
-                                                </h5>
-
-                                                <p class="text-muted mb-0">
-                                                    There are currently no approved requests.
-                                                </p>
-
-                                            </div>
-
-                                        </td>
-
-                                    </tr>
-
-                                @endforelse
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
+                        </table>
 
                     </div>
 
@@ -307,142 +367,779 @@
             </div>
 
         </div>
-
-    </main>
-
-@endsection
+    </div>
 
 
-{{-- ======================================================
-    STYLES
-======================================================= --}}
-
-@push('styles')
-
+    {{-- =============================================================
+        STYLE
+    ============================================================= --}}
     <style>
 
+        /* =====================================================
+           CARD
+        ====================================================== */
+
         .request-card {
-            border-radius: 0;
+            border-radius: 0 !important;
             border: 1px solid #dee2e6;
         }
 
-        .page-icon {
-            width: 48px;
-            height: 48px;
+        .request-card .card-header {
+            border-bottom: 1px solid #dee2e6;
+            padding: 14px 16px;
+        }
+
+
+        /* =====================================================
+           TABLE
+        ====================================================== */
+
+        .request-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        #approvedTable {
+            width: 100% !important;
+            min-width: 1150px;
+            margin: 0 !important;
+            font-size: 14px;
+            border-collapse: collapse;
+        }
+
+        #approvedTable thead th {
+            white-space: nowrap;
+            vertical-align: middle;
+            font-weight: 600;
+            background: #f8f9fa;
+            color: #212529;
+            padding: 11px 10px;
+        }
+
+        #approvedTable tbody td {
+            vertical-align: middle;
+            padding: 10px;
+        }
+
+        #approvedTable tbody tr {
+            min-height: 60px;
+        }
+
+
+        /* =====================================================
+           REFERENCE
+        ====================================================== */
+
+        .request-reference {
+            white-space: nowrap;
+        }
+
+
+        /* =====================================================
+           REQUESTER
+        ====================================================== */
+
+        .request-avatar {
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
 
             display: flex;
             align-items: center;
             justify-content: center;
 
-            border-radius: 8px;
+            background: #f1f1f1;
+            color: #777;
 
-            font-size: 1.4rem;
+            border: 1px solid #dee2e6;
+            border-radius: 0;
+
+            font-size: 17px;
         }
 
-        #approvedTable thead th {
-            white-space: nowrap;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.02em;
+
+        /* =====================================================
+           BADGES
+        ====================================================== */
+
+        .items-badge {
+            background: #6c757d !important;
+            color: #fff;
+
+            border-radius: 0 !important;
+
+            min-width: 28px;
+            padding: 5px 7px;
         }
 
-        #approvedTable tbody td {
-            font-size: 0.9rem;
+        .approved-count {
+            background: #198754 !important;
+            color: #fff;
+
+            border-radius: 0 !important;
+
+            padding: 7px 10px;
+        }
+
+
+        /* =====================================================
+           ACTIONS
+        ====================================================== */
+
+        .request-actions {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
         }
 
         .action-btn {
             width: 34px;
             height: 34px;
 
+            padding: 0;
+
             display: inline-flex;
             align-items: center;
             justify-content: center;
 
-            border-radius: 4px;
+            border-radius: 0 !important;
         }
 
-        .empty-state {
-            padding: 20px;
+        .action-btn:focus,
+        .action-btn:active {
+            box-shadow:
+                0 0 0 0.15rem
+                rgba(255, 102, 0, .15) !important;
+        }
+
+
+        /* =====================================================
+           DATATABLE TOP
+        ====================================================== */
+
+        .datatable-top {
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            margin-bottom: 15px;
+        }
+
+        .datatable-search {
+            display: flex;
+            align-items: center;
+
+            flex: 0 1 auto;
+        }
+
+        .datatable-search label {
+            margin: 0;
+
+            display: flex;
+            align-items: center;
+
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .datatable-search input {
+            width: 260px;
+            height: 38px;
+
+            margin-left: 8px;
+
+            padding: 6px 10px;
+
+            border: 1px solid #ced4da;
+            border-radius: 0 !important;
+
+            outline: none;
+        }
+
+        .datatable-search input:focus {
+            border-color: #FF6600;
+
+            box-shadow:
+                0 0 0 0.15rem
+                rgba(255, 102, 0, .15);
+        }
+
+
+        /* =====================================================
+           DATATABLE ADD
+        ====================================================== */
+
+        .datatable-add {
+            display: none;
+        }
+
+
+        /* =====================================================
+           DATATABLE LENGTH
+        ====================================================== */
+
+        .datatable-length {
+            display: flex;
+            align-items: center;
+
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        .dataTables_length select,
+        .dt-length select {
+            height: 36px;
+            border-radius: 0 !important;
+        }
+
+
+        /* =====================================================
+           DATATABLE BUTTONS
+        ====================================================== */
+
+        .datatable-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+
+            flex-wrap: wrap;
+            gap: 4px;
+
+            flex-shrink: 0;
+        }
+
+        .datatable-buttons .dt-button {
+            margin: 0 !important;
+
+            min-height: 38px;
+
+            padding: 6px 12px;
+
+            border-radius: 0 !important;
+            border: none !important;
+
+            box-shadow: none !important;
+        }
+
+        .datatable-buttons .dt-button:hover {
+            opacity: .9;
+        }
+
+
+        /* =====================================================
+           DATATABLE TABLE / BOTTOM
+        ====================================================== */
+
+        .datatable-table {
+            width: 100%;
+        }
+
+        .datatable-bottom {
+            width: 100%;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-top: 15px;
+        }
+
+        .datatable-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .datatable-pagination {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+
+        /* =====================================================
+           DATATABLE DEFAULT
+        ====================================================== */
+
+        .dataTables_wrapper .dataTables_filter {
+            float: none;
+            text-align: left;
+        }
+
+        .dataTables_wrapper .dataTables_length {
+            float: none;
+        }
+
+        .dataTables_wrapper .dataTables_filter input,
+        .dataTables_wrapper .dataTables_length select {
+            border-radius: 0 !important;
+        }
+
+        .dataTables_wrapper .dataTables_filter input:focus,
+        .dataTables_wrapper .dataTables_length select:focus {
+            border-color: #FF6600;
+
+            box-shadow:
+                0 0 0 0.15rem
+                rgba(255, 102, 0, .15);
+        }
+
+        .dt-buttons .btn {
+            border-radius: 0 !important;
+        }
+
+
+        /* =====================================================
+           DATATABLE EMPTY STATE
+        ====================================================== */
+
+        #approvedTable_wrapper
+        .dataTables_empty {
+            padding: 50px 20px !important;
+            text-align: center !important;
+            color: #6c757d;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE
+        ====================================================== */
+
+        @media (max-width: 1100px) {
+
+            .datatable-top {
+                flex-wrap: wrap;
+            }
+
+            .datatable-search {
+                width: 100%;
+            }
+
+            .datatable-search input {
+                width: 100%;
+                max-width: 350px;
+            }
+
+            .datatable-length {
+                margin-left: 0;
+            }
+
+        }
+
+
+        @media (max-width: 768px) {
+
+            .request-card .card-body {
+                padding: 10px;
+            }
+
+            #approvedTable {
+                min-width: 1150px;
+                font-size: 13px;
+            }
+
+            #approvedTable tbody td {
+                padding: 8px;
+            }
+
+            .app-content-header .row {
+                row-gap: 8px;
+            }
+
+            .app-content-header .breadcrumb {
+                float: none !important;
+            }
+
+            .datatable-top {
+                display: grid;
+
+                grid-template-columns: 1fr auto;
+
+                gap: 10px;
+
+                align-items: center;
+            }
+
+            .datatable-search {
+                width: 100%;
+                min-width: 0;
+
+                grid-column: 1 / -1;
+            }
+
+            .datatable-search label {
+                width: 100%;
+            }
+
+            .datatable-search input {
+                width: 100%;
+                max-width: none;
+                min-width: 0;
+
+                margin-left: 8px;
+            }
+
+            .datatable-add {
+                display: none;
+            }
+
+            .datatable-length {
+                width: 100%;
+                margin-left: 0;
+            }
+
+            .datatable-buttons {
+                width: 100%;
+
+                justify-content: flex-start;
+
+                overflow-x: auto;
+
+                flex-wrap: nowrap;
+
+                padding-bottom: 2px;
+            }
+
+            .datatable-buttons .dt-button {
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+
+            .datatable-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .datatable-pagination {
+                width: 100%;
+
+                justify-content: flex-start;
+
+                overflow-x: auto;
+            }
+
+        }
+
+
+        @media (max-width: 480px) {
+
+            .datatable-top {
+                grid-template-columns: 1fr;
+            }
+
+            .datatable-search {
+                width: 100%;
+            }
+
+            .datatable-search input {
+                width: 100%;
+
+                margin-left: 0;
+                margin-top: 5px;
+            }
+
+            .datatable-buttons {
+                flex-wrap: nowrap;
+            }
+
         }
 
     </style>
 
-@endpush
 
+    {{-- =============================================================
+        DATATABLE SCRIPT
+    ============================================================= --}}
+    @push('scripts')
 
-{{-- ======================================================
-    SCRIPTS
-======================================================= --}}
+        <script>
 
-@push('scripts')
+            document.addEventListener(
+                'DOMContentLoaded',
+                function () {
 
-    <script>
+                    /*
+                     * Vérifie que jQuery et DataTables sont disponibles.
+                     */
+                    if (
+                        typeof window.jQuery === 'undefined' ||
+                        typeof $.fn.DataTable === 'undefined'
+                    ) {
+                        console.error(
+                            'jQuery or DataTables is not loaded.'
+                        );
 
-        $(document).ready(function () {
-
-            $('#approvedTable').DataTable({
-
-                pageLength: 5,
-
-                lengthMenu: [
-                    [5, 10, 25, 50, -1],
-                    [5, 10, 25, 50, 'All']
-                ],
-
-                order: [
-                    [6, 'desc']
-                ],
-
-                columnDefs: [
-                    {
-                        orderable: false,
-                        targets: [7]
-                    }
-                ],
-
-                language: {
-
-                    search: 'Search:',
-
-                    lengthMenu: 'Show _MENU_ entries',
-
-                    info: 'Showing _START_ to _END_ of _TOTAL_ requests',
-
-                    emptyTable: 'No approved requests available',
-
-                    zeroRecords: 'No matching requests found',
-
-                    paginate: {
-                        previous: 'Previous',
-                        next: 'Next'
+                        return;
                     }
 
-                },
 
-                dom:
-                    '<"row px-3 py-3"' +
-                    '<"col-md-6"B>' +
-                    '<"col-md-6"f>' +
-                    '>' +
-                    '<"table-responsive"t>' +
-                    '<"row px-3 py-3"' +
-                    '<"col-md-6"i>' +
-                    '<"col-md-6"p>' +
-                    '>',
+                    /*
+                     * Vérifie que le tableau existe.
+                     */
+                    const table = document.getElementById(
+                        'approvedTable'
+                    );
 
-                buttons: [
-                    'copy',
-                    'excel',
-                    'pdf',
-                    'print'
-                ]
+                    if (!table) {
+                        return;
+                    }
 
-            });
 
-        });
+                    /*
+                     * Évite une double initialisation.
+                     */
+                    if ($.fn.DataTable.isDataTable('#approvedTable')) {
 
-    </script>
+                        $('#approvedTable')
+                            .DataTable()
+                            .destroy();
 
-@endpush
+                    }
 
+
+                    /*
+                     * Initialisation DataTables.
+                     */
+                    $('#approvedTable').DataTable({
+
+                        responsive: false,
+
+                        autoWidth: false,
+
+                        pageLength:
+                            {{ PerPage::FIVE->value }},
+
+                        lengthMenu: [
+
+                            @json(PerPage::values()),
+
+                            @json([
+                                ...PerPage::values(),
+                                'All'
+                            ])
+
+                        ],
+
+                        /*
+                         * Tri par Approved Date.
+                         * Colonne 6 = Approved Date.
+                         */
+                        order: [
+                            [6, 'desc']
+                        ],
+
+                        /*
+                         * Configuration des colonnes.
+                         *
+                         * Il y a exactement 8 colonnes :
+                         *
+                         * 0 = #
+                         * 1 = Reference
+                         * 2 = Title
+                         * 3 = Requester
+                         * 4 = Items
+                         * 5 = Total Amount
+                         * 6 = Approved Date
+                         * 7 = Actions
+                         */
+                        columnDefs: [
+
+                            {
+                                targets: 0,
+
+                                searchable: false,
+
+                                orderable: false,
+
+                                width: '50px'
+                            },
+
+                            {
+                                targets: 7,
+
+                                searchable: false,
+
+                                orderable: false,
+
+                                width: '100px'
+                            }
+
+                        ],
+
+                        /*
+                         * Layout DataTables.
+                         */
+                        dom:
+                            '<"datatable-top"' +
+
+                            '<"datatable-search"f>' +
+
+                            '<"datatable-add">' +
+
+                            '<"datatable-length"l>' +
+
+                            '<"datatable-buttons"B>' +
+
+                            '>' +
+
+                            '<"datatable-table"tr>' +
+
+                            '<"datatable-bottom"' +
+
+                            '<"datatable-info"i>' +
+
+                            '<"datatable-pagination"p>' +
+
+                            '>',
+
+                        /*
+                         * Boutons export.
+                         */
+                        buttons: [
+
+                            {
+                                extend: 'copy',
+
+                                text:
+                                    '<i class="bi bi-copy me-1"></i> Copy',
+
+                                className:
+                                    'btn btn-secondary',
+
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            },
+
+                            {
+                                extend: 'excel',
+
+                                text:
+                                    '<i class="bi bi-file-earmark-excel me-1"></i> Excel',
+
+                                className:
+                                    'btn btn-success',
+
+                                title:
+                                    'Approved Requests',
+
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            },
+
+                            {
+                                extend: 'pdf',
+
+                                text:
+                                    '<i class="bi bi-file-earmark-pdf me-1"></i> PDF',
+
+                                className:
+                                    'btn btn-danger',
+
+                                title:
+                                    'Approved Requests',
+
+                                orientation:
+                                    'landscape',
+
+                                pageSize:
+                                    'A4',
+
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            },
+
+                            {
+                                extend: 'print',
+
+                                text:
+                                    '<i class="bi bi-printer me-1"></i> Print',
+
+                                className:
+                                    'btn btn-primary',
+
+                                title:
+                                    'Approved Requests',
+
+                                exportOptions: {
+                                    columns: ':not(:last-child)'
+                                }
+                            }
+
+                        ],
+
+                        /*
+                         * Messages DataTables.
+                         */
+                        language: {
+
+                            search:
+                                'Search:',
+
+                            searchPlaceholder:
+                                'Search request...',
+
+                            lengthMenu:
+                                'Show _MENU_ requests',
+
+                            info:
+                                'Showing _START_ to _END_ of _TOTAL_ requests',
+
+                            infoEmpty:
+                                'No requests available',
+
+                            infoFiltered:
+                                '(filtered from _MAX_ total requests)',
+
+                            zeroRecords:
+                                'No matching requests found',
+
+                            /*
+                             * IMPORTANT :
+                             * Ce message est utilisé lorsque le <tbody>
+                             * ne contient aucune ligne.
+                             *
+                             * Il ne faut donc PAS créer nous-mêmes
+                             * une ligne <tr><td colspan="8">...</td></tr>.
+                             */
+                            emptyTable:
+                                'No approved requests found',
+
+                            paginate: {
+
+                                first:
+                                    'First',
+
+                                last:
+                                    'Last',
+
+                                next:
+                                    'Next',
+
+                                previous:
+                                    'Previous'
+
+                            }
+
+                        }
+
+                    });
+
+                }
+
+            );
+
+        </script>
+
+    @endpush
+
+@endsection
