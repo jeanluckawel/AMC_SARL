@@ -130,50 +130,50 @@
 
                     {{-- Approved --}}
 
-                    @can('procurement.view')
+{{--                    @can('procurement.view')--}}
 
-                        <li class="nav-item">
+{{--                        <li class="nav-item">--}}
 
-                            <a
-                                href="{{ route('requests.approved') }}"
-                                class="nav-link {{ request()->routeIs('requests.approved') ? 'active' : '' }}"
-                            >
+{{--                            <a--}}
+{{--                                href="{{ route('requests.approved') }}"--}}
+{{--                                class="nav-link {{ request()->routeIs('requests.approved') ? 'active' : '' }}"--}}
+{{--                            >--}}
 
-                                <i class="nav-icon bi bi-check-circle"></i>
+{{--                                <i class="nav-icon bi bi-check-circle"></i>--}}
 
-                                <p>
-                                    Approved Requests
-                                </p>
+{{--                                <p>--}}
+{{--                                    Approved Requests--}}
+{{--                                </p>--}}
 
-                            </a>
+{{--                            </a>--}}
 
-                        </li>
+{{--                        </li>--}}
 
-                    @endcan
+{{--                    @endcan--}}
 
 
-                    {{-- Rejected --}}
+{{--                    --}}{{-- Rejected --}}
 
-                    @can('procurement.view')
+{{--                    @can('procurement.view')--}}
 
-                        <li class="nav-item">
+{{--                        <li class="nav-item">--}}
 
-                            <a
-                                href="{{ route('procurement.requests.rejected') }}"
-                                class="nav-link {{ request()->routeIs('procurement.requests.rejected') ? 'active' : '' }}"
-                            >
+{{--                            <a--}}
+{{--                                href="{{ route('procurement.requests.rejected') }}"--}}
+{{--                                class="nav-link {{ request()->routeIs('procurement.requests.rejected') ? 'active' : '' }}"--}}
+{{--                            >--}}
 
-                                <i class="nav-icon bi bi-x-circle"></i>
+{{--                                <i class="nav-icon bi bi-x-circle"></i>--}}
 
-                                <p>
-                                    Rejected Requests
-                                </p>
+{{--                                <p>--}}
+{{--                                    Rejected Requests--}}
+{{--                                </p>--}}
 
-                            </a>
+{{--                            </a>--}}
 
-                        </li>
+{{--                        </li>--}}
 
-                    @endcan
+{{--                    @endcan--}}
 
                 @endcanany
 
