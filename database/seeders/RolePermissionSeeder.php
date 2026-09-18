@@ -237,9 +237,9 @@ class RolePermissionSeeder extends Seeder
 
 
             // Procurement
-            'procurement.view',
-            'procurement.approve',
-            'procurement.reject',
+//            'procurement.view',
+//            'procurement.approve',
+//            'procurement.reject',
 
 
         ]);
