@@ -294,20 +294,52 @@
 
                                         <div class="request-actions">
 
+                                            {{-- VIEW REQUEST --}}
                                             <a
                                                 href="{{ route('requests.show', $request) }}"
                                                 class="btn btn-sm btn-info action-btn"
                                                 title="View Request"
                                                 aria-label="View Request"
                                             >
-
                                                 <i class="bi bi-eye"></i>
-
                                             </a>
+
+
+                                            {{-- UPLOAD DOCUMENT --}}
+                                            @if(
+                                                $request->status === \App\Enums\RequestStatus::APPROVED
+                                                && !$request->budget_consumed
+                                            )
+
+                                                <a
+                                                    href="{{ route('requests.document.create', ['request' => $request->id]) }}"
+                                                    class="btn btn-sm btn-success action-btn"
+                                                    title="Upload Document & Release Amount"
+                                                    aria-label="Upload Document & Release Amount"
+                                                >
+                                                    <i class="bi bi-cloud-arrow-up"></i>
+                                                </a>
+
+                                            @endif
+
+
+                                            {{-- ALREADY PROCESSED --}}
+                                            @if($request->budget_consumed)
+
+                                                <span
+                                                    class="btn btn-sm btn-secondary action-btn"
+                                                    title="Amount Already Released"
+                                                >
+                                                <i class="bi bi-check-circle"></i>
+                                                </span>
+
+                                            @endif
 
                                         </div>
 
                                     </td>
+
+
 
                                 </tr>
 

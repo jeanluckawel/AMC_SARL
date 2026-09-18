@@ -38,6 +38,13 @@ return new class extends Migration
             $table->timestamp('rejected_at')
                 ->nullable();
 
+            $table->string('document_path')
+                ->nullable()
+                ->after('total_amount');
+
+            $table->boolean('budget_consumed')
+                ->default(false);
+
             $table->timestamps();
 
             $table->index('requester_id');

@@ -18,16 +18,19 @@ class RequestModel extends Model
         'title',
         'description',
         'total_amount',
+        'document_path',
+        'budget_consumed',
         'status',
         'approved_at',
         'rejected_at',
     ];
 
     protected $casts = [
-        'status' => RequestStatus::class,
         'total_amount' => 'decimal:2',
+        'budget_consumed' => 'boolean',
         'approved_at' => 'datetime',
         'rejected_at' => 'datetime',
+        'status' => \App\Enums\RequestStatus::class,
     ];
 
     public function requester(): BelongsTo

@@ -10,6 +10,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\QuotationController;
 use App\Http\Controllers\RequestController;
+use App\Http\Controllers\RequestDisbursementController;
+use App\Http\Controllers\RequestDocumentController;
 use App\Http\Controllers\RequestManagementController;
 use App\Http\Controllers\UserController;
 use App\Models\RequestModel;
@@ -371,6 +373,16 @@ Route::middleware([
         [UserController::class, 'updatePassword']
     )->name('users.update-password');
 
+    Route::get(
+        '/requests/{request}/document',
+        [RequestDocumentController::class, 'create']
+    )->name('requests.document.create');
+
+
+    Route::post(
+        '/requests/{request}/document',
+        [RequestDocumentController::class, 'store']
+    )->name('requests.document.store');
 
 });
 

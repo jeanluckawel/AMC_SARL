@@ -15,14 +15,14 @@
             border-radius: 0 !important;
         }
 
+        .employee-card-wrapper {
+            margin: 24px;
+        }
+
         .employee-header {
             background-color: #FF6600;
             color: #fff;
             border-radius: 0 !important;
-        }
-
-        .employee-header .card-title {
-            font-weight: 600;
         }
 
         .form-control,
@@ -79,6 +79,7 @@
             z-index: 1;
             text-align: center;
             flex: 1;
+            cursor: pointer;
         }
 
         .employee-step-number {
@@ -229,6 +230,12 @@
         }
 
     </style>
+
+
+    {{-- =========================================================
+         PAGE HEADER
+    ========================================================== --}}
+
     <div class="app-content-header">
 
         <div class="container-fluid">
@@ -236,23 +243,38 @@
             <div class="row align-items-center">
 
                 <div class="col-md-6 col-12">
+
                     <h3 class="mb-0">
-                        Create an new Employees
+                        Create a New Employee
                     </h3>
+
                 </div>
 
+
                 <div class="col-md-6 col-12">
+
                     <ol class="breadcrumb float-md-end mb-0">
+
                         <li class="breadcrumb-item">
+
                             <a href="{{ url('/') }}">
                                 Home
                             </a>
+
                         </li>
 
                         <li class="breadcrumb-item active">
-                            Employees <i class="bi bi-chevron-right"></i> Create
+
+                            Employees
+
+                            <i class="bi bi-chevron-right"></i>
+
+                            Create
+
                         </li>
+
                     </ol>
+
                 </div>
 
             </div>
@@ -261,21 +283,20 @@
 
     </div>
 
-    <div class="card employee-card employee-card-wrapper m-4 shadow-sm">
 
 
-        {{-- =========================================================
-             HEADER
-        ========================================================== --}}
+    {{-- =========================================================
+         MAIN CARD
+    ========================================================== --}}
 
-
+    <div class="card employee-card employee-card-wrapper shadow-sm">
 
         <div class="card-body">
 
 
-            {{-- =========================================================
+            {{-- =====================================================
                  VALIDATION SUMMARY
-            ========================================================== --}}
+            ====================================================== --}}
 
             @if($errors->any())
 
@@ -291,6 +312,7 @@
                         Please correct the following errors:
 
                     </div>
+
 
                     <ul class="mb-0">
 
@@ -309,13 +331,20 @@
             @endif
 
 
-            {{-- =========================================================
+
+            {{-- =====================================================
                  STEPPER
-            ========================================================== --}}
+            ====================================================== --}}
 
             <div class="employee-stepper">
 
-                <div class="employee-step active" data-step="1">
+
+                {{-- STEP 1 --}}
+
+                <div
+                    class="employee-step active"
+                    data-step="1"
+                >
 
                     <div class="employee-step-number">
                         1
@@ -328,7 +357,12 @@
                 </div>
 
 
-                <div class="employee-step" data-step="2">
+                {{-- STEP 2 --}}
+
+                <div
+                    class="employee-step"
+                    data-step="2"
+                >
 
                     <div class="employee-step-number">
                         2
@@ -341,7 +375,12 @@
                 </div>
 
 
-                <div class="employee-step" data-step="3">
+                {{-- STEP 3 --}}
+
+                <div
+                    class="employee-step"
+                    data-step="3"
+                >
 
                     <div class="employee-step-number">
                         3
@@ -354,7 +393,12 @@
                 </div>
 
 
-                <div class="employee-step" data-step="4">
+                {{-- STEP 4 --}}
+
+                <div
+                    class="employee-step"
+                    data-step="4"
+                >
 
                     <div class="employee-step-number">
                         4
@@ -367,7 +411,12 @@
                 </div>
 
 
-                <div class="employee-step" data-step="5">
+                {{-- STEP 5 --}}
+
+                <div
+                    class="employee-step"
+                    data-step="5"
+                >
 
                     <div class="employee-step-number">
                         5
@@ -380,7 +429,12 @@
                 </div>
 
 
-                <div class="employee-step" data-step="6">
+                {{-- STEP 6 --}}
+
+                <div
+                    class="employee-step"
+                    data-step="6"
+                >
 
                     <div class="employee-step-number">
                         6
@@ -393,7 +447,12 @@
                 </div>
 
 
-                <div class="employee-step" data-step="7">
+                {{-- STEP 7 --}}
+
+                <div
+                    class="employee-step"
+                    data-step="7"
+                >
 
                     <div class="employee-step-number">
                         7
@@ -408,9 +467,10 @@
             </div>
 
 
-            {{-- =========================================================
+
+            {{-- =====================================================
                  FORM
-            ========================================================== --}}
+            ====================================================== --}}
 
             <form
                 action="{{ route('employees.store') }}"
@@ -423,16 +483,31 @@
                 @csrf
 
 
-                {{-- =====================================================
+
+                {{-- =================================================
                      STEP 1 : PERSONAL
-                ====================================================== --}}
+                ================================================== --}}
 
                 <div
                     class="employee-form-step active"
                     data-step="1"
                 >
 
+                    <div class="step-title">
 
+                        <h5>
+
+                            <i class="bi bi-person me-2"></i>
+
+                            Personal Information
+
+                        </h5>
+
+                        <p>
+                            Enter the employee's personal information.
+                        </p>
+
+                    </div>
 
 
                     <div class="row g-3">
@@ -458,15 +533,19 @@
                                 placeholder="John"
                                 required
                                 pattern="[A-Za-zÀ-ÿ\s]{2,}"
+                                autocomplete="off"
                             >
 
                             @error('first_name')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
+
 
 
                         {{-- MIDDLE NAME --}}
@@ -484,15 +563,19 @@
                                 value="{{ old('middle_name') }}"
                                 placeholder="Michael"
                                 pattern="[A-Za-zÀ-ÿ\s]{2,}"
+                                autocomplete="off"
                             >
 
                             @error('middle_name')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
+
 
 
                         {{-- LAST NAME --}}
@@ -515,15 +598,19 @@
                                 placeholder="Doe"
                                 required
                                 pattern="[A-Za-zÀ-ÿ\s]{2,}"
+                                autocomplete="off"
                             >
 
                             @error('last_name')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
+
 
 
                         {{-- GENDER --}}
@@ -542,6 +629,7 @@
                                 name="gender"
                                 class="form-select @error('gender') is-invalid @enderror"
                                 required
+                                autocomplete="off"
                             >
 
                                 <option value="">
@@ -552,7 +640,9 @@
 
                                     <option
                                         value="{{ $gender->value }}"
-                                        @selected(old('gender') === $gender->value)
+                                        @selected(
+                                            old('gender') === $gender->value
+                                        )
                                     >
                                         {{ $gender->label() }}
                                     </option>
@@ -562,12 +652,15 @@
                             </select>
 
                             @error('gender')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
+
 
 
                         {{-- DATE OF BIRTH --}}
@@ -588,15 +681,19 @@
                                 class="form-control @error('date_of_birth') is-invalid @enderror"
                                 value="{{ old('date_of_birth') }}"
                                 required
+                                autocomplete="off"
                             >
 
                             @error('date_of_birth')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
+
 
 
                         {{-- ID CARD --}}
@@ -619,15 +716,19 @@
                                 placeholder="NN338638245"
                                 required
                                 minlength="10"
+                                autocomplete="off"
                             >
 
                             @error('number_card')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
+
 
 
                         {{-- COUNTRY --}}
@@ -646,6 +747,7 @@
                                 name="country"
                                 class="form-select @error('country') is-invalid @enderror"
                                 required
+                                autocomplete="off"
                             >
 
                                 <option value="">
@@ -663,21 +765,27 @@
 
                                 <option
                                     value="Zambia"
-                                    @selected(old('country') === 'Zambia')
+                                    @selected(
+                                        old('country') === 'Zambia'
+                                    )
                                 >
                                     Zambia
                                 </option>
 
                                 <option
                                     value="South Africa"
-                                    @selected(old('country') === 'South Africa')
+                                    @selected(
+                                        old('country') === 'South Africa'
+                                    )
                                 >
                                     South Africa
                                 </option>
 
                                 <option
                                     value="Angola"
-                                    @selected(old('country') === 'Angola')
+                                    @selected(
+                                        old('country') === 'Angola'
+                                    )
                                 >
                                     Angola
                                 </option>
@@ -694,12 +802,15 @@
                             </select>
 
                             @error('country')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
+
 
 
                         {{-- MARITAL STATUS --}}
@@ -718,18 +829,23 @@
                                 name="marital_status"
                                 class="form-select @error('marital_status') is-invalid @enderror"
                                 required
+                                autocomplete="off"
                             >
 
                                 <option value="">
                                     Select marital status
                                 </option>
 
-                                @foreach(\App\Enums\MaritalStatus::cases() as $status)
+                                @foreach(
+                                    \App\Enums\MaritalStatus::cases()
+                                    as $status
+                                )
 
                                     <option
                                         value="{{ $status->value }}"
                                         @selected(
-                                            old('marital_status') === $status->value
+                                            old('marital_status')
+                                            === $status->value
                                         )
                                     >
                                         {{ $status->label() }}
@@ -740,9 +856,11 @@
                             </select>
 
                             @error('marital_status')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
@@ -752,14 +870,32 @@
                 </div>
 
 
-                {{-- =====================================================
+
+                {{-- =================================================
                      STEP 2 : ADDRESS
-                ====================================================== --}}
+                ================================================== --}}
 
                 <div
                     class="employee-form-step"
                     data-step="2"
                 >
+
+                    <div class="step-title">
+
+                        <h5>
+
+                            <i class="bi bi-geo-alt me-2"></i>
+
+                            Address & Contact
+
+                        </h5>
+
+                        <p>
+                            Enter employee contact information.
+                        </p>
+
+                    </div>
+
 
                     <div class="row g-3">
 
@@ -778,9 +914,11 @@
                                 class="form-control"
                                 value="{{ old('employee_work_phone') }}"
                                 placeholder="+243 XXX XXX XXX"
+                                autocomplete="off"
                             >
 
                         </div>
+
 
 
                         {{-- PERSONAL PHONE --}}
@@ -797,9 +935,11 @@
                                 class="form-control"
                                 value="{{ old('employee_phone') }}"
                                 placeholder="+243 XXX XXX XXX"
+                                autocomplete="off"
                             >
 
                         </div>
+
 
 
                         {{-- EMAIL --}}
@@ -816,9 +956,11 @@
                                 class="form-control"
                                 value="{{ old('employee_email') }}"
                                 placeholder="employee@example.com"
+                                autocomplete="off"
                             >
 
                         </div>
+
 
 
                         {{-- ADDRESS --}}
@@ -834,6 +976,7 @@
                                 class="form-control"
                                 rows="4"
                                 placeholder="Enter employee address"
+                                autocomplete="off"
                             >{{ old('employee_address') }}</textarea>
 
                         </div>
@@ -843,9 +986,10 @@
                 </div>
 
 
-                {{-- =====================================================
+
+                {{-- =================================================
                      STEP 3 : PHOTO
-                ====================================================== --}}
+                ================================================== --}}
 
                 <div
                     class="employee-form-step"
@@ -884,6 +1028,7 @@
                                 id="photoInput"
                                 class="form-control @error('photo') is-invalid @enderror"
                                 accept="image/jpeg,image/png"
+                                autocomplete="off"
                             >
 
                             <small class="text-muted">
@@ -894,9 +1039,11 @@
                             </small>
 
                             @error('photo')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
@@ -931,16 +1078,31 @@
                 </div>
 
 
-                {{-- =====================================================
+
+                {{-- =================================================
                      STEP 4 : COMPANY
-                ====================================================== --}}
+                ================================================== --}}
 
                 <div
                     class="employee-form-step"
                     data-step="4"
                 >
 
+                    <div class="step-title">
 
+                        <h5>
+
+                            <i class="bi bi-building me-2"></i>
+
+                            Company Information
+
+                        </h5>
+
+                        <p>
+                            Assign the employee to a department, section and job title.
+                        </p>
+
+                    </div>
 
 
                     <div class="row g-3">
@@ -963,6 +1125,7 @@
                                 id="department"
                                 class="form-select @error('department_id') is-invalid @enderror"
                                 required
+                                autocomplete="off"
                             >
 
                                 <option value="">
@@ -985,12 +1148,15 @@
                             </select>
 
                             @error('department_id')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
+
 
 
                         {{-- SECTION --}}
@@ -1011,6 +1177,7 @@
                                 class="form-select @error('section_id') is-invalid @enderror"
                                 required
                                 disabled
+                                autocomplete="off"
                             >
 
                                 <option value="">
@@ -1020,12 +1187,15 @@
                             </select>
 
                             @error('section_id')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
+
 
 
                         {{-- JOB TITLE --}}
@@ -1046,6 +1216,7 @@
                                 class="form-select @error('job_title_id') is-invalid @enderror"
                                 required
                                 disabled
+                                autocomplete="off"
                             >
 
                                 <option value="">
@@ -1055,12 +1226,15 @@
                             </select>
 
                             @error('job_title_id')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
+
 
 
                         {{-- CONTRACT TYPE --}}
@@ -1080,18 +1254,23 @@
                                 id="contract_type"
                                 class="form-select @error('contract_type') is-invalid @enderror"
                                 required
+                                autocomplete="off"
                             >
 
                                 <option value="">
                                     Select contract type
                                 </option>
 
-                                @foreach(\App\Enums\ContractType::cases() as $contract)
+                                @foreach(
+                                    \App\Enums\ContractType::cases()
+                                    as $contract
+                                )
 
                                     <option
                                         value="{{ $contract->value }}"
                                         @selected(
-                                            old('contract_type') === $contract->value
+                                            old('contract_type')
+                                            === $contract->value
                                         )
                                     >
                                         {{ $contract->label() }}
@@ -1102,12 +1281,15 @@
                             </select>
 
                             @error('contract_type')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
+
 
 
                         {{-- END CONTRACT DATE --}}
@@ -1131,15 +1313,19 @@
                                 id="end_contract_date"
                                 class="form-control @error('end_contract_date') is-invalid @enderror"
                                 value="{{ old('end_contract_date') }}"
+                                autocomplete="off"
                             >
 
                             @error('end_contract_date')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
+
 
 
                         {{-- WORK LOCATION --}}
@@ -1158,18 +1344,23 @@
                                 name="work_location"
                                 class="form-select @error('work_location') is-invalid @enderror"
                                 required
+                                autocomplete="off"
                             >
 
                                 <option value="">
                                     Select location
                                 </option>
 
-                                @foreach(\App\Enums\WorkLocation::cases() as $location)
+                                @foreach(
+                                    \App\Enums\WorkLocation::cases()
+                                    as $location
+                                )
 
                                     <option
                                         value="{{ $location->value }}"
                                         @selected(
-                                            old('work_location') === $location->value
+                                            old('work_location')
+                                            === $location->value
                                         )
                                     >
                                         {{ $location->label() }}
@@ -1180,12 +1371,15 @@
                             </select>
 
                             @error('work_location')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
+
 
 
                         {{-- SUPERVISOR --}}
@@ -1202,9 +1396,11 @@
                                 class="form-control"
                                 value="{{ old('supervisor') }}"
                                 placeholder="Supervisor name"
+                                autocomplete="off"
                             >
 
                         </div>
+
 
 
                         {{-- EMPLOYEE TYPE --}}
@@ -1223,18 +1419,23 @@
                                 name="employee_type"
                                 class="form-select @error('employee_type') is-invalid @enderror"
                                 required
+                                autocomplete="off"
                             >
 
                                 <option value="">
                                     Select employee type
                                 </option>
 
-                                @foreach(\App\Enums\EmployeeType::cases() as $type)
+                                @foreach(
+                                    \App\Enums\EmployeeType::cases()
+                                    as $type
+                                )
 
                                     <option
                                         value="{{ $type->value }}"
                                         @selected(
-                                            old('employee_type') === $type->value
+                                            old('employee_type')
+                                            === $type->value
                                         )
                                     >
                                         {{ $type->label() }}
@@ -1245,12 +1446,15 @@
                             </select>
 
                             @error('employee_type')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
+
 
 
                         {{-- HIRE DATE --}}
@@ -1271,12 +1475,15 @@
                                 class="form-control @error('hire_date') is-invalid @enderror"
                                 value="{{ old('hire_date') }}"
                                 required
+                                autocomplete="off"
                             >
 
                             @error('hire_date')
+
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
+
                             @enderror
 
                         </div>
@@ -1286,22 +1493,37 @@
                 </div>
 
 
-                {{-- =====================================================
+
+                {{-- =================================================
                      STEP 5 : FAMILY
-                ====================================================== --}}
+                ================================================== --}}
 
                 <div
                     class="employee-form-step"
                     data-step="5"
                 >
 
+                    <div class="step-title">
 
+                        <h5>
+
+                            <i class="bi bi-people me-2"></i>
+
+                            Family Information
+
+                        </h5>
+
+                        <p>
+                            Enter spouse and parent information.
+                        </p>
+
+                    </div>
 
 
                     <div class="row g-3">
 
 
-                        {{-- SPOUSE TITLE --}}
+                        {{-- SPOUSE --}}
 
                         <div class="col-12">
 
@@ -1327,6 +1549,7 @@
                             <select
                                 name="spouse_status"
                                 class="form-select"
+                                autocomplete="off"
                             >
 
                                 <option value="">
@@ -1374,6 +1597,7 @@
                         </div>
 
 
+
                         {{-- SPOUSE NAME --}}
 
                         <div class="col-12 col-md-4">
@@ -1389,9 +1613,11 @@
                                 value="{{ old('spouse_full_name') }}"
                                 placeholder="Spouse full name"
                                 pattern="[A-Za-zÀ-ÿ\s]{2,}"
+                                autocomplete="off"
                             >
 
                         </div>
+
 
 
                         {{-- SPOUSE PHONE --}}
@@ -1408,12 +1634,14 @@
                                 class="form-control"
                                 value="{{ old('spouse_phone') }}"
                                 placeholder="+243 XXX XXX XXX"
+                                autocomplete="off"
                             >
 
                         </div>
 
 
-                        {{-- PARENTS TITLE --}}
+
+                        {{-- PARENTS --}}
 
                         <div class="col-12 mt-4">
 
@@ -1433,6 +1661,7 @@
                             </small>
 
                         </div>
+
 
 
                         {{-- FATHER --}}
@@ -1456,6 +1685,7 @@
                                 value="{{ old('parents.father.full_name') }}"
                                 placeholder="Father full name"
                                 pattern="[A-Za-zÀ-ÿ\s]{2,}"
+                                autocomplete="off"
                             >
 
                         </div>
@@ -1473,6 +1703,7 @@
                                 class="form-control"
                                 value="{{ old('parents.father.phone') }}"
                                 placeholder="+243 XXX XXX XXX"
+                                autocomplete="off"
                             >
 
                         </div>
@@ -1509,6 +1740,7 @@
                         </div>
 
 
+
                         {{-- MOTHER --}}
 
                         <div class="col-12 col-md-5">
@@ -1530,6 +1762,7 @@
                                 value="{{ old('parents.mother.full_name') }}"
                                 placeholder="Mother full name"
                                 pattern="[A-Za-zÀ-ÿ\s]{2,}"
+                                autocomplete="off"
                             >
 
                         </div>
@@ -1547,6 +1780,7 @@
                                 class="form-control"
                                 value="{{ old('parents.mother.phone') }}"
                                 placeholder="+243 XXX XXX XXX"
+                                autocomplete="off"
                             >
 
                         </div>
@@ -1583,6 +1817,7 @@
                         </div>
 
 
+
                         {{-- FATHER IN LAW --}}
 
                         <div class="col-12 col-md-5">
@@ -1604,6 +1839,7 @@
                                 value="{{ old('parents.father_in_law.full_name') }}"
                                 placeholder="Father-in-law full name"
                                 pattern="[A-Za-zÀ-ÿ\s]{2,}"
+                                autocomplete="off"
                             >
 
                         </div>
@@ -1621,6 +1857,7 @@
                                 class="form-control"
                                 value="{{ old('parents.father_in_law.phone') }}"
                                 placeholder="+243 XXX XXX XXX"
+                                autocomplete="off"
                             >
 
                         </div>
@@ -1657,6 +1894,7 @@
                         </div>
 
 
+
                         {{-- MOTHER IN LAW --}}
 
                         <div class="col-12 col-md-5">
@@ -1678,6 +1916,7 @@
                                 value="{{ old('parents.mother_in_law.full_name') }}"
                                 placeholder="Mother-in-law full name"
                                 pattern="[A-Za-zÀ-ÿ\s]{2,}"
+                                autocomplete="off"
                             >
 
                         </div>
@@ -1695,6 +1934,7 @@
                                 class="form-control"
                                 value="{{ old('parents.mother_in_law.phone') }}"
                                 placeholder="+243 XXX XXX XXX"
+                                autocomplete="off"
                             >
 
                         </div>
@@ -1735,16 +1975,31 @@
                 </div>
 
 
-                {{-- =====================================================
+
+                {{-- =================================================
                      STEP 6 : EMERGENCY
-                ====================================================== --}}
+                ================================================== --}}
 
                 <div
                     class="employee-form-step"
                     data-step="6"
                 >
 
+                    <div class="step-title">
 
+                        <h5>
+
+                            <i class="bi bi-telephone-forward me-2"></i>
+
+                            Emergency Contact
+
+                        </h5>
+
+                        <p>
+                            Enter the employee's emergency contact information.
+                        </p>
+
+                    </div>
 
 
                     <div class="row g-3">
@@ -1761,6 +2016,7 @@
                             <select
                                 name="emergency_relationship"
                                 class="form-select"
+                                autocomplete="off"
                             >
 
                                 <option value="">
@@ -1789,6 +2045,7 @@
                         </div>
 
 
+
                         {{-- FULL NAME --}}
 
                         <div class="col-12 col-md-4">
@@ -1803,9 +2060,11 @@
                                 class="form-control"
                                 value="{{ old('emergency_full_name') }}"
                                 placeholder="Emergency contact name"
+                                autocomplete="off"
                             >
 
                         </div>
+
 
 
                         {{-- PHONE --}}
@@ -1822,9 +2081,11 @@
                                 class="form-control"
                                 value="{{ old('emergency_phone') }}"
                                 placeholder="+243 XXX XXX XXX"
+                                autocomplete="off"
                             >
 
                         </div>
+
 
 
                         {{-- ADDRESS --}}
@@ -1840,6 +2101,7 @@
                                 class="form-control"
                                 rows="3"
                                 placeholder="Emergency contact address"
+                                autocomplete="off"
                             >{{ old('emergency_address') }}</textarea>
 
                         </div>
@@ -1849,16 +2111,31 @@
                 </div>
 
 
-                {{-- =====================================================
+
+                {{-- =================================================
                      STEP 7 : SALARY
-                ====================================================== --}}
+                ================================================== --}}
 
                 <div
                     class="employee-form-step"
                     data-step="7"
                 >
 
+                    <div class="step-title">
 
+                        <h5>
+
+                            <i class="bi bi-cash-stack me-2"></i>
+
+                            Salary Information
+
+                        </h5>
+
+                        <p>
+                            Enter employee salary information.
+                        </p>
+
+                    </div>
 
 
                     <div class="row g-3">
@@ -1881,9 +2158,11 @@
                                 min="0"
                                 step="0.01"
                                 placeholder="0.00"
+                                autocomplete="off"
                             >
 
                         </div>
+
 
 
                         {{-- CATEGORY --}}
@@ -1898,6 +2177,7 @@
                                 name="salary_category"
                                 id="categorySelect"
                                 class="form-select"
+                                autocomplete="off"
                             >
 
                                 <option value="">
@@ -1926,6 +2206,7 @@
                         </div>
 
 
+
                         {{-- ECHELON --}}
 
                         <div class="col-12 col-md-4">
@@ -1940,10 +2221,12 @@
                                 id="echelonSelect"
                                 class="form-control"
                                 value="{{ old('salary_echelon') }}"
-                                readonly
+                                placeholder="Echelon"
+                                autocomplete="off"
                             >
 
                         </div>
+
 
 
                         {{-- CURRENCY --}}
@@ -1957,6 +2240,7 @@
                             <select
                                 name="salary_currency"
                                 class="form-select"
+                                autocomplete="off"
                             >
 
                                 <option value="">
@@ -1989,9 +2273,10 @@
                 </div>
 
 
-                {{-- =====================================================
-                     BUTTONS
-                ====================================================== --}}
+
+                {{-- =================================================
+                     NAVIGATION BUTTONS
+                ================================================== --}}
 
                 <div
                     class="d-flex justify-content-between mt-4 pt-3 border-top"
@@ -2017,9 +2302,13 @@
                     </div>
 
 
+
                     {{-- NAVIGATION --}}
 
                     <div>
+
+
+                        {{-- PREVIOUS --}}
 
                         <button
                             type="button"
@@ -2035,6 +2324,9 @@
                         </button>
 
 
+
+                        {{-- NEXT --}}
+
                         <button
                             type="button"
                             class="btn btn-orange"
@@ -2047,6 +2339,9 @@
 
                         </button>
 
+
+
+                        {{-- SAVE --}}
 
                         <button
                             type="submit"
@@ -2061,6 +2356,7 @@
                             role="status"
                             aria-hidden="true"
                         ></span>
+
 
                             <span id="saveText">
 
@@ -2083,23 +2379,34 @@
     </div>
 
 
+
+    {{-- =========================================================
+         JAVASCRIPT
+    ========================================================== --}}
+
     <script>
 
         document.addEventListener('DOMContentLoaded', function () {
 
 
             /* =========================================================
-               FORM ELEMENTS
+               FORM
             ========================================================== */
 
             const form =
                 document.getElementById('employeeForm');
 
+
+            /* =========================================================
+               STEPS
+            ========================================================== */
+
             const steps =
                 document.querySelectorAll('.employee-form-step');
 
-            const indicators =
+            const stepIndicators =
                 document.querySelectorAll('.employee-step');
+
 
             const nextBtn =
                 document.getElementById('nextBtn');
@@ -2107,11 +2414,11 @@
             const previousBtn =
                 document.getElementById('previousBtn');
 
-            const saveBtn =
-                document.getElementById('saveBtn');
-
             const cancelBtn =
                 document.getElementById('cancelBtn');
+
+            const saveBtn =
+                document.getElementById('saveBtn');
 
             const saveSpinner =
                 document.getElementById('saveSpinner');
@@ -2120,411 +2427,13 @@
                 document.getElementById('saveText');
 
 
-            let currentStep = 1;
+            let currentStep = 0;
 
-            const totalSteps = 7;
-
-
-            /* =========================================================
-               SHOW STEP
-            ========================================================== */
-
-            function showStep(step) {
-
-                steps.forEach(function (element) {
-
-                    element.classList.remove('active');
-
-                });
-
-
-                indicators.forEach(function (element, index) {
-
-                    element.classList.remove(
-                        'active',
-                        'completed'
-                    );
-
-
-                    if (index + 1 < step) {
-
-                        element.classList.add('completed');
-
-                    }
-
-
-                    if (index + 1 === step) {
-
-                        element.classList.add('active');
-
-                    }
-
-                });
-
-
-                const current =
-                    document.querySelector(
-                        `.employee-form-step[data-step="${step}"]`
-                    );
-
-
-                if (current) {
-
-                    current.classList.add('active');
-
-                }
-
-
-                previousBtn.style.display =
-                    step === 1
-                        ? 'none'
-                        : 'inline-block';
-
-
-                nextBtn.style.display =
-                    step === totalSteps
-                        ? 'none'
-                        : 'inline-block';
-
-
-                saveBtn.style.display =
-                    step === totalSteps
-                        ? 'inline-block'
-                        : 'none';
-
-
-                cancelBtn.style.display =
-                    step === totalSteps
-                        ? 'none'
-                        : 'inline-block';
-
-            }
 
 
             /* =========================================================
-               VALIDATE CURRENT STEP
-            ========================================================== */
-
-            function validateStep() {
-
-                const current =
-                    document.querySelector(
-                        `.employee-form-step[data-step="${currentStep}"]`
-                    );
-
-
-                if (!current) {
-
-                    return true;
-
-                }
-
-
-                const fields =
-                    current.querySelectorAll(
-                        'input[required], select[required], textarea[required]'
-                    );
-
-
-                for (const field of fields) {
-
-                    /*
-                     * Disabled fields are not required
-                     * at this moment.
-                     */
-
-                    if (field.disabled) {
-
-                        continue;
-
-                    }
-
-
-                    if (!field.checkValidity()) {
-
-                        field.reportValidity();
-
-                        return false;
-
-                    }
-
-                }
-
-
-                return true;
-
-            }
-
-
-            /* =========================================================
-               NEXT
-            ========================================================== */
-
-            nextBtn.addEventListener(
-                'click',
-                function () {
-
-                    if (!validateStep()) {
-
-                        return;
-
-                    }
-
-
-                    if (currentStep < totalSteps) {
-
-                        currentStep++;
-
-                        showStep(currentStep);
-
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                        });
-
-                    }
-
-                }
-            );
-
-
-            /* =========================================================
-               PREVIOUS
-            ========================================================== */
-
-            previousBtn.addEventListener(
-                'click',
-                function () {
-
-                    if (currentStep > 1) {
-
-                        currentStep--;
-
-                        showStep(currentStep);
-
-                        window.scrollTo({
-                            top: 0,
-                            behavior: 'smooth'
-                        });
-
-                    }
-
-                }
-            );
-
-
-            /* =========================================================
-               CANCEL
-            ========================================================== */
-
-            cancelBtn.addEventListener(
-                'click',
-                function () {
-
-                    if (
-                        confirm(
-                            'Are you sure you want to cancel?'
-                        )
-                    ) {
-
-                        window.location.reload();
-
-                    }
-
-                }
-            );
-
-
-            /* =========================================================
-               PHOTO PREVIEW
-            ========================================================== */
-
-            const photoInput =
-                document.getElementById('photoInput');
-
-            const photoPreview =
-                document.getElementById('photoPreview');
-
-            const photoPlaceholder =
-                document.getElementById('photoPlaceholder');
-
-
-            photoInput.addEventListener(
-                'change',
-                function () {
-
-                    const file =
-                        this.files[0];
-
-
-                    if (!file) {
-
-                        photoPreview.style.display = 'none';
-
-                        photoPlaceholder.style.display = 'flex';
-
-                        return;
-
-                    }
-
-
-                    if (!file.type.startsWith('image/')) {
-
-                        alert(
-                            'Please select a valid image.'
-                        );
-
-                        this.value = '';
-
-                        photoPreview.style.display = 'none';
-
-                        photoPlaceholder.style.display = 'flex';
-
-                        return;
-
-                    }
-
-
-                    const reader =
-                        new FileReader();
-
-
-                    reader.onload =
-                        function (event) {
-
-                            photoPreview.src =
-                                event.target.result;
-
-                            photoPreview.style.display =
-                                'block';
-
-                            photoPlaceholder.style.display =
-                                'none';
-
-                        };
-
-
-                    reader.readAsDataURL(file);
-
-                }
-            );
-
-
-            /* =========================================================
-               CONTRACT TYPE
-            ========================================================== */
-
-            const contractType =
-                document.getElementById('contract_type');
-
-            const endWrapper =
-                document.getElementById('endContractWrapper');
-
-            const endInput =
-                document.getElementById('end_contract_date');
-
-
-            function updateContractDate() {
-
-                const requiresEndDate =
-                    [
-                        'CDD',
-                        'Stage',
-                        'Consultant'
-                    ].includes(contractType.value);
-
-
-                if (requiresEndDate) {
-
-                    endWrapper.classList.remove('d-none');
-
-                    endInput.required = true;
-
-                } else {
-
-                    endWrapper.classList.add('d-none');
-
-                    endInput.required = false;
-
-                    endInput.value = '';
-
-                }
-
-            }
-
-
-            contractType.addEventListener(
-                'change',
-                updateContractDate
-            );
-
-
-            updateContractDate();
-
-
-            /* =========================================================
-               SALARY CATEGORY -> ECHELON
-            ========================================================== */
-
-            const categorySelect =
-                document.getElementById('categorySelect');
-
-            const echelonInput =
-                document.getElementById('echelonSelect');
-
-
-            const categoryToEchelon = {
-
-                'A1': 'I',
-                'A2': 'II',
-                'A3': 'III',
-
-                'B1': 'IV',
-                'B2': 'V',
-                'B3': 'VI',
-                'B4': 'VII',
-                'B5': 'VIII',
-
-                'C1': 'IX',
-                'C2': 'X',
-                'C3': 'XI',
-                'C4': 'XII',
-                'C5': 'XIII',
-
-                'D1': 'XIV',
-                'D2': 'XV',
-                'D3': 'XVI',
-                'D4': 'XVII',
-                'D5': 'XVIII',
-
-                'E1': 'XIX',
-                'E2': 'XX',
-                'E3': 'XXI'
-
-            };
-
-
-            function updateEchelon() {
-
-                echelonInput.value =
-                    categoryToEchelon[
-                        categorySelect.value
-                        ] || '';
-
-            }
-
-
-            categorySelect.addEventListener(
-                'change',
-                updateEchelon
-            );
-
-
-            updateEchelon();
-
-
-            /* =========================================================
-               DEPARTMENT -> SECTION -> JOB TITLE
+               DEPARTMENT / SECTION / JOB TITLE
+               NO AJAX
             ========================================================== */
 
             const department =
@@ -2537,11 +2446,16 @@
                 document.getElementById('job_title');
 
 
-            const sectionsBaseUrl =
-                @json(url('/get-sections'));
+            /*
+             * Laravel sends all data to the page.
+             * No AJAX is used.
+             */
 
-            const jobTitlesBaseUrl =
-                @json(url('/get-job-titles'));
+            const sections =
+                @json($sections);
+
+            const jobTitles =
+                @json($jobTitles);
 
 
             /* =========================================================
@@ -2558,18 +2472,18 @@
                 @json(old('job_title_id'));
 
 
+
             /* =========================================================
                LOAD SECTIONS
             ========================================================== */
 
-            async function loadSections(
+            function loadSections(
                 departmentId,
-                selectedSectionId = null,
-                selectedJobTitleId = null
+                selectedSectionId = null
             ) {
 
                 section.innerHTML =
-                    '<option value="">Loading sections...</option>';
+                    '<option value="">Select section</option>';
 
                 section.disabled = true;
 
@@ -2586,123 +2500,74 @@
                         '<option value="">Select department first</option>';
 
                     return;
-
                 }
 
 
-                try {
+                const filteredSections =
+                    sections.filter(function (item) {
 
-                    const response =
-                        await fetch(
-                            `${sectionsBaseUrl}/${departmentId}`,
-                            {
-                                method: 'GET',
-
-                                headers: {
-                                    'Accept': 'application/json',
-                                    'X-Requested-With': 'XMLHttpRequest'
-                                }
-                            }
-                        );
-
-
-                    if (!response.ok) {
-
-                        throw new Error(
-                            `HTTP error: ${response.status}`
-                        );
-
-                    }
-
-
-                    const data =
-                        await response.json();
-
-
-                    if (!Array.isArray(data)) {
-
-                        throw new Error(
-                            'Invalid sections response'
-                        );
-
-                    }
-
-
-                    section.innerHTML =
-                        '<option value="">Select section</option>';
-
-
-                    data.forEach(function (item) {
-
-                        const option =
-                            document.createElement('option');
-
-
-                        option.value =
-                            item.id;
-
-
-                        option.textContent =
-                            item.name;
-
-
-                        if (
-                            selectedSectionId &&
-                            String(selectedSectionId) ===
-                            String(item.id)
-                        ) {
-
-                            option.selected = true;
-
-                        }
-
-
-                        section.appendChild(option);
+                        return String(item.department_id) ===
+                            String(departmentId);
 
                     });
 
 
-                    section.disabled = false;
+                filteredSections.forEach(function (item) {
+
+                    const option =
+                        document.createElement('option');
 
 
-                    if (selectedSectionId) {
+                    option.value =
+                        item.id;
 
-                        await loadJobTitles(
-                            selectedSectionId,
-                            selectedJobTitleId
-                        );
+
+                    option.textContent =
+                        item.name;
+
+
+                    if (
+                        selectedSectionId &&
+                        String(selectedSectionId) ===
+                        String(item.id)
+                    ) {
+
+                        option.selected = true;
 
                     }
 
-                } catch (error) {
 
-                    console.error(
-                        'Error loading sections:',
-                        error
-                    );
+                    section.appendChild(option);
 
+                });
+
+
+                if (filteredSections.length > 0) {
+
+                    section.disabled = false;
+
+                } else {
 
                     section.innerHTML =
-                        '<option value="">Unable to load sections</option>';
-
-                    section.disabled = true;
+                        '<option value="">No section available</option>';
 
                 }
 
             }
 
 
+
             /* =========================================================
                LOAD JOB TITLES
             ========================================================== */
 
-            async function loadJobTitles(
+            function loadJobTitles(
                 sectionId,
                 selectedJobTitleId = null
             ) {
 
                 jobTitle.innerHTML =
-                    '<option value="">Loading job titles...</option>';
+                    '<option value="">Select job title</option>';
 
                 jobTitle.disabled = true;
 
@@ -2713,219 +2578,889 @@
                         '<option value="">Select section first</option>';
 
                     return;
-
                 }
 
 
-                try {
+                const filteredJobTitles =
+                    jobTitles.filter(function (item) {
 
-                    const response =
-                        await fetch(
-                            `${jobTitlesBaseUrl}/${sectionId}`,
-                            {
-                                method: 'GET',
-
-                                headers: {
-                                    'Accept': 'application/json',
-                                    'X-Requested-With': 'XMLHttpRequest'
-                                }
-                            }
-                        );
-
-
-                    if (!response.ok) {
-
-                        throw new Error(
-                            `HTTP error: ${response.status}`
-                        );
-
-                    }
-
-
-                    const data =
-                        await response.json();
-
-
-                    if (!Array.isArray(data)) {
-
-                        throw new Error(
-                            'Invalid job titles response'
-                        );
-
-                    }
-
-
-                    jobTitle.innerHTML =
-                        '<option value="">Select job title</option>';
-
-
-                    data.forEach(function (item) {
-
-                        const option =
-                            document.createElement('option');
-
-
-                        option.value =
-                            item.id;
-
-
-                        option.textContent =
-                            item.name;
-
-
-                        if (
-                            selectedJobTitleId &&
-                            String(selectedJobTitleId) ===
-                            String(item.id)
-                        ) {
-
-                            option.selected = true;
-
-                        }
-
-
-                        jobTitle.appendChild(option);
+                        return String(item.section_id) ===
+                            String(sectionId);
 
                     });
 
 
+                filteredJobTitles.forEach(function (item) {
+
+                    const option =
+                        document.createElement('option');
+
+
+                    option.value =
+                        item.id;
+
+
+                    option.textContent =
+                        item.name;
+
+
+                    if (
+                        selectedJobTitleId &&
+                        String(selectedJobTitleId) ===
+                        String(item.id)
+                    ) {
+
+                        option.selected = true;
+
+                    }
+
+
+                    jobTitle.appendChild(option);
+
+                });
+
+
+                if (filteredJobTitles.length > 0) {
+
                     jobTitle.disabled = false;
 
-                } catch (error) {
-
-                    console.error(
-                        'Error loading job titles:',
-                        error
-                    );
-
+                } else {
 
                     jobTitle.innerHTML =
-                        '<option value="">Unable to load job titles</option>';
-
-                    jobTitle.disabled = true;
+                        '<option value="">No job title available</option>';
 
                 }
 
             }
+
 
 
             /* =========================================================
                DEPARTMENT CHANGE
             ========================================================== */
 
-            department.addEventListener(
-                'change',
-                function () {
+            if (
+                department &&
+                section &&
+                jobTitle
+            ) {
+
+                department.addEventListener(
+                    'change',
+                    function () {
+
+                        loadSections(
+                            this.value
+                        );
+
+                    }
+                );
+
+
+                /* =====================================================
+                   SECTION CHANGE
+                ====================================================== */
+
+                section.addEventListener(
+                    'change',
+                    function () {
+
+                        loadJobTitles(
+                            this.value
+                        );
+
+                    }
+                );
+
+
+                /* =====================================================
+                   RESTORE OLD VALUES
+                ====================================================== */
+
+                if (oldDepartmentId) {
+
+                    department.value =
+                        oldDepartmentId;
+
 
                     loadSections(
-                        this.value
+                        oldDepartmentId,
+                        oldSectionId
                     );
 
-                }
-            );
 
+                    if (oldSectionId) {
 
-            /* =========================================================
-               SECTION CHANGE
-            ========================================================== */
+                        loadJobTitles(
+                            oldSectionId,
+                            oldJobTitleId
+                        );
 
-            section.addEventListener(
-                'change',
-                function () {
-
-                    loadJobTitles(
-                        this.value
-                    );
+                    }
 
                 }
-            );
-
-
-            /* =========================================================
-               RESTORE OLD VALUES
-            ========================================================== */
-
-            if (oldDepartmentId) {
-
-                loadSections(
-                    oldDepartmentId,
-                    oldSectionId,
-                    oldJobTitleId
-                );
 
             }
 
 
+
             /* =========================================================
-               SUBMIT
+               SHOW STEP
             ========================================================== */
 
-            form.addEventListener(
-                'submit',
-                function (event) {
+            function showStep(step) {
 
-                    console.log(
-                        'SUBMIT EMPLOYEE'
+                if (step < 0) {
+
+                    step = 0;
+
+                }
+
+
+                if (step >= steps.length) {
+
+                    step =
+                        steps.length - 1;
+
+                }
+
+
+                steps.forEach(function (item, index) {
+
+                    item.classList.toggle(
+                        'active',
+                        index === step
+                    );
+
+                });
+
+
+                stepIndicators.forEach(function (item, index) {
+
+                    item.classList.toggle(
+                        'active',
+                        index === step
                     );
 
 
-                    /*
-                     * Final HTML validation.
-                     */
+                    item.classList.toggle(
+                        'completed',
+                        index < step
+                    );
 
-                    if (!form.checkValidity()) {
+                });
 
-                        event.preventDefault();
 
-                        form.reportValidity();
+                currentStep =
+                    step;
 
-                        console.log(
-                            'FORM INVALID'
-                        );
+
+                /* Previous */
+
+                if (previousBtn) {
+
+                    previousBtn.style.display =
+                        currentStep === 0
+                            ? 'none'
+                            : 'inline-block';
+
+                }
+
+
+                /* Next */
+
+                if (nextBtn) {
+
+                    nextBtn.style.display =
+                        currentStep === steps.length - 1
+                            ? 'none'
+                            : 'inline-block';
+
+                }
+
+
+                /* Save */
+
+                if (saveBtn) {
+
+                    saveBtn.style.display =
+                        currentStep === steps.length - 1
+                            ? 'inline-block'
+                            : 'none';
+
+                }
+
+
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+
+            }
+
+
+
+            /* =========================================================
+               VALIDATE STEP
+            ========================================================== */
+
+            function validateStep(step) {
+
+                if (!step) {
+
+                    return true;
+
+                }
+
+
+                const fields =
+                    step.querySelectorAll(
+                        'input, select, textarea'
+                    );
+
+
+                let valid = true;
+
+
+                fields.forEach(function (field) {
+
+                    if (field.disabled) {
 
                         return;
 
                     }
 
 
-                    console.log(
-                        'FORM VALID - POST /employees'
+                    if (!field.checkValidity()) {
+
+                        field.classList.add(
+                            'is-invalid'
+                        );
+
+                        valid = false;
+
+                    } else {
+
+                        field.classList.remove(
+                            'is-invalid'
+                        );
+
+                    }
+
+                });
+
+
+                if (!valid) {
+
+                    const firstInvalid =
+                        step.querySelector(
+                            '.is-invalid'
+                        );
+
+
+                    if (firstInvalid) {
+
+                        firstInvalid.focus();
+
+                    }
+
+                }
+
+
+                return valid;
+
+            }
+
+
+
+            /* =========================================================
+               NEXT BUTTON
+            ========================================================== */
+
+            if (nextBtn) {
+
+                nextBtn.addEventListener(
+                    'click',
+                    function () {
+
+                        const step =
+                            steps[currentStep];
+
+
+                        if (!validateStep(step)) {
+
+                            return;
+
+                        }
+
+
+                        if (
+                            currentStep <
+                            steps.length - 1
+                        ) {
+
+                            showStep(
+                                currentStep + 1
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+
+
+
+            /* =========================================================
+               PREVIOUS BUTTON
+            ========================================================== */
+
+            if (previousBtn) {
+
+                previousBtn.addEventListener(
+                    'click',
+                    function () {
+
+                        if (currentStep > 0) {
+
+                            showStep(
+                                currentStep - 1
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+
+
+
+            /* =========================================================
+               STEP INDICATORS
+            ========================================================== */
+
+            stepIndicators.forEach(
+                function (indicator, index) {
+
+                    indicator.addEventListener(
+                        'click',
+                        function () {
+
+                            /*
+                             * Only allow going backward
+                             * or staying on current step.
+                             */
+
+                            if (index <= currentStep) {
+
+                                showStep(index);
+
+                            }
+
+                        }
                     );
-
-
-                    /*
-                     * Prevent double submission.
-                     */
-
-                    saveBtn.disabled = true;
-
-
-                    /*
-                     * Show spinner.
-                     */
-
-                    saveSpinner.classList.remove(
-                        'd-none'
-                    );
-
-
-                    saveText.innerHTML =
-                        'Saving...';
 
                 }
             );
 
 
+
             /* =========================================================
-               INITIALIZE
+               REMOVE INVALID CLASS
             ========================================================== */
 
-            showStep(
-                currentStep
-            );
+            document
+                .querySelectorAll(
+                    'input, select, textarea'
+                )
+                .forEach(function (field) {
+
+
+                    field.addEventListener(
+                        'input',
+                        function () {
+
+                            if (this.checkValidity()) {
+
+                                this.classList.remove(
+                                    'is-invalid'
+                                );
+
+                            }
+
+                        }
+                    );
+
+
+                    field.addEventListener(
+                        'change',
+                        function () {
+
+                            if (this.checkValidity()) {
+
+                                this.classList.remove(
+                                    'is-invalid'
+                                );
+
+                            }
+
+                        }
+                    );
+
+                });
+
+
+
+            /* =========================================================
+               PHOTO PREVIEW
+            ========================================================== */
+
+            const photoInput =
+                document.getElementById('photoInput');
+
+            const photoPreview =
+                document.getElementById('photoPreview');
+
+            const photoPlaceholder =
+                document.getElementById('photoPlaceholder');
+
+
+            if (
+                photoInput &&
+                photoPreview
+            ) {
+
+                photoInput.addEventListener(
+                    'change',
+                    function () {
+
+                        const file =
+                            this.files[0];
+
+
+                        if (!file) {
+
+                            photoPreview.style.display =
+                                'none';
+
+
+                            if (photoPlaceholder) {
+
+                                photoPlaceholder.style.display =
+                                    'flex';
+
+                            }
+
+                            return;
+
+                        }
+
+
+                        if (
+                            !file.type.startsWith('image/')
+                        ) {
+
+                            this.value = '';
+
+                            return;
+
+                        }
+
+
+                        const reader =
+                            new FileReader();
+
+
+                        reader.onload =
+                            function (event) {
+
+                                photoPreview.src =
+                                    event.target.result;
+
+
+                                photoPreview.style.display =
+                                    'block';
+
+
+                                if (photoPlaceholder) {
+
+                                    photoPlaceholder.style.display =
+                                        'none';
+
+                                }
+
+                            };
+
+
+                        reader.readAsDataURL(file);
+
+                    }
+                );
+
+            }
+
+
+
+            /* =========================================================
+               CONTRACT TYPE
+            ========================================================== */
+
+            const contractType =
+                document.getElementById('contract_type');
+
+            const endContractWrapper =
+                document.getElementById('endContractWrapper');
+
+            const endContractDate =
+                document.getElementById('end_contract_date');
+
+
+            function updateContractType() {
+
+                if (!contractType) {
+
+                    return;
+
+                }
+
+
+                const value =
+                    contractType.value;
+
+
+                /*
+                 * IMPORTANT:
+                 * Adapt these values if your ContractType
+                 * enum uses different values.
+                 */
+
+                const needsEndDate =
+                    value === 'fixed_term' ||
+                    value === 'temporary' ||
+                    value === 'CDD';
+
+
+                if (needsEndDate) {
+
+                    if (endContractWrapper) {
+
+                        endContractWrapper.classList.remove(
+                            'd-none'
+                        );
+
+                    }
+
+
+                    if (endContractDate) {
+
+                        endContractDate.required =
+                            true;
+
+                    }
+
+                } else {
+
+                    if (endContractWrapper) {
+
+                        endContractWrapper.classList.add(
+                            'd-none'
+                        );
+
+                    }
+
+
+                    if (endContractDate) {
+
+                        endContractDate.required =
+                            false;
+
+                        endContractDate.value =
+                            '';
+
+                    }
+
+                }
+
+            }
+
+
+            if (contractType) {
+
+                contractType.addEventListener(
+                    'change',
+                    updateContractType
+                );
+
+
+                updateContractType();
+
+            }
+
+
+
+            /* =========================================================
+               SALARY CATEGORY -> ECHELON
+            ========================================================== */
+
+            const categorySelect =
+                document.getElementById('categorySelect');
+
+            const echelonSelect =
+                document.getElementById('echelonSelect');
+
+
+            /*
+             * This is only an example mapping.
+             * Change it according to your salary rules.
+             */
+
+            const echelons = {
+
+                A: [
+                    'A1',
+                    'A2',
+                    'A3'
+                ],
+
+                B: [
+                    'B1',
+                    'B2',
+                    'B3'
+                ],
+
+                C: [
+                    'C1',
+                    'C2',
+                    'C3'
+                ],
+
+                D: [
+                    'D1',
+                    'D2',
+                    'D3'
+                ]
+
+            };
+
+
+            function updateEchelon() {
+
+                if (
+                    !categorySelect ||
+                    !echelonSelect
+                ) {
+
+                    return;
+
+                }
+
+
+                const category =
+                    categorySelect.value;
+
+
+                if (!category) {
+
+                    echelonSelect.value = '';
+
+                    return;
+
+                }
+
+
+                const values =
+                    echelons[category] || [];
+
+
+                /*
+                 * Your echelon field is currently
+                 * an INPUT, not a SELECT.
+                 *
+                 * If there are several echelons,
+                 * leave it available for manual entry.
+                 */
+
+                if (values.length === 1) {
+
+                    echelonSelect.value =
+                        values[0];
+
+                }
+
+            }
+
+
+            if (categorySelect) {
+
+                categorySelect.addEventListener(
+                    'change',
+                    updateEchelon
+                );
+
+
+                updateEchelon();
+
+            }
+
+
+
+            /* =========================================================
+               AUTOCOMPLETE OFF
+            ========================================================== */
+
+            if (form) {
+
+                form.setAttribute(
+                    'autocomplete',
+                    'off'
+                );
+
+
+                form.querySelectorAll(
+                    'input, select, textarea'
+                ).forEach(function (field) {
+
+                    field.setAttribute(
+                        'autocomplete',
+                        'off'
+                    );
+
+                });
+
+            }
+
+
+
+            /* =========================================================
+               CANCEL
+            ========================================================== */
+
+            if (cancelBtn) {
+
+                cancelBtn.addEventListener(
+                    'click',
+                    function () {
+
+                        window.history.back();
+
+                    }
+                );
+
+            }
+
+
+
+            /* =========================================================
+               FORM SUBMIT
+            ========================================================== */
+
+            if (form) {
+
+                form.addEventListener(
+                    'submit',
+                    function (event) {
+
+                        let firstInvalidStep =
+                            -1;
+
+
+                        /*
+                         * Validate every step.
+                         */
+
+                        steps.forEach(
+                            function (step, index) {
+
+                                if (!validateStep(step)) {
+
+                                    if (
+                                        firstInvalidStep === -1
+                                    ) {
+
+                                        firstInvalidStep =
+                                            index;
+
+                                    }
+
+                                }
+
+                            }
+                        );
+
+
+                        /*
+                         * Validation failed.
+                         */
+
+                        if (
+                            firstInvalidStep !== -1
+                        ) {
+
+                            event.preventDefault();
+
+
+                            showStep(
+                                firstInvalidStep
+                            );
+
+
+                            return;
+
+                        }
+
+
+                        /*
+                         * Prevent double submission.
+                         */
+
+                        if (saveBtn) {
+
+                            saveBtn.disabled =
+                                true;
+
+                        }
+
+
+                        /*
+                         * Show spinner.
+                         */
+
+                        if (saveSpinner) {
+
+                            saveSpinner.classList.remove(
+                                'd-none'
+                            );
+
+                        }
+
+
+                        /*
+                         * Change save text.
+                         */
+
+                        if (saveText) {
+
+                            saveText.innerHTML =
+                                'Saving...';
+
+                        }
+
+                    }
+                );
+
+            }
+
+
+
+            /* =========================================================
+               INITIAL STEP
+            ========================================================== */
+
+            showStep(0);
 
         });
-
     </script>
 
 @endsection

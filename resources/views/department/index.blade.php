@@ -1,9 +1,8 @@
 @extends('layouts.admin')
 
-@section('title', 'Departments - HR Management')
+@section('title', 'Departments')
 
 @section('content')
-
 
     @php
         use App\Enums\PerPage;
@@ -114,8 +113,8 @@
                             <tbody>
 
                             {{-- IMPORTANT:
-                                 Do NOT use @forelse + @empty here.
-                                 DataTables expects every <tr> to have 5 <td>.
+                                Do NOT use @forelse + @empty here.
+                                DataTables expects every <tr> to have 5 <td>.
                             --}}
 
                             @foreach($departments as $department)
@@ -163,8 +162,8 @@
                                         @empty
 
                                             <span class="text-muted">
-                                            No section
-                                        </span>
+                                                No section
+                                            </span>
 
                                         @endforelse
 
@@ -200,8 +199,8 @@
                                         @empty
 
                                             <span class="text-muted">
-                                            No job title
-                                        </span>
+                                                No job title
+                                            </span>
 
                                         @endforelse
 
@@ -365,8 +364,8 @@
                                 Department Name
 
                                 <span class="text-danger">
-                                *
-                            </span>
+                                    *
+                                </span>
 
                             </label>
 
@@ -443,6 +442,7 @@
 
     {{-- =========================================================
         CSS
+        LIGHT + DARK MODE
     ========================================================== --}}
 
     <style>
@@ -456,6 +456,10 @@
             border-radius: 0 !important;
 
             border: 1px solid #dee2e6;
+
+            background-color: #ffffff;
+
+            color: #212529;
 
         }
 
@@ -532,6 +536,8 @@
 
             padding: 11px 10px;
 
+            border-color: #dee2e6;
+
         }
 
 
@@ -540,6 +546,12 @@
             vertical-align: middle;
 
             padding: 10px;
+
+            border-color: #dee2e6;
+
+            background-color: #ffffff;
+
+            color: #212529;
 
         }
 
@@ -783,9 +795,20 @@
 
             outline: none;
 
+            background-color: #ffffff;
+
+            color: #212529;
+
             transition:
                 border-color .15s ease-in-out,
                 box-shadow .15s ease-in-out;
+
+        }
+
+
+        .datatable-search input::placeholder {
+
+            color: #6c757d;
 
         }
 
@@ -842,7 +865,9 @@
 
             border-radius: 0 !important;
 
-            background-color: #fff;
+            background-color: #ffffff;
+
+            color: #212529;
 
         }
 
@@ -993,6 +1018,344 @@
 
 
         /* =========================================================
+           =========================================================
+           DARK MODE
+           =========================================================
+           ========================================================= */
+
+        body.dark-mode .department-card {
+
+            background-color: #343a40;
+
+            border-color: #495057;
+
+            color: #f8f9fa;
+
+        }
+
+
+        /* ---------------------------------------------------------
+           TABLE
+        --------------------------------------------------------- */
+
+        body.dark-mode #departmentsTable {
+
+            color: #f8f9fa;
+
+        }
+
+
+        body.dark-mode #departmentsTable thead th {
+
+            background-color: #212529;
+
+            color: #f8f9fa;
+
+            border-color: #495057;
+
+        }
+
+
+        body.dark-mode #departmentsTable tbody td {
+
+            background-color: #343a40;
+
+            color: #f8f9fa;
+
+            border-color: #495057;
+
+        }
+
+
+        body.dark-mode #departmentsTable tbody tr:hover td {
+
+            background-color: #3d444b;
+
+        }
+
+
+        /* ---------------------------------------------------------
+           TEXT
+        --------------------------------------------------------- */
+
+        body.dark-mode .department-name {
+
+            color: #f8f9fa;
+
+        }
+
+
+        body.dark-mode .section-name {
+
+            color: #f8f9fa;
+
+        }
+
+
+        body.dark-mode .job-title-name {
+
+            color: #e9ecef;
+
+        }
+
+
+        body.dark-mode .section-item,
+        body.dark-mode .job-title-item {
+
+            border-bottom-color: #495057;
+
+        }
+
+
+        body.dark-mode .text-muted,
+        body.dark-mode .section-code,
+        body.dark-mode .job-title-code {
+
+            color: #adb5bd !important;
+
+        }
+
+
+        /* ---------------------------------------------------------
+           AVATAR
+        --------------------------------------------------------- */
+
+        body.dark-mode .department-avatar {
+
+            background-color: #212529;
+
+            color: #adb5bd;
+
+            border-color: #495057;
+
+        }
+
+
+        /* ---------------------------------------------------------
+           SEARCH
+        --------------------------------------------------------- */
+
+        body.dark-mode .datatable-search input {
+
+            background-color: #212529;
+
+            color: #f8f9fa;
+
+            border-color: #495057;
+
+        }
+
+
+        body.dark-mode .datatable-search input::placeholder {
+
+            color: #adb5bd;
+
+        }
+
+
+        body.dark-mode .datatable-search input:focus {
+
+            background-color: #212529;
+
+            color: #ffffff;
+
+            border-color: #86b7fe;
+
+        }
+
+
+        /* ---------------------------------------------------------
+           LENGTH
+        --------------------------------------------------------- */
+
+        body.dark-mode .datatable-length select {
+
+            background-color: #212529;
+
+            color: #f8f9fa;
+
+            border-color: #495057;
+
+        }
+
+
+        body.dark-mode .datatable-length select option {
+
+            background-color: #212529;
+
+            color: #f8f9fa;
+
+        }
+
+
+        /* ---------------------------------------------------------
+           DATATABLE TEXT
+        --------------------------------------------------------- */
+
+        body.dark-mode .datatable-top,
+        body.dark-mode .datatable-bottom {
+
+            color: #f8f9fa;
+
+        }
+
+
+        /* ---------------------------------------------------------
+           DATATABLE PAGINATION
+        --------------------------------------------------------- */
+
+        body.dark-mode .dataTables_wrapper
+        .dataTables_paginate
+        .paginate_button {
+
+            color: #f8f9fa !important;
+
+        }
+
+
+        body.dark-mode .dataTables_wrapper
+        .dataTables_paginate
+        .paginate_button:hover {
+
+            background: #495057 !important;
+
+            border-color: #6c757d !important;
+
+            color: #ffffff !important;
+
+        }
+
+
+        body.dark-mode .dataTables_wrapper
+        .dataTables_paginate
+        .paginate_button.current,
+        body.dark-mode .dataTables_wrapper
+        .dataTables_paginate
+        .paginate_button.current:hover {
+
+            background: #0d6efd !important;
+
+            border-color: #0d6efd !important;
+
+            color: #ffffff !important;
+
+        }
+
+
+        /* ---------------------------------------------------------
+           DATATABLE PROCESSING
+        --------------------------------------------------------- */
+
+        body.dark-mode .dataTables_processing {
+
+            background-color: #343a40;
+
+            color: #f8f9fa;
+
+            border-color: #495057;
+
+        }
+
+
+        /* ---------------------------------------------------------
+           MODAL
+        --------------------------------------------------------- */
+
+        body.dark-mode .modal-content {
+
+            background-color: #343a40;
+
+            color: #f8f9fa;
+
+            border-color: #495057;
+
+        }
+
+
+        body.dark-mode .modal-header {
+
+            border-color: #495057;
+
+        }
+
+
+        body.dark-mode .modal-footer {
+
+            border-top-color: #495057;
+
+        }
+
+
+        body.dark-mode .modal-title {
+
+            color: #f8f9fa;
+
+        }
+
+
+        body.dark-mode .form-label {
+
+            color: #f8f9fa;
+
+        }
+
+
+        body.dark-mode .form-control {
+
+            background-color: #212529;
+
+            color: #f8f9fa;
+
+            border-color: #495057;
+
+        }
+
+
+        body.dark-mode .form-control::placeholder {
+
+            color: #adb5bd;
+
+        }
+
+
+        body.dark-mode .form-control:focus {
+
+            background-color: #212529;
+
+            color: #ffffff;
+
+            border-color: #86b7fe;
+
+        }
+
+
+        body.dark-mode .btn-close {
+
+            filter: invert(1) grayscale(100%) brightness(200%);
+
+        }
+
+
+        /* ---------------------------------------------------------
+           BREADCRUMB
+        --------------------------------------------------------- */
+
+        body.dark-mode .breadcrumb-item,
+        body.dark-mode .breadcrumb-item.active {
+
+            color: #adb5bd;
+
+        }
+
+
+        body.dark-mode .breadcrumb-item a {
+
+            color: #6ea8fe;
+
+        }
+
+
+        /* =========================================================
            MOBILE
         ========================================================== */
 
@@ -1118,52 +1481,39 @@
 
                 $('#departmentsTable').DataTable({
 
-                    /*
-                    |--------------------------------------------------------------------------
-                    | TABLE
-                    |--------------------------------------------------------------------------
-                    */
+                    /* =====================================================
+                       TABLE
+                    ====================================================== */
 
                     responsive: false,
 
                     autoWidth: false,
 
 
-                    /*
-                    |--------------------------------------------------------------------------
-                    | PAGINATION
-                    |--------------------------------------------------------------------------
-                    */
+                    /* =====================================================
+                       PAGINATION
+                    ====================================================== */
 
                     pageLength: {{ PerPage::FIVE->value }},
 
                     lengthMenu: [
-
                         @json($perPageValues),
-
                         @json($perPageLabels)
-
                     ],
 
 
-                    /*
-                    |--------------------------------------------------------------------------
-                    | DEFAULT ORDER
-                    |--------------------------------------------------------------------------
-                    */
+                    /* =====================================================
+                       DEFAULT ORDER
+                    ====================================================== */
 
                     order: [
-
                         [1, 'asc']
-
                     ],
 
 
-                    /*
-                    |--------------------------------------------------------------------------
-                    | LANGUAGE
-                    |--------------------------------------------------------------------------
-                    */
+                    /* =====================================================
+                       LANGUAGE
+                    ====================================================== */
 
                     language: {
 
@@ -1204,39 +1554,26 @@
                     },
 
 
-                    /*
-                    |--------------------------------------------------------------------------
-                    | DATATABLE LAYOUT
-                    |--------------------------------------------------------------------------
-                    */
+                    /* =====================================================
+                       DATATABLE LAYOUT
+                    ====================================================== */
 
                     dom:
                         '<"datatable-top"' +
-
                         '<"datatable-search"f>' +
-
                         '<"datatable-length"l>' +
-
                         '<"datatable-buttons"B>' +
-
                         '>' +
-
                         '<"datatable-table"tr>' +
-
                         '<"datatable-bottom"' +
-
                         '<"datatable-info"i>' +
-
                         '<"datatable-pagination"p>' +
-
                         '>',
 
 
-                    /*
-                    |--------------------------------------------------------------------------
-                    | EXPORT BUTTONS
-                    |--------------------------------------------------------------------------
-                    */
+                    /* =====================================================
+                       EXPORT BUTTONS
+                    ====================================================== */
 
                     buttons: [
 
@@ -1333,11 +1670,9 @@
                     ],
 
 
-                    /*
-                    |--------------------------------------------------------------------------
-                    | COLUMNS
-                    |--------------------------------------------------------------------------
-                    */
+                    /* =====================================================
+                       COLUMNS
+                    ====================================================== */
 
                     columnDefs: [
 
@@ -1373,11 +1708,9 @@
             });
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | DELETE CONFIRMATION
-            |--------------------------------------------------------------------------
-            */
+            /* =============================================================
+               DELETE CONFIRMATION
+            ============================================================= */
 
             function confirmDelete(button)
             {
@@ -1430,6 +1763,5 @@
         </script>
 
     @endif
-
 
 @endsection

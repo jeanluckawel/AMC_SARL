@@ -12,6 +12,8 @@ use App\Models\Employee;
 use App\Models\EmployeeParent;
 use App\Models\EmployeeSalary;
 use App\Models\EmergencyContact;
+use App\Models\JobTitle;
+use App\Models\Section;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,9 +24,17 @@ class EmployeeController extends Controller
 {
     public function create(): View
     {
-        $departments = Department::orderBy('name', 'asc')->get();
+        $departments = Department::orderBy('name')->get();
 
-        return view('employee.create', compact('departments'));
+        $sections = Section::orderBy('name')->get();
+
+        $jobTitles = JobTitle::orderBy('name')->get();
+
+        return view('employee.create', compact(
+            'departments',
+            'sections',
+            'jobTitles'
+        ));
     }
 
 

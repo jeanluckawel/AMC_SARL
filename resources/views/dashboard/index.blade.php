@@ -526,6 +526,8 @@
                                             {{-- DEPARTMENT --}}
                                             <td>
 
+{{--                                                {{ $employee->department->nom  }}--}}
+
                                                 {{ $request->requester?->employee?->department?->name ?? 'N/A' }}
 
                                             </td>
