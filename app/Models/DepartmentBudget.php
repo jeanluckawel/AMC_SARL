@@ -14,6 +14,7 @@ class DepartmentBudget extends Model
         'end_date',
     ];
 
+
     protected $casts = [
         'amount' => 'decimal:2',
         'used_amount' => 'decimal:2',
