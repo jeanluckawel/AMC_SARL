@@ -16,63 +16,267 @@ class DashboardController extends Controller
     {
         $user = auth()->user();
 
-        $department = Department::count();
+        /*
+        |--------------------------------------------------------------------------
+        | DEFAULT VALUES
+        |--------------------------------------------------------------------------
+        | On initialise toutes les variables utilisées par le Blade.
+        | Cela évite les "Undefined variable".
+        |--------------------------------------------------------------------------
+        */
 
-        $employee = Employee::count();
+        $department = 0;
+        $employee = 0;
+        $totalUsers = 0;
+        $totalEmployees = 0;
 
-        $totalUsers = User::count();
+        $requests = collect();
 
-        $totalEmployees = Employee::count();
+        $totalRequests = 0;
+        $pendingRequests = 0;
+        $approvedRequests = 0;
+        $rejectedRequests = 0;
 
+        $totalQuotations = 0;
+        $totalPurchaseOrders = 0;
 
-        $requests = RequestModel::with([
-            'requester.employee.department',
-            'items',
-            'attachments',
-            'steps.user',
-        ])
-            ->latest('created_at')
-            ->take(5)
-            ->get();
-
-
-
-        $totalRequests = RequestModel::count();
-
-        $pendingRequests = RequestModel::whereIn('status', [
-            'pending_procurement',
-            'pending_finance',
-            'pending_ceo',
-        ])->count();
-
-        $approvedRequests = RequestModel::where('status', 'approved')
-            ->count();
-
-        $rejectedRequests = RequestModel::where('status', 'rejected')
-            ->count();
+        $budgets = collect();
 
 
+        /*
+        |--------------------------------------------------------------------------
+        | EXECUTIVE ACCESS
+        |--------------------------------------------------------------------------
+        |
+        | CEO et DG peuvent voir les informations globales.
+        |
+        */
 
-        $totalQuotations = Quotation::count();
+        $isExecutive =
+            $user->can('ceo.view') ||
+            $user->can('dg.view');
 
-        $totalPurchaseOrders = PurchaseOrder::count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | CEO / DG
+        |--------------------------------------------------------------------------
+        */
+
+        if ($isExecutive) {
+
+            /*
+            |--------------------------------------------------------------------------
+            | DEPARTMENTS
+            |--------------------------------------------------------------------------
+            */
+
+            if ($user->can('departments.view')) {
+                $department = Department::count();
+            }
 
 
-        $budgets = DepartmentBudget::with('department')
-            ->latest()
-            ->take(5)
-            ->get();
+            /*
+            |--------------------------------------------------------------------------
+            | EMPLOYEES
+            |--------------------------------------------------------------------------
+            */
 
+            if ($user->can('employees.view')) {
+                $employee = Employee::count();
+                $totalEmployees = Employee::count();
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | USERS
+            |--------------------------------------------------------------------------
+            */
+
+            if ($user->can('users.view')) {
+                $totalUsers = User::count();
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | REQUESTS
+            |--------------------------------------------------------------------------
+            */
+
+            if ($user->can('requests.view')) {
+
+                $requests = RequestModel::with([
+                    'requester.employee.department',
+                    'items',
+                    'attachments',
+                    'steps.user',
+                ])
+                    ->latest('created_at')
+                    ->take(5)
+                    ->get();
+
+
+                $totalRequests = RequestModel::count();
+
+
+                $pendingRequests = RequestModel::whereIn('status', [
+                    'pending_procurement',
+                    'pending_finance',
+                    'pending_ceo',
+                ])->count();
+
+
+                $approvedRequests = RequestModel::where(
+                    'status',
+                    'approved'
+                )->count();
+
+
+                $rejectedRequests = RequestModel::where(
+                    'status',
+                    'rejected'
+                )->count();
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | QUOTATIONS
+            |--------------------------------------------------------------------------
+            */
+
+            if ($user->can('quotations.view')) {
+                $totalQuotations = Quotation::count();
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | PURCHASE ORDERS
+            |--------------------------------------------------------------------------
+            */
+
+            if ($user->can('purchase_orders.view')) {
+                $totalPurchaseOrders = PurchaseOrder::count();
+            }
+
+
+            /*
+            |--------------------------------------------------------------------------
+            | BUDGET
+            |--------------------------------------------------------------------------
+            */
+
+            if ($user->can('finance.budget.view')) {
+
+                $budgets = DepartmentBudget::with('department')
+                    ->latest()
+                    ->take(5)
+                    ->get();
+            }
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | NORMAL USER
+        |--------------------------------------------------------------------------
+        |
+        | Un utilisateur normal ne voit que SES demandes.
+        |
+        */
+
+        else {
+
+            if ($user->can('requests.view')) {
+
+                $requestQuery = RequestModel::with([
+                    'requester.employee.department',
+                    'items',
+                    'attachments',
+                    'steps.user',
+                ])
+                    ->whereHas('requester', function ($query) use ($user) {
+                        $query->where('id', $user->id);
+                    });
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | RECENT REQUESTS
+                |--------------------------------------------------------------------------
+                */
+
+                $requests = (clone $requestQuery)
+                    ->latest('created_at')
+                    ->take(5)
+                    ->get();
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | TOTAL REQUESTS
+                |--------------------------------------------------------------------------
+                */
+
+                $totalRequests = (clone $requestQuery)
+                    ->count();
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | PENDING
+                |--------------------------------------------------------------------------
+                */
+
+                $pendingRequests = (clone $requestQuery)
+                    ->whereIn('status', [
+                        'pending_procurement',
+                        'pending_finance',
+                        'pending_ceo',
+                    ])
+                    ->count();
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | APPROVED
+                |--------------------------------------------------------------------------
+                */
+
+                $approvedRequests = (clone $requestQuery)
+                    ->where('status', 'approved')
+                    ->count();
+
+
+                /*
+                |--------------------------------------------------------------------------
+                | REJECTED
+                |--------------------------------------------------------------------------
+                */
+
+                $rejectedRequests = (clone $requestQuery)
+                    ->where('status', 'rejected')
+                    ->count();
+            }
+        }
+
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETURN VIEW
+        |--------------------------------------------------------------------------
+        */
 
         return view('dashboard.index', compact(
             'user',
-
 
             'department',
             'employee',
             'totalEmployees',
             'totalUsers',
-
 
             'requests',
             'totalRequests',
@@ -80,10 +284,8 @@ class DashboardController extends Controller
             'approvedRequests',
             'rejectedRequests',
 
-
             'totalQuotations',
             'totalPurchaseOrders',
-
 
             'budgets',
         ));
