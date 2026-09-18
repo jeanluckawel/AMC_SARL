@@ -15,54 +15,76 @@ use Illuminate\View\View;
 
 class RequestManagementController extends Controller
 {
+//    public function index(): View
+//    {
+//        $user = auth()->user();
+//
+//        $query = RequestModel::with([
+//            'requester',
+//            'items',
+//            'attachments',
+//            'steps.user',
+//        ]);
+//
+//        if ($user->hasRole('Requester')) {
+//
+//            $query->where('requester_id', $user->id);
+//
+//        } elseif ($user->hasRole('Procurement')) {
+//
+//            $query->where(
+//                'status',
+//                RequestStatus::PENDING_PROCUREMENT
+//            );
+//
+//        } elseif ($user->hasRole('Finance')) {
+//
+//            $query->where(
+//                'status',
+//                RequestStatus::PENDING_FINANCE
+//            );
+//
+//        } elseif ($user->hasRole('CEO')) {
+//
+//            $query->where(
+//                'status',
+//                RequestStatus::PENDING_CEO
+//            );
+//
+//        } elseif (
+//            $user->hasRole('Admin') ||
+//            $user->hasRole('IT')
+//        ) {
+//
+//
+//        } else {
+//
+//            $query->where('requester_id', $user->id);
+//        }
+//
+//        $requests = $query
+//            ->latest('created_at')
+//            ->get();
+//
+//        return view(
+//            'requests.index',
+//            compact('requests')
+//        );
+//    }
+//
+
     public function index(): View
     {
         $user = auth()->user();
 
-        $query = RequestModel::with([
+
+        $requests = RequestModel::with([
             'requester',
             'items',
             'attachments',
             'steps.user',
-        ]);
-
-        if ($user->hasRole('Requester')) {
-
-            $query->where('requester_id', $user->id);
-
-        } elseif ($user->hasRole('Procurement')) {
-
-            $query->where(
-                'status',
-                RequestStatus::PENDING_PROCUREMENT
-            );
-
-        } elseif ($user->hasRole('Finance')) {
-
-            $query->where(
-                'status',
-                RequestStatus::PENDING_FINANCE
-            );
-
-        } elseif ($user->hasRole('CEO')) {
-
-            $query->where(
-                'status',
-                RequestStatus::PENDING_CEO
-            );
-
-        } elseif (
-            $user->hasRole('Admin') ||
-            $user->hasRole('IT')
-        ) {
-
-
-        } else {
-
-            $query->where('requester_id', $user->id);
-        }
-
-        $requests = $query
+        ])
+            ->where('requester_id', $user->id)
             ->latest('created_at')
             ->get();
 
@@ -70,7 +92,9 @@ class RequestManagementController extends Controller
             'requests.index',
             compact('requests')
         );
-    }
+
+
+        }
 
 
     public function create(): View
