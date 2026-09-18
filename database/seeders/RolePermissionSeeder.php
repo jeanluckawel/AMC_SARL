@@ -95,6 +95,9 @@ class RolePermissionSeeder extends Seeder
         $ceo->syncPermissions([
             // Employees
             'employees.view',
+            'employees.create',
+            'employees.edit',
+            'employees.delete',
 
             // Organization
             'departments.view',
@@ -104,12 +107,17 @@ class RolePermissionSeeder extends Seeder
 
             // Quotations
             'quotations.view',
+            'quotations.create',
+            'quotations.edit',
 
             // Purchase Orders
             'purchase_orders.view',
+            'purchase_orders.create',
 
             // Requests
             'requests.view',
+            'requests.create',
+            'requests.edit',
 
             // Procurement
             'procurement.view',
@@ -198,23 +206,7 @@ class RolePermissionSeeder extends Seeder
         $logistics = Role::findByName('Logistics', 'web');
 
         $logistics->syncPermissions([
-            // Employees
-            'employees.view',
 
-            // Organization
-            'departments.view',
-            'sections.view',
-            'job_titles.view',
-
-            // Quotations
-            'quotations.view',
-
-            // Purchase Orders
-            'purchase_orders.view',
-            'purchase_orders.create',
-
-            // Procurement
-            'procurement.view',
 
             // Requests
             'requests.view',
@@ -234,35 +226,22 @@ class RolePermissionSeeder extends Seeder
         $procurement = Role::findByName('Procurement', 'web');
 
         $procurement->syncPermissions([
-            // Employees
-            'employees.view',
 
-            // Quotations
-            'quotations.view',
-            'quotations.create',
-            'quotations.edit',
-            'quotations.delete',
+
 
             // Purchase Orders
             'purchase_orders.view',
             'purchase_orders.create',
             'purchase_orders.delete',
 
-            // Requests
-            'requests.view',
-            'requests.create',
-            'requests.edit',
-            'requests.delete',
+
 
             // Procurement
             'procurement.view',
             'procurement.approve',
             'procurement.reject',
 
-            // Reports
-            'reports.view',
-            'reports.create',
-            'reports.export',
+
         ]);
 
 
@@ -275,31 +254,21 @@ class RolePermissionSeeder extends Seeder
         $finance = Role::findByName('Finance', 'web');
 
         $finance->syncPermissions([
-            // Employees
-            'employees.view',
 
-            // Quotations
-            'quotations.view',
 
-            // Purchase Orders
-            'purchase_orders.view',
+
+
 
             // Requests
             'requests.view',
 
-            // Procurement
-            'procurement.view',
 
             // Finance
             'finance.view',
             'finance.approve',
             'finance.reject',
 
-            // Budgets
-            'finance.budget.view',
-            'finance.budget.create',
-            'finance.budget.edit',
-            'finance.budget.delete',
+
 
             // Reports
             'reports.view',
