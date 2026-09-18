@@ -17,6 +17,8 @@ class departmentBudgetsController extends Controller
 //            403
 //        );
 
+
+
         $departments = Department::with([
             'budgets',
         ])
