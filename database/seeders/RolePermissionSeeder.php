@@ -230,16 +230,16 @@ class RolePermissionSeeder extends Seeder
 
 
             // Purchase Orders
-            'purchase_orders.view',
-            'purchase_orders.create',
-            'purchase_orders.delete',
+//            'purchase_orders.view',
+//            'purchase_orders.create',
+//            'purchase_orders.delete',
 
 
 
             // Procurement
-//            'procurement.view',
-//            'procurement.approve',
-//            'procurement.reject',
+            'procurement.view',
+            'procurement.approve',
+            'procurement.reject',
 
 
         ]);
