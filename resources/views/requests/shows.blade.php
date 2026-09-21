@@ -1233,8 +1233,8 @@
                     <div class="approval-box">
 
                         <div class="approval-role">
-                            DG
 
+                            DG
                         </div>
 
                         @if($ceoStep)
