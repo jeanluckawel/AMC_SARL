@@ -1234,6 +1234,7 @@
 
                         <div class="approval-role">
                             DG
+
                         </div>
 
                         @if($ceoStep)
