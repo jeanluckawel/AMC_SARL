@@ -610,7 +610,7 @@
                         <div>
                             Requester:
                             <strong>
-                                {{ $requestModel->user?->name ?? '-' }}
+                                {{ $requestModel->requests?->name ?? '-' }}
                             </strong>
                         </div>
 
