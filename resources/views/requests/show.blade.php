@@ -617,7 +617,7 @@
                         <div>
                             Department:
                             <strong>
-                                {{ $requestModel->department?->name ?? '-' }}
+                                {{ $requestModel->requester?->employee?->department?->name ?? '-' }}
                             </strong>
                         </div>
 
@@ -651,7 +651,7 @@
 
                     <div class="request-date">
 
-                        {{ $requestModel->created_at?->format('d/m/Y') ?? '-' }}
+                      Kolwezi le,  {{ $requestModel->created_at?->format('d/m/Y') ?? '-' }}
 
                     </div>
 
