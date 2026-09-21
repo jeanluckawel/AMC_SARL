@@ -641,7 +641,7 @@
 
                     <div class="request-title">
 
-                        REQUEST :
+                        PURCHASE REQUEST :
 
                         <span style="margin-left: 7px;">
                             {{ $requestModel->reference ?? '-' }}
