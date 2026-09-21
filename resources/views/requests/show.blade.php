@@ -617,7 +617,7 @@
                         <div>
                             Department:
                             <strong>
-                                {{ $requestModel->requester?->employee?->department->name ?? '-' }}
+                                {{ $requestModel->requester?->employee?->department?->name ?? '-' }}
                             </strong>
                         </div>
 
