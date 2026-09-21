@@ -21,7 +21,7 @@
                 <div class="col-md-6 col-12">
 
                     <h3 class="mb-0">
-                        Pending CEO Validation
+                        Pending DG Validation
                     </h3>
 
                 </div>
@@ -41,7 +41,7 @@
 
 
                         <li class="breadcrumb-item">
-                            CEO
+                            DG
                         </li>
 
 
@@ -90,11 +90,11 @@
                         <div>
 
                             <h5 class="mb-0">
-                                Requests Pending CEO
+                                Requests Pending DG
                             </h5>
 
                             <small class="text-muted">
-                                Requests waiting for final CEO validation
+                                Requests waiting for final DG validation
                             </small>
 
                         </div>
@@ -344,7 +344,7 @@
 
                                                 <i class="bi bi-hourglass-split me-1"></i>
 
-                                                Pending CEO
+                                                Pending DG
 
                                             </span>
 
