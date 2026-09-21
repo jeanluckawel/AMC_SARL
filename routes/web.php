@@ -383,6 +383,11 @@ Route::middleware([
         '/requests/{request}/document',
         [RequestDocumentController::class, 'store']
     )->name('requests.document.store');
+    Route::get(
+        '/my-profile',
+        [EmployeeController::class, 'myProfile']
+    )->name('employees.myProfile');
+
 
 });
 

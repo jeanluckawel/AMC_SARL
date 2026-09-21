@@ -742,4 +742,20 @@ class EmployeeController extends Controller
         return view('profile', compact('employee'));
 
     }
+
+
+
+    public function myProfile()
+    {
+
+        $employee = auth()->user()->employee;
+
+        if (!$employee) {
+            abort(404, 'Aucun profil employé associé à ce compte.');
+        }
+
+        $employee->load(['department', 'section', 'jobTitle']);
+
+        return view('admin.employees.profile', compact('employee'));
+    }
 }

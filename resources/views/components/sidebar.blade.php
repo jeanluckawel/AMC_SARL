@@ -698,7 +698,7 @@
                 <li class="nav-item">
 
                     <a
-                        href="#"
+                        href="{{ route('employees.myProfile') }}"
                         class="nav-link"
                     >
 
