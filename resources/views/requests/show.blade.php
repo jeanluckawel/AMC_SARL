@@ -958,7 +958,7 @@
                     <div class="request-approval-box">
 
                         <div class="request-approval-header">
-                            CEO
+                            DG
                         </div>
 
                         <div class="request-approval-body">
