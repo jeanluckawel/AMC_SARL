@@ -291,7 +291,7 @@
 
                                 <div class="col-4 text-center">
 
-                                    <a href="#">
+                                    <a href="{{ route('employees.myProfile') }}">
                                         Profile
                                     </a>
 
@@ -306,7 +306,7 @@
                         <li class="user-footer">
 
                             <a
-                                href="#"
+                                href="{{ route('employees.myProfile') }}"
                                 class="btn btn-outline-secondary"
                             >
                                 <i class="bi bi-person me-1"></i>

@@ -162,13 +162,13 @@
                                     <h6 class="section-title">Identifiants</h6>
 
                                     <div class="info-row">
-                                        <span>ID Employé</span>
+                                        <span>Matricule</span>
                                         <strong>{{ $employee->employee_id ?? '-' }}</strong>
                                     </div>
-                                    <div class="info-row">
-                                        <span>ID Interne</span>
-                                        <strong>{{ $employee->id }}</strong>
-                                    </div>
+{{--                                    <div class="info-row">--}}
+{{--                                        <span>ID Interne</span>--}}
+{{--                                        <strong>{{ $employee->id }}</strong>--}}
+{{--                                    </div>--}}
                                 </div>
                             </div>
                         </div>
