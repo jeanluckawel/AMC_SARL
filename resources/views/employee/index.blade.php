@@ -329,9 +329,10 @@
                                             {{-- DELETE --}}
 
                                             <form
-                                                action="#"
+                                                action="{{ route('employees.destroy', $employee) }}"
                                                 method="POST"
                                                 class="d-inline"
+                                                onsubmit="return confirm('Are you sure you want to delete this employee?');"
                                             >
 
                                                 @csrf
@@ -339,10 +340,10 @@
                                                 @method('DELETE')
 
                                                 <button
-                                                    type="button"
+                                                    type="submit"
                                                     class="btn btn-sm btn-danger action-btn"
                                                     title="Delete Employee"
-                                                    onclick="confirmDelete(this)"
+                                                    aria-label="Delete Employee"
                                                 >
 
                                                     <i class="bi bi-trash"></i>

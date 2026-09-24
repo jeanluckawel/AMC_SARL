@@ -1000,9 +1000,13 @@ class EmployeeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Employee $employee)
+    public function destroy(Employee $employee): RedirectResponse
     {
-        //
+        $employee->delete();
+
+        return redirect()
+            ->route('employees.index')
+            ->with('success', 'Employee deleted successfully.');
     }
 
     public function getSections(Department $department): \Illuminate\Http\JsonResponse

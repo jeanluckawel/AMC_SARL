@@ -76,6 +76,7 @@ return new class extends Migration
             $table->string('spouse_phone')->nullable();
 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -57,6 +57,11 @@ Route::middleware('auth')->group(function () {
         [EmployeeController::class, 'update']
     )->name('employees.update');
 
+    Route::delete(
+        '/employees-{employee}-delete',
+        [EmployeeController::class, 'destroy']
+    )->name('employees.destroy');
+
 
 
     Route::get('/get-sections/{department}', [EmployeeController::class, 'getSections'])
