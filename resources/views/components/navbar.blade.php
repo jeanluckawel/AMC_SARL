@@ -63,6 +63,7 @@
             <!-- Language -->
             <!-- Language -->
             <li class="nav-item dropdown">
+
                 <a
                     class="nav-link dropdown-toggle"
                     href="#"
@@ -75,37 +76,55 @@
                     <i class="bi bi-translate"></i>
                 </a>
 
+
                 <ul
                     class="dropdown-menu dropdown-menu-end"
                     aria-labelledby="language-menu"
                 >
+
+                    {{-- FRANÇAIS --}}
                     <li>
                         <a
-                            class="dropdown-item {{ app()->getLocale() === 'fr' ? 'active' : '' }}"
+                            class="dropdown-item d-flex align-items-center justify-content-between {{ app()->getLocale() === 'fr' ? 'active' : '' }}"
                             href="{{ route('language.switch', 'fr') }}"
                         >
-                            Français
+
+                <span>
+                    <span class="me-2">🇫🇷</span>
+                    Français
+                </span>
 
                             @if(app()->getLocale() === 'fr')
                                 <i class="bi bi-check-lg ms-2"></i>
                             @endif
+
                         </a>
                     </li>
 
+
+                    {{-- ENGLISH --}}
                     <li>
                         <a
-                            class="dropdown-item {{ app()->getLocale() === 'en' ? 'active' : '' }}"
+                            class="dropdown-item d-flex align-items-center justify-content-between {{ app()->getLocale() === 'en' ? 'active' : '' }}"
                             href="{{ route('language.switch', 'en') }}"
                         >
-                            English
+
+                <span>
+                    <span class="me-2">🇬🇧</span>
+                    English
+                </span>
 
                             @if(app()->getLocale() === 'en')
                                 <i class="bi bi-check-lg ms-2"></i>
                             @endif
+
                         </a>
                     </li>
+
                 </ul>
+
             </li>
+
 
 
 
