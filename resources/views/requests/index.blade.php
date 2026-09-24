@@ -8,6 +8,9 @@
     @endphp
 
 
+    {{-- =========================================================
+        PAGE HEADER
+    ========================================================== --}}
 
     <div class="app-content-header">
 
@@ -159,7 +162,7 @@
 
                                         @if($request->description)
 
-                                            <small class="text-muted request-description">
+                                            <small class="request-description">
 
                                                 {{ \Illuminate\Support\Str::limit(
                                                     $request->description,
@@ -211,36 +214,36 @@
 
                                                 <div class="request-item-row">
 
-                                                        <span class="fw-semibold">
+                                                    <span class="fw-semibold">
 
-                                                            {{ $item->name }}
+                                                        {{ $item->name }}
 
-                                                        </span>
+                                                    </span>
 
 
-                                                    <span class="text-muted">
+                                                    <span class="request-muted">
 
-                                                            ×
+                                                        ×
 
-                                                            {{ rtrim(
-                                                                rtrim(
-                                                                    number_format(
-                                                                        $item->quantity,
-                                                                        2,
-                                                                        '.',
-                                                                        ''
-                                                                    ),
-                                                                    '0'
+                                                        {{ rtrim(
+                                                            rtrim(
+                                                                number_format(
+                                                                    $item->quantity,
+                                                                    2,
+                                                                    '.',
+                                                                    ''
                                                                 ),
-                                                                '.'
-                                                            ) }}
+                                                                '0'
+                                                            ),
+                                                            '.'
+                                                        ) }}
 
-                                                        </span>
+                                                    </span>
 
 
                                                     @if($item->unit)
 
-                                                        <small class="text-muted">
+                                                        <small class="request-muted">
 
                                                             {{ $item->unit }}
 
@@ -252,11 +255,11 @@
 
                                             @empty
 
-                                                <span class="text-muted">
+                                                <span class="request-muted">
 
-                                                        No items
+                                                    No items
 
-                                                    </span>
+                                                </span>
 
                                             @endforelse
 
@@ -265,6 +268,9 @@
                                     </td>
 
 
+                                    {{-- =================================================
+                                        6. STATUS
+                                    ================================================== --}}
 
                                     <td>
 
@@ -276,9 +282,9 @@
                                                     class="badge status-badge status-procurement"
                                                 >
 
-                                                        Pending Procurement
+                                                    Pending Procurement
 
-                                                    </span>
+                                                </span>
 
                                                 @break
 
@@ -289,9 +295,9 @@
                                                     class="badge status-badge status-finance"
                                                 >
 
-                                                        Pending Finance
+                                                    Pending Finance
 
-                                                    </span>
+                                                </span>
 
                                                 @break
 
@@ -302,9 +308,9 @@
                                                     class="badge status-badge status-ceo"
                                                 >
 
-                                                        Pending CEO
+                                                    Pending CEO
 
-                                                    </span>
+                                                </span>
 
                                                 @break
 
@@ -315,9 +321,9 @@
                                                     class="badge status-badge status-approved"
                                                 >
 
-                                                        Approved
+                                                    Approved
 
-                                                    </span>
+                                                </span>
 
                                                 @break
 
@@ -328,9 +334,9 @@
                                                     class="badge status-badge status-rejected"
                                                 >
 
-                                                        Rejected
+                                                    Rejected
 
-                                                    </span>
+                                                </span>
 
                                                 @break
 
@@ -341,14 +347,18 @@
                                                     class="badge status-badge status-default"
                                                 >
 
-                                                        {{ $status ?? '-' }}
+                                                    {{ $status ?? '-' }}
 
-                                                    </span>
+                                                </span>
 
                                         @endswitch
 
                                     </td>
 
+
+                                    {{-- =================================================
+                                        7. CREATED DATE
+                                    ================================================== --}}
 
                                     <td
                                         data-order="{{ $request->created_at?->format('Y-m-d H:i:s') }}"
@@ -470,10 +480,88 @@
 
 
     {{-- =========================================================
-        CSS
+        CSS — LIGHT + DARK MODE
     ========================================================== --}}
 
     <style>
+
+        /* =====================================================
+           LIGHT THEME
+        ====================================================== */
+
+        :root {
+
+            --request-bg: #ffffff;
+
+            --request-card-bg: #ffffff;
+
+            --request-table-bg: #ffffff;
+
+            --request-header-bg: #f8f9fa;
+
+            --request-hover-bg: #f8f9fa;
+
+            --request-text: #212529;
+
+            --request-muted: #6c757d;
+
+            --request-border: #dee2e6;
+
+            --request-input-bg: #ffffff;
+
+            --request-input-text: #212529;
+
+            --request-input-border: #ced4da;
+
+            --request-avatar-bg: #f1f1f1;
+
+            --request-avatar-text: #777;
+
+            --request-item-border: #f1f1f1;
+
+            --request-link: #0d6efd;
+
+        }
+
+
+        /* =====================================================
+           DARK THEME
+        ====================================================== */
+
+        [data-bs-theme="dark"] {
+
+            --request-bg: #212529;
+
+            --request-card-bg: #212529;
+
+            --request-table-bg: #212529;
+
+            --request-header-bg: #2b3035;
+
+            --request-hover-bg: #2c3035;
+
+            --request-text: #f8f9fa;
+
+            --request-muted: #adb5bd;
+
+            --request-border: #495057;
+
+            --request-input-bg: #2b3035;
+
+            --request-input-text: #f8f9fa;
+
+            --request-input-border: #495057;
+
+            --request-avatar-bg: #343a40;
+
+            --request-avatar-text: #adb5bd;
+
+            --request-item-border: #3f4449;
+
+            --request-link: #6ea8fe;
+
+        }
+
 
         /* =====================================================
            CARD
@@ -483,7 +571,20 @@
 
             border-radius: 0 !important;
 
-            border: 1px solid #dee2e6;
+            border: 1px solid var(--request-border) !important;
+
+            background-color: var(--request-card-bg) !important;
+
+            color: var(--request-text);
+
+        }
+
+
+        .request-card .card-body {
+
+            background-color: var(--request-card-bg) !important;
+
+            color: var(--request-text);
 
         }
 
@@ -521,8 +622,16 @@
 
             border-collapse: collapse;
 
+            background-color: var(--request-table-bg) !important;
+
+            color: var(--request-text) !important;
+
         }
 
+
+        /* =====================================================
+           TABLE HEADER
+        ====================================================== */
 
         #requestsTable thead th {
 
@@ -532,20 +641,32 @@
 
             font-weight: 600;
 
-            background: #f8f9fa;
+            background-color: var(--request-header-bg) !important;
 
-            color: #212529;
+            color: var(--request-text) !important;
+
+            border-color: var(--request-border) !important;
 
             padding: 11px 10px;
 
         }
 
 
+        /* =====================================================
+           TABLE BODY
+        ====================================================== */
+
         #requestsTable tbody td {
 
             vertical-align: middle;
 
             padding: 10px;
+
+            background-color: var(--request-table-bg) !important;
+
+            color: var(--request-text) !important;
+
+            border-color: var(--request-border) !important;
 
         }
 
@@ -557,6 +678,44 @@
         }
 
 
+        #requestsTable tbody tr:hover td {
+
+            background-color: var(--request-hover-bg) !important;
+
+            color: var(--request-text) !important;
+
+        }
+
+
+        /* =====================================================
+           DATATABLES SORTING
+        ====================================================== */
+
+        [data-bs-theme="dark"] #requestsTable thead th {
+
+            color: var(--request-text) !important;
+
+        }
+
+
+        [data-bs-theme="dark"]
+        #requestsTable thead th.sorting:before,
+        [data-bs-theme="dark"]
+        #requestsTable thead th.sorting:after,
+        [data-bs-theme="dark"]
+        #requestsTable thead th.sorting_asc:before,
+        [data-bs-theme="dark"]
+        #requestsTable thead th.sorting_asc:after,
+        [data-bs-theme="dark"]
+        #requestsTable thead th.sorting_desc:before,
+        [data-bs-theme="dark"]
+        #requestsTable thead th.sorting_desc:after {
+
+            color: var(--request-muted) !important;
+
+        }
+
+
         /* =====================================================
            REFERENCE
         ====================================================== */
@@ -564,6 +723,8 @@
         .request-reference {
 
             white-space: nowrap;
+
+            color: var(--request-text);
 
         }
 
@@ -581,6 +742,8 @@
             text-overflow: ellipsis;
 
             white-space: nowrap;
+
+            color: var(--request-text);
 
         }
 
@@ -600,6 +763,19 @@
             text-overflow: ellipsis;
 
             white-space: nowrap;
+
+            color: var(--request-muted) !important;
+
+        }
+
+
+        /* =====================================================
+           MUTED TEXT
+        ====================================================== */
+
+        .request-muted {
+
+            color: var(--request-muted) !important;
 
         }
 
@@ -622,11 +798,11 @@
 
             justify-content: center;
 
-            background: #f1f1f1;
+            background-color: var(--request-avatar-bg);
 
-            color: #777;
+            color: var(--request-avatar-text);
 
-            border: 1px solid #dee2e6;
+            border: 1px solid var(--request-border);
 
             border-radius: 0;
 
@@ -660,12 +836,14 @@
 
             white-space: nowrap;
 
+            color: var(--request-text);
+
         }
 
 
         .request-item-row + .request-item-row {
 
-            border-top: 1px solid #f1f1f1;
+            border-top: 1px solid var(--request-item-border);
 
             padding-top: 3px;
 
@@ -695,7 +873,7 @@
 
             background: #ffc107 !important;
 
-            color: #212529;
+            color: #212529 !important;
 
         }
 
@@ -704,7 +882,7 @@
 
             background: #0dcaf0 !important;
 
-            color: #212529;
+            color: #212529 !important;
 
         }
 
@@ -713,7 +891,7 @@
 
             background: #6f42c1 !important;
 
-            color: #fff;
+            color: #fff !important;
 
         }
 
@@ -722,7 +900,7 @@
 
             background: #198754 !important;
 
-            color: #fff;
+            color: #fff !important;
 
         }
 
@@ -731,7 +909,7 @@
 
             background: #dc3545 !important;
 
-            color: #fff;
+            color: #fff !important;
 
         }
 
@@ -740,7 +918,7 @@
 
             background: #6c757d !important;
 
-            color: #fff;
+            color: #fff !important;
 
         }
 
@@ -825,6 +1003,8 @@
 
             white-space: nowrap;
 
+            color: var(--request-text);
+
         }
 
 
@@ -838,11 +1018,24 @@
 
             padding: 6px 10px;
 
-            border: 1px solid #ced4da;
+            border: 1px solid var(--request-input-border);
 
             border-radius: 0 !important;
 
             outline: none;
+
+            background-color: var(--request-input-bg) !important;
+
+            color: var(--request-input-text) !important;
+
+        }
+
+
+        .datatable-search input::placeholder {
+
+            color: var(--request-muted);
+
+            opacity: .85;
 
         }
 
@@ -852,6 +1045,10 @@
             border-color: #FF6600;
 
             box-shadow: 0 0 0 0.15rem rgba(255, 102, 0, .15);
+
+            background-color: var(--request-input-bg) !important;
+
+            color: var(--request-input-text) !important;
 
         }
 
@@ -900,12 +1097,17 @@
 
 
         .dataTables_length select,
-
         .dt-length select {
 
             height: 36px;
 
             border-radius: 0 !important;
+
+            background-color: var(--request-input-bg) !important;
+
+            color: var(--request-input-text) !important;
+
+            border-color: var(--request-input-border) !important;
 
         }
 
@@ -993,6 +1195,8 @@
 
             align-items: center;
 
+            color: var(--request-muted);
+
         }
 
 
@@ -1008,7 +1212,88 @@
 
 
         /* =====================================================
-           RESPONSIVE - TABLET
+           DATATABLE PAGINATION — DARK
+        ====================================================== */
+
+        [data-bs-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button {
+
+            color: var(--request-text) !important;
+
+            background: transparent !important;
+
+            border-color: var(--request-border) !important;
+
+        }
+
+
+        [data-bs-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+
+            color: #ffffff !important;
+
+            background: #343a40 !important;
+
+            border-color: #495057 !important;
+
+        }
+
+
+        [data-bs-theme="dark"] .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+
+            color: #ffffff !important;
+
+            background: #0d6efd !important;
+
+            border-color: #0d6efd !important;
+
+        }
+
+
+        /* =====================================================
+           DATATABLE INFO / LABELS
+        ====================================================== */
+
+        .dataTables_wrapper .dataTables_info,
+        .dataTables_wrapper .dataTables_length,
+        .dataTables_wrapper .dataTables_filter {
+
+            color: var(--request-text);
+
+        }
+
+
+        /* =====================================================
+           DATATABLE EMPTY
+        ====================================================== */
+
+        [data-bs-theme="dark"] .dataTables_empty {
+
+            background-color: var(--request-table-bg) !important;
+
+            color: var(--request-muted) !important;
+
+        }
+
+
+        /* =====================================================
+           BREADCRUMB
+        ====================================================== */
+
+        [data-bs-theme="dark"] .breadcrumb-item {
+
+            color: var(--request-muted);
+
+        }
+
+
+        [data-bs-theme="dark"] .breadcrumb-item a {
+
+            color: var(--request-link);
+
+        }
+
+
+        /* =====================================================
+           RESPONSIVE — TABLET
         ====================================================== */
 
         @media (max-width: 1100px) {
@@ -1030,7 +1315,7 @@
 
 
         /* =====================================================
-           RESPONSIVE - MOBILE
+           RESPONSIVE — MOBILE
         ====================================================== */
 
         @media (max-width: 768px) {
@@ -1195,7 +1480,7 @@
 
 
         /* =====================================================
-           RESPONSIVE - SMALL MOBILE
+           RESPONSIVE — SMALL MOBILE
         ====================================================== */
 
         @media (max-width: 480px) {
@@ -1291,25 +1576,26 @@
 
                         search: 'Search:',
 
-                        searchPlaceholder: 'Search request...',
+                        searchPlaceholder:
+                            'Search request...',
 
-                        lengthMenu: 'Show _MENU_ requests',
+                        lengthMenu:
+                            'Show _MENU_ requests',
 
-                        info: 'Showing _START_ to _END_ of _TOTAL_ requests',
+                        info:
+                            'Showing _START_ to _END_ of _TOTAL_ requests',
 
-                        infoEmpty: 'No requests available',
+                        infoEmpty:
+                            'No requests available',
 
-                        infoFiltered: '(filtered from _MAX_ total requests)',
+                        infoFiltered:
+                            '(filtered from _MAX_ total requests)',
 
-                        zeroRecords: 'No matching requests found',
+                        zeroRecords:
+                            'No matching requests found',
 
-                        /*
-                         * Important:
-                         * This message is displayed by DataTables
-                         * when the tbody contains no real rows.
-                         */
-
-                        emptyTable: 'No requests found',
+                        emptyTable:
+                            'No requests found',
 
                         paginate: {
 
@@ -1362,6 +1648,7 @@
                     buttons: [
 
                         {
+
                             extend: 'copy',
 
                             text:
@@ -1380,6 +1667,7 @@
 
 
                         {
+
                             extend: 'excel',
 
                             text:
@@ -1401,6 +1689,7 @@
 
 
                         {
+
                             extend: 'pdf',
 
                             text:
@@ -1428,6 +1717,7 @@
 
 
                         {
+
                             extend: 'print',
 
                             text:
@@ -1456,11 +1746,10 @@
 
                     columnDefs: [
 
-                        /* -----------------------------------------
-                           #
-                        ------------------------------------------ */
+                        /* # */
 
                         {
+
                             targets: 0,
 
                             searchable: false,
@@ -1472,11 +1761,10 @@
                         },
 
 
-                        /* -----------------------------------------
-                           REFERENCE
-                        ------------------------------------------ */
+                        /* REFERENCE */
 
                         {
+
                             targets: 1,
 
                             searchable: true,
@@ -1486,11 +1774,10 @@
                         },
 
 
-                        /* -----------------------------------------
-                           TITLE
-                        ------------------------------------------ */
+                        /* TITLE */
 
                         {
+
                             targets: 2,
 
                             searchable: true,
@@ -1500,11 +1787,10 @@
                         },
 
 
-                        /* -----------------------------------------
-                           REQUESTER
-                        ------------------------------------------ */
+                        /* REQUESTER */
 
                         {
+
                             targets: 3,
 
                             searchable: true,
@@ -1514,11 +1800,10 @@
                         },
 
 
-                        /* -----------------------------------------
-                           ITEMS
-                        ------------------------------------------ */
+                        /* ITEMS */
 
                         {
+
                             targets: 4,
 
                             searchable: true,
@@ -1530,11 +1815,10 @@
                         },
 
 
-                        /* -----------------------------------------
-                           STATUS
-                        ------------------------------------------ */
+                        /* STATUS */
 
                         {
+
                             targets: 5,
 
                             searchable: true,
@@ -1546,11 +1830,10 @@
                         },
 
 
-                        /* -----------------------------------------
-                           CREATED DATE
-                        ------------------------------------------ */
+                        /* CREATED DATE */
 
                         {
+
                             targets: 6,
 
                             searchable: false,
@@ -1562,11 +1845,10 @@
                         },
 
 
-                        /* -----------------------------------------
-                           ACTIONS
-                        ------------------------------------------ */
+                        /* ACTIONS */
 
                         {
+
                             targets: 7,
 
                             searchable: false,

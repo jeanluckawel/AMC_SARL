@@ -70,15 +70,6 @@
     <!--end::Accessibility Features-->
 
     <!--begin::Fonts-->
-{{--    <link--}}
-{{--        rel="stylesheet"--}}
-{{--        href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"--}}
-{{--        integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="--}}
-{{--        crossorigin="anonymous"--}}
-{{--        media="print"--}}
-{{--        onload="this.media = 'all'"--}}
-{{--    />--}}
-    <!--begin::Fonts-->
     <link
         rel="preconnect"
         href="https://fonts.googleapis.com"
@@ -96,7 +87,6 @@
         media="print"
         onload="this.media = 'all'"
     />
-    <!--end::Fonts-->
     <!--end::Fonts-->
 
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
@@ -116,7 +106,7 @@
     <!--end::Third Party Plugin(Bootstrap Icons)-->
 
     <!--begin::Required Plugin(AdminLTE)-->
-    <link rel="stylesheet" href="./css/adminlte.css" />
+    <link rel="stylesheet" href="{{ asset('css/adminlte.css') }}" />
     <!--end::Required Plugin(AdminLTE)-->
 
     <!-- apexcharts -->
@@ -177,8 +167,113 @@
     crossorigin="anonymous"
 ></script>
 <!--end::Required Plugin(Bootstrap 5)--><!--begin::Required Plugin(AdminLTE)-->
-<script src="./js/adminlte.js"></script>
+<script src="{{ asset('js/adminlte.js') }}"></script>
 <!--end::Required Plugin(AdminLTE)-->
+
+<!--begin::Color Mode Toggle (Manual Fallback)-->
+<script>
+    (() => {
+        'use strict';
+
+        const STORAGE_KEY = 'lte-theme';
+        const root = document.documentElement;
+
+        function getStoredTheme() {
+            try {
+                return localStorage.getItem(STORAGE_KEY);
+            } catch {
+                return null;
+            }
+        }
+
+        function setStoredTheme(theme) {
+            try {
+                localStorage.setItem(STORAGE_KEY, theme);
+            } catch {
+                // localStorage indisponible
+            }
+        }
+
+        function applyTheme(theme) {
+
+            let resolved = theme;
+
+            if (theme === 'auto') {
+                resolved = window.matchMedia('(prefers-color-scheme: dark)').matches
+                    ? 'dark'
+                    : 'light';
+            }
+
+            root.setAttribute('data-bs-theme', resolved);
+            root.style.colorScheme = resolved;
+
+            updateIcons(theme);
+            updateActiveButtons(theme);
+        }
+
+        function updateIcons(theme) {
+
+            document.querySelectorAll('[data-lte-theme-icon]').forEach(function (icon) {
+
+                icon.classList.toggle(
+                    'd-none',
+                    icon.getAttribute('data-lte-theme-icon') !== theme
+                );
+
+            });
+        }
+
+        function updateActiveButtons(theme) {
+
+            document.querySelectorAll('[data-bs-theme-value]').forEach(function (button) {
+
+                const isActive = button.getAttribute('data-bs-theme-value') === theme;
+
+                button.classList.toggle('active', isActive);
+
+                const check = button.querySelector('.bi-check-lg');
+
+                if (check) {
+                    check.classList.toggle('d-none', !isActive);
+                }
+
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const currentTheme = getStoredTheme() || 'auto';
+
+            applyTheme(currentTheme);
+
+            document.querySelectorAll('[data-bs-theme-value]').forEach(function (button) {
+
+                button.addEventListener('click', function () {
+
+                    const theme = this.getAttribute('data-bs-theme-value');
+
+                    setStoredTheme(theme);
+                    applyTheme(theme);
+
+                });
+
+            });
+
+            // Si "auto" est actif, on suit les changements OS en direct
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+
+                if (getStoredTheme() === 'auto' || !getStoredTheme()) {
+                    applyTheme('auto');
+                }
+
+            });
+
+        });
+
+    })();
+</script>
+<!--end::Color Mode Toggle (Manual Fallback)-->
+
 <!--begin::OverlayScrollbars Configure-->
 <script>
     const SELECTOR_SIDEBAR_WRAPPER = '.sidebar-wrapper';
@@ -245,7 +340,9 @@
 <!--begin::Color Mode Toggle-->
 <!-- The light/dark/auto switcher ships in adminlte.js as the ColorMode
  module (since 4.1) — no page script needed. Only the no-flash snippet
- in <head> stays inline, because it must run before first paint. -->
+ in <head> stays inline, because it must run before first paint.
+ A manual fallback script has been added above in case this module
+ is missing or not working from the bundled adminlte.js. -->
 <!--end::Color Mode Toggle-->
 
 <!-- OPTIONAL SCRIPTS -->

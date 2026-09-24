@@ -1,4 +1,3 @@
-
 @extends('layouts.admin')
 
 @section('content')
@@ -21,7 +20,7 @@
 
                 <div class="col-md-6 col-12">
 
-                    <h3 class="mb-0">
+                    <h3 class="mb-0 page-title">
                         Pending Validation
                     </h3>
 
@@ -34,7 +33,10 @@
 
                         <li class="breadcrumb-item">
 
-                            <a href="{{ url('/') }}">
+                            <a
+                                href="{{ url('/') }}"
+                                class="breadcrumb-link"
+                            >
                                 Home
                             </a>
 
@@ -63,7 +65,7 @@
          CONTENT
     ========================================================== --}}
 
-    <div class="app-content">
+    <div class="app-content request-page">
 
         <div class="container-fluid">
 
@@ -127,17 +129,17 @@
                      CARD HEADER
                 ================================================== --}}
 
-                <div class="card-header bg-white">
+                <div class="card-header request-card-header">
 
                     <div class="d-flex justify-content-between align-items-center">
 
                         <div>
 
-                            <h5 class="mb-0">
+                            <h5 class="mb-0 request-card-title">
                                 Requests Pending Procurement
                             </h5>
 
-                            <small class="text-muted">
+                            <small class="request-card-subtitle">
                                 Requests waiting for Procurement validation
                             </small>
 
@@ -161,7 +163,7 @@
                      CARD BODY
                 ================================================== --}}
 
-                <div class="card-body">
+                <div class="card-body request-card-body">
 
                     <div class="request-table-wrapper">
 
@@ -185,33 +187,19 @@
 
                             <tr>
 
-                                <th>
-                                    #
-                                </th>
+                                <th>#</th>
 
-                                <th>
-                                    Reference
-                                </th>
+                                <th>Reference</th>
 
-                                <th>
-                                    Title
-                                </th>
+                                <th>Title</th>
 
-                                <th>
-                                    Requester
-                                </th>
+                                <th>Requester</th>
 
-                                <th>
-                                    Items
-                                </th>
+                                <th>Items</th>
 
-                                <th>
-                                    Status
-                                </th>
+                                <th>Status</th>
 
-                                <th>
-                                    Created Date
-                                </th>
+                                <th>Created Date</th>
 
                                 <th class="text-center">
                                     Actions
@@ -224,14 +212,6 @@
 
                             {{-- =================================================
                                  TBODY
-
-                                 IMPORTANT:
-                                 Ne jamais mettre ici une ligne avec
-                                 colspan="8".
-
-                                 Si $requests est vide, le tbody reste vide.
-                                 DataTables affichera automatiquement
-                                 language.emptyTable.
                             ================================================== --}}
 
                             <tbody>
@@ -273,7 +253,7 @@
 
                                     <td>
 
-                                        <div class="fw-semibold">
+                                        <div class="fw-semibold request-title">
 
                                             {{ $request->title ?? '—' }}
 
@@ -282,7 +262,7 @@
 
                                         @if(!empty($request->description))
 
-                                            <small class="text-muted">
+                                            <small class="request-muted">
 
                                                 {{ Str::limit(
                                                     $request->description,
@@ -303,7 +283,6 @@
                                     <td>
 
                                         <div class="d-flex align-items-center">
-
 
                                             <div class="request-avatar me-2">
 
@@ -395,7 +374,7 @@
 
                                             </div>
 
-                                            <small class="text-muted">
+                                            <small class="request-muted">
 
                                                 {{ $request->created_at->format('H:i') }}
 
@@ -403,7 +382,7 @@
 
                                         @else
 
-                                            <span class="text-muted">
+                                            <span class="request-muted">
                                                 —
                                             </span>
 
@@ -483,6 +462,104 @@
 
     <style>
 
+        /* =====================================================
+           THEME VARIABLES
+        ====================================================== */
+
+        .request-page {
+
+            --request-bg: #ffffff;
+            --request-card-bg: #ffffff;
+            --request-header-bg: #f8f9fa;
+            --request-table-bg: #ffffff;
+            --request-hover-bg: #f8f9fa;
+
+            --request-text: #212529;
+            --request-muted: #6c757d;
+
+            --request-border: #dee2e6;
+
+            --request-input-bg: #ffffff;
+            --request-input-text: #212529;
+            --request-input-border: #ced4da;
+
+            --request-avatar-bg: #f1f1f1;
+            --request-avatar-text: #777777;
+
+            --request-link: #0d6efd;
+
+            --request-empty-text: #6c757d;
+
+            color: var(--request-text);
+
+        }
+
+
+        /* =====================================================
+           DARK MODE
+        ====================================================== */
+
+        [data-bs-theme="dark"] .request-page {
+
+            --request-bg: #212529;
+            --request-card-bg: #212529;
+            --request-header-bg: #2b3035;
+            --request-table-bg: #212529;
+            --request-hover-bg: #2c3035;
+
+            --request-text: #f8f9fa;
+            --request-muted: #adb5bd;
+
+            --request-border: #495057;
+
+            --request-input-bg: #2b3035;
+            --request-input-text: #f8f9fa;
+            --request-input-border: #495057;
+
+            --request-avatar-bg: #343a40;
+            --request-avatar-text: #adb5bd;
+
+            --request-link: #6ea8fe;
+
+            --request-empty-text: #adb5bd;
+
+        }
+
+
+        /* =====================================================
+           PAGE TITLE
+        ====================================================== */
+
+        .page-title {
+
+            color: var(--request-text);
+
+        }
+
+
+        .breadcrumb-link {
+
+            color: var(--request-link);
+
+            text-decoration: none;
+
+        }
+
+
+        .breadcrumb-link:hover {
+
+            text-decoration: underline;
+
+        }
+
+
+        .request-page .breadcrumb-item,
+        .request-page .breadcrumb-item.active {
+
+            color: var(--request-muted);
+
+        }
+
 
         /* =====================================================
            CARD
@@ -492,16 +569,47 @@
 
             border-radius: 0 !important;
 
-            border: 1px solid #dee2e6;
+            border: 1px solid var(--request-border) !important;
+
+            background-color: var(--request-card-bg) !important;
+
+            color: var(--request-text);
 
         }
 
 
-        .request-card .card-header {
+        .request-card-header {
 
-            border-bottom: 1px solid #dee2e6;
+            background-color: var(--request-header-bg) !important;
+
+            color: var(--request-text);
+
+            border-bottom: 1px solid var(--request-border) !important;
 
             padding: 14px 16px;
+
+        }
+
+
+        .request-card-title {
+
+            color: var(--request-text);
+
+        }
+
+
+        .request-card-subtitle {
+
+            color: var(--request-muted) !important;
+
+        }
+
+
+        .request-card-body {
+
+            background-color: var(--request-card-bg) !important;
+
+            color: var(--request-text);
 
         }
 
@@ -523,6 +631,10 @@
         }
 
 
+        /* =====================================================
+           TABLE
+        ====================================================== */
+
         #procurementTable {
 
             width: 100% !important;
@@ -535,6 +647,27 @@
 
             border-collapse: collapse;
 
+            background-color: var(--request-table-bg) !important;
+
+            color: var(--request-text) !important;
+
+            --bs-table-bg: var(--request-table-bg);
+
+            --bs-table-color: var(--request-text);
+
+            --bs-table-border-color: var(--request-border);
+
+            --bs-table-hover-bg: var(--request-hover-bg);
+
+            --bs-table-hover-color: var(--request-text);
+
+        }
+
+
+        #procurementTable thead {
+
+            background-color: var(--request-header-bg) !important;
+
         }
 
 
@@ -546,11 +679,40 @@
 
             font-weight: 600;
 
-            background: #f8f9fa;
+            background-color: var(--request-header-bg) !important;
 
-            color: #212529;
+            color: var(--request-text) !important;
+
+            border-color: var(--request-border) !important;
 
             padding: 11px 10px;
+
+        }
+
+
+        #procurementTable tbody {
+
+            background-color: var(--request-table-bg) !important;
+
+        }
+
+
+        #procurementTable tbody tr {
+
+            min-height: 60px;
+
+            background-color: var(--request-table-bg) !important;
+
+            color: var(--request-text) !important;
+
+        }
+
+
+        #procurementTable tbody tr:hover {
+
+            background-color: var(--request-hover-bg) !important;
+
+            color: var(--request-text) !important;
 
         }
 
@@ -561,12 +723,18 @@
 
             padding: 10px;
 
+            background-color: inherit !important;
+
+            color: var(--request-text) !important;
+
+            border-color: var(--request-border) !important;
+
         }
 
 
-        #procurementTable tbody tr {
+        #procurementTable > :not(caption) > * > * {
 
-            min-height: 60px;
+            border-color: var(--request-border) !important;
 
         }
 
@@ -578,6 +746,22 @@
         .request-reference {
 
             white-space: nowrap;
+
+            color: var(--request-text);
+
+        }
+
+
+        .request-title {
+
+            color: var(--request-text);
+
+        }
+
+
+        .request-muted {
+
+            color: var(--request-muted) !important;
 
         }
 
@@ -600,11 +784,11 @@
 
             justify-content: center;
 
-            background: #f1f1f1;
+            background-color: var(--request-avatar-bg);
 
-            color: #777;
+            color: var(--request-avatar-text);
 
-            border: 1px solid #dee2e6;
+            border: 1px solid var(--request-border);
 
             border-radius: 0;
 
@@ -634,7 +818,7 @@
 
             background: #0dcaf0 !important;
 
-            color: #212529;
+            color: #212529 !important;
 
         }
 
@@ -647,7 +831,7 @@
 
             background: #6c757d !important;
 
-            color: #fff;
+            color: #fff !important;
 
             border-radius: 0 !important;
 
@@ -666,7 +850,7 @@
 
             background: #0dcaf0 !important;
 
-            color: #212529;
+            color: #212529 !important;
 
             border-radius: 0 !important;
 
@@ -763,6 +947,8 @@
 
             white-space: nowrap;
 
+            color: var(--request-text);
+
         }
 
 
@@ -776,7 +962,11 @@
 
             padding: 6px 10px;
 
-            border: 1px solid #ced4da;
+            background-color: var(--request-input-bg) !important;
+
+            color: var(--request-input-text) !important;
+
+            border: 1px solid var(--request-input-border) !important;
 
             border-radius: 0 !important;
 
@@ -785,13 +975,22 @@
         }
 
 
+        .datatable-search input::placeholder {
+
+            color: var(--request-muted) !important;
+
+            opacity: 1;
+
+        }
+
+
         .datatable-search input:focus {
 
-            border-color: #FF6600;
+            border-color: #FF6600 !important;
 
             box-shadow:
                 0 0 0 0.15rem
-                rgba(255, 102, 0, .15);
+                rgba(255, 102, 0, .15) !important;
 
         }
 
@@ -821,6 +1020,16 @@
 
             flex-shrink: 0;
 
+            color: var(--request-text);
+
+        }
+
+
+        .dataTables_length,
+        .dt-length {
+
+            color: var(--request-text) !important;
+
         }
 
 
@@ -828,6 +1037,12 @@
         .dt-length select {
 
             height: 36px;
+
+            background-color: var(--request-input-bg) !important;
+
+            color: var(--request-input-text) !important;
+
+            border: 1px solid var(--request-input-border) !important;
 
             border-radius: 0 !important;
 
@@ -913,6 +1128,8 @@
 
             align-items: center;
 
+            color: var(--request-muted) !important;
+
         }
 
 
@@ -937,7 +1154,9 @@
 
             text-align: center !important;
 
-            color: #6c757d;
+            color: var(--request-empty-text) !important;
+
+            background-color: var(--request-table-bg) !important;
 
             font-size: 14px;
 
@@ -947,6 +1166,13 @@
         /* =====================================================
            DATATABLE DEFAULT OVERRIDES
         ====================================================== */
+
+        .dataTables_wrapper {
+
+            color: var(--request-text) !important;
+
+        }
+
 
         .dataTables_wrapper .dataTables_filter {
 
@@ -964,10 +1190,31 @@
         }
 
 
+        .dataTables_wrapper .dataTables_filter label,
+        .dataTables_wrapper .dataTables_length label {
+
+            color: var(--request-text) !important;
+
+        }
+
+
         .dataTables_wrapper .dataTables_filter input,
         .dataTables_wrapper .dataTables_length select {
 
+            background-color: var(--request-input-bg) !important;
+
+            color: var(--request-input-text) !important;
+
+            border: 1px solid var(--request-input-border) !important;
+
             border-radius: 0 !important;
+
+        }
+
+
+        .dataTables_wrapper .dataTables_filter input::placeholder {
+
+            color: var(--request-muted) !important;
 
         }
 
@@ -975,11 +1222,11 @@
         .dataTables_wrapper .dataTables_filter input:focus,
         .dataTables_wrapper .dataTables_length select:focus {
 
-            border-color: #FF6600;
+            border-color: #FF6600 !important;
 
             box-shadow:
                 0 0 0 0.15rem
-                rgba(255, 102, 0, .15);
+                rgba(255, 102, 0, .15) !important;
 
         }
 
@@ -987,6 +1234,173 @@
         .dt-buttons .btn {
 
             border-radius: 0 !important;
+
+        }
+
+
+        /* =====================================================
+           DATATABLE 2 PAGINATION
+        ====================================================== */
+
+        .dt-paging {
+
+            color: var(--request-text) !important;
+
+        }
+
+
+        .dt-paging .dt-paging-button {
+
+            color: var(--request-text) !important;
+
+            background: var(--request-table-bg) !important;
+
+            border: 1px solid var(--request-border) !important;
+
+            border-radius: 0 !important;
+
+        }
+
+
+        .dt-paging .dt-paging-button:hover {
+
+            color: var(--request-text) !important;
+
+            background: var(--request-hover-bg) !important;
+
+            border-color: var(--request-border) !important;
+
+        }
+
+
+        .dt-paging .dt-paging-button.current {
+
+            color: #fff !important;
+
+            background: #0d6efd !important;
+
+            border-color: #0d6efd !important;
+
+        }
+
+
+        .dt-paging .dt-paging-button.disabled {
+
+            color: var(--request-muted) !important;
+
+            background: var(--request-table-bg) !important;
+
+            border-color: var(--request-border) !important;
+
+            opacity: .65;
+
+        }
+
+
+        /* =====================================================
+           DATATABLE 1 PAGINATION
+        ====================================================== */
+
+        .dataTables_wrapper .dataTables_paginate {
+
+            color: var(--request-text) !important;
+
+        }
+
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+
+            color: var(--request-text) !important;
+
+            background: var(--request-table-bg) !important;
+
+            border: 1px solid var(--request-border) !important;
+
+            border-radius: 0 !important;
+
+        }
+
+
+        .dataTables_wrapper
+        .dataTables_paginate
+        .paginate_button:hover {
+
+            color: var(--request-text) !important;
+
+            background: var(--request-hover-bg) !important;
+
+            border-color: var(--request-border) !important;
+
+        }
+
+
+        .dataTables_wrapper
+        .dataTables_paginate
+        .paginate_button.current {
+
+            color: #fff !important;
+
+            background: #0d6efd !important;
+
+            border-color: #0d6efd !important;
+
+        }
+
+
+        .dataTables_wrapper
+        .dataTables_paginate
+        .paginate_button.disabled {
+
+            color: var(--request-muted) !important;
+
+            background: var(--request-table-bg) !important;
+
+            border-color: var(--request-border) !important;
+
+        }
+
+
+        /* =====================================================
+           DATATABLE SORTING
+        ====================================================== */
+
+        #procurementTable thead th.dt-orderable-asc,
+        #procurementTable thead th.dt-orderable-desc {
+
+            color: var(--request-text) !important;
+
+        }
+
+
+        /* =====================================================
+           ALERTS
+        ====================================================== */
+
+        .request-page .alert {
+
+            border-radius: 0 !important;
+
+        }
+
+
+        [data-bs-theme="dark"] .request-page .alert-success {
+
+            --bs-alert-color: #75b798;
+
+            --bs-alert-bg: #132e1c;
+
+            --bs-alert-border-color: #1f5b35;
+
+        }
+
+
+        [data-bs-theme="dark"] .request-page .alert-danger {
+
+            --bs-alert-color: #ea868f;
+
+            --bs-alert-bg: #321b1e;
+
+            --bs-alert-border-color: #842029;
 
         }
 
@@ -1319,9 +1733,6 @@
 
                         /*
                          * Tri par Created Date.
-                         *
-                         * Colonne 6 :
-                         * Created Date
                          */
                         order: [
 
@@ -1332,15 +1743,6 @@
 
                         /*
                          * Configuration des colonnes.
-                         *
-                         * 0 = #
-                         * 1 = Reference
-                         * 2 = Title
-                         * 3 = Requester
-                         * 4 = Items
-                         * 5 = Status
-                         * 6 = Created Date
-                         * 7 = Actions
                          */
                         columnDefs: [
 
@@ -1530,10 +1932,6 @@
                                 'No matching requests found',
 
 
-                            /*
-                             * Utilisé lorsque le tbody
-                             * est complètement vide.
-                             */
                             emptyTable:
                                 'No pending requests found',
 

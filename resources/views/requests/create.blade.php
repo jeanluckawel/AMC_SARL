@@ -5,145 +5,512 @@
 @section('content')
 
     {{-- =========================================================
-        CSS
+        CSS — LIGHT + DARK MODE
     ========================================================== --}}
 
     <style>
 
-        .request-card {
-            border: 0;
-            border-radius: 0 !important;
+        /* =====================================================
+           THEME VARIABLES — LIGHT MODE
+        ====================================================== */
+
+        :root {
+
+            --request-bg: #ffffff;
+            --request-card-bg: #ffffff;
+            --request-section-bg: #ffffff;
+            --request-section-header: #f8f9fa;
+            --request-item-bg: #ffffff;
+
+            --request-text: #212529;
+            --request-muted: #6c757d;
+
+            --request-border: #dee2e6;
+            --request-input-bg: #ffffff;
+            --request-input-text: #212529;
+            --request-placeholder: #6c757d;
+
+            --request-primary: #0d6efd;
+            --request-primary-hover: #0b5ed7;
+
+            --request-danger: #dc3545;
+
+            --request-header-bg: #0d6efd;
+            --request-header-text: #ffffff;
+
+            --request-add-bg: #ffffff;
+            --request-add-text: #0d6efd;
+
+            --request-alert-bg: #f8d7da;
+            --request-alert-text: #842029;
+            --request-alert-border: #f5c2c7;
         }
+
+
+        /* =====================================================
+           DARK MODE
+        ====================================================== */
+
+        [data-bs-theme="dark"] {
+
+            --request-bg: #212529;
+            --request-card-bg: #212529;
+            --request-section-bg: #212529;
+            --request-section-header: #2b3035;
+            --request-item-bg: #252a2f;
+
+            --request-text: #f8f9fa;
+            --request-muted: #adb5bd;
+
+            --request-border: #495057;
+            --request-input-bg: #2b3035;
+            --request-input-text: #f8f9fa;
+            --request-placeholder: #adb5bd;
+
+            --request-primary: #0d6efd;
+            --request-primary-hover: #3d8bfd;
+
+            --request-danger: #dc3545;
+
+            --request-header-bg: #0d6efd;
+            --request-header-text: #ffffff;
+
+            --request-add-bg: #252a2f;
+            --request-add-text: #6ea8fe;
+
+            --request-alert-bg: #2c1b1e;
+            --request-alert-text: #ea868f;
+            --request-alert-border: #842029;
+        }
+
+
+        /* =====================================================
+           MAIN CARD
+        ====================================================== */
+
+        .request-card {
+
+            border: 0 !important;
+            border-radius: 0 !important;
+
+            background-color: var(--request-card-bg) !important;
+            color: var(--request-text);
+
+        }
+
+
+        /* =====================================================
+           CARD HEADER
+        ====================================================== */
 
         .request-header {
-            background-color: #0d6efd;
-            color: #fff;
+
+            background-color: var(--request-header-bg) !important;
+            color: var(--request-header-text) !important;
+
             border-radius: 0 !important;
+            border: 0 !important;
+
         }
 
+
         .request-header .card-title {
+
             font-weight: 600;
+
         }
+
+
+        /* =====================================================
+           FORM CONTROLS
+        ====================================================== */
 
         .form-control,
         .form-select,
         .input-group-text,
         .btn {
+
             border-radius: 0 !important;
+
         }
+
 
         .form-control,
         .form-select {
+
             min-height: 44px;
+
+            background-color: var(--request-input-bg);
+            color: var(--request-input-text);
+
+            border-color: var(--request-border);
+
         }
+
+
+        .form-control:focus,
+        .form-select:focus {
+
+            background-color: var(--request-input-bg);
+            color: var(--request-input-text);
+
+            border-color: var(--request-primary);
+
+            box-shadow: 0 0 0 .15rem rgba(13, 110, 253, .15);
+
+        }
+
+
+        .form-control::placeholder {
+
+            color: var(--request-placeholder);
+            opacity: .8;
+
+        }
+
+
+        /* =====================================================
+           LABELS
+        ====================================================== */
 
         .form-label {
+
             font-weight: 600;
             margin-bottom: 6px;
+
+            color: var(--request-text);
+
         }
+
+
+        /* =====================================================
+           INVALID
+        ====================================================== */
 
         .is-invalid {
-            border-color: #dc3545 !important;
+
+            border-color: var(--request-danger) !important;
+
         }
+
+
+        /* =====================================================
+           REQUEST SECTION
+        ====================================================== */
 
         .request-section {
-            border: 1px solid #dee2e6;
+
+            border: 1px solid var(--request-border);
+
             margin-bottom: 25px;
+
+            background-color: var(--request-section-bg);
+
         }
+
+
+        /* =====================================================
+           REQUEST SECTION HEADER
+        ====================================================== */
 
         .request-section-header {
-            background: #f8f9fa;
-            border-bottom: 1px solid #dee2e6;
+
+            background-color: var(--request-section-header);
+
+            border-bottom: 1px solid var(--request-border);
+
             padding: 15px 18px;
+
         }
+
 
         .request-section-header h5 {
+
             margin: 0;
+
             font-weight: 600;
+
+            color: var(--request-text);
+
         }
+
 
         .request-section-header p {
+
             margin: 4px 0 0;
-            color: #6c757d;
+
+            color: var(--request-muted);
+
             font-size: 14px;
+
         }
+
+
+        /* =====================================================
+           REQUEST SECTION BODY
+        ====================================================== */
 
         .request-section-body {
+
             padding: 20px;
+
+            background-color: var(--request-section-bg);
+
         }
+
+
+        /* =====================================================
+           ITEM CARD
+        ====================================================== */
 
         .item-card {
-            border: 1px solid #dee2e6;
-            background: #fff;
+
+            border: 1px solid var(--request-border);
+
+            background-color: var(--request-item-bg);
+
+            color: var(--request-text);
+
             padding: 18px;
+
             margin-bottom: 15px;
+
             position: relative;
+
         }
+
+
+        /* =====================================================
+           ITEM CARD HEADER
+        ====================================================== */
 
         .item-card-header {
+
             display: flex;
+
             align-items: center;
+
             justify-content: space-between;
+
             margin-bottom: 15px;
+
             padding-bottom: 10px;
-            border-bottom: 1px solid #dee2e6;
+
+            border-bottom: 1px solid var(--request-border);
+
         }
+
 
         .item-number {
+
             font-weight: 600;
-            color: #0d6efd;
+
+            color: var(--request-primary);
+
         }
+
+
+        /* =====================================================
+           REMOVE BUTTON
+        ====================================================== */
 
         .remove-item-btn {
+
             border-radius: 0 !important;
+
         }
+
+
+        /* =====================================================
+           ADD ITEM BUTTON
+        ====================================================== */
 
         .btn-add-item {
-            border: 1px dashed #0d6efd;
-            color: #0d6efd;
-            background: #fff;
+
+            border: 1px dashed var(--request-primary);
+
+            color: var(--request-add-text);
+
+            background-color: var(--request-add-bg);
+
             border-radius: 0 !important;
+
         }
+
 
         .btn-add-item:hover {
-            background: #0d6efd;
-            color: #fff;
+
+            background-color: var(--request-primary);
+
+            color: #ffffff;
+
         }
+
+
+        /* =====================================================
+           ALERT
+        ====================================================== */
 
         .request-info {
+
             border-radius: 0 !important;
+
         }
+
+
+        .alert-danger.request-info {
+
+            background-color: var(--request-alert-bg);
+
+            color: var(--request-alert-text);
+
+            border-color: var(--request-alert-border);
+
+        }
+
+
+        /* =====================================================
+           PRIMARY BUTTON
+        ====================================================== */
 
         .btn-primary-custom {
-            background-color: #0d6efd;
-            border-color: #0d6efd;
-            color: #fff;
+
+            background-color: var(--request-primary);
+
+            border-color: var(--request-primary);
+
+            color: #ffffff;
+
             border-radius: 0 !important;
+
         }
 
+
         .btn-primary-custom:hover {
-            background-color: #0b5ed7;
-            border-color: #0a58ca;
-            color: #fff;
+
+            background-color: var(--request-primary-hover);
+
+            border-color: var(--request-primary-hover);
+
+            color: #ffffff;
+
         }
+
+
+        /* =====================================================
+           SECONDARY BUTTON
+        ====================================================== */
+
+        .btn-secondary {
+
+            border-radius: 0 !important;
+
+        }
+
+
+        /* =====================================================
+           CARD BODY
+        ====================================================== */
+
+        .request-card .card-body {
+
+            background-color: var(--request-card-bg);
+
+            color: var(--request-text);
+
+        }
+
+
+        /* =====================================================
+           BORDER TOP
+        ====================================================== */
+
+        .request-card .border-top {
+
+            border-color: var(--request-border) !important;
+
+        }
+
+
+        /* =====================================================
+           BREADCRUMB
+        ====================================================== */
+
+        [data-bs-theme="dark"] .breadcrumb-item {
+
+            color: var(--request-muted);
+
+        }
+
+
+        [data-bs-theme="dark"] .breadcrumb-item a {
+
+            color: #6ea8fe;
+
+        }
+
+
+        /* =====================================================
+           NUMBER INPUT ARROWS
+        ====================================================== */
+
+        [data-bs-theme="dark"] input[type="number"] {
+
+            color-scheme: dark;
+
+        }
+
+
+        /* =====================================================
+           DATE / SELECT / AUTOFILL
+        ====================================================== */
+
+        [data-bs-theme="dark"] .form-control:-webkit-autofill,
+        [data-bs-theme="dark"] .form-control:-webkit-autofill:hover,
+        [data-bs-theme="dark"] .form-control:-webkit-autofill:focus {
+
+            -webkit-text-fill-color: var(--request-input-text);
+
+            -webkit-box-shadow: 0 0 0 1000px var(--request-input-bg) inset;
+
+            transition: background-color 5000s ease-in-out 0s;
+
+        }
+
+
+        /* =====================================================
+           MOBILE
+        ====================================================== */
 
         @media (max-width: 768px) {
 
             .request-card-wrapper {
+
                 margin: 10px !important;
+
             }
+
 
             .request-section-body {
+
                 padding: 15px;
+
             }
+
 
             .item-card {
+
                 padding: 12px;
+
             }
 
+
             .item-card-header {
+
                 align-items: flex-start;
+
                 gap: 10px;
+
             }
 
         }
@@ -190,7 +557,9 @@
                         </li>
 
                         <li class="breadcrumb-item active">
+
                             {{ __('menu.create') }}
+
                         </li>
 
                     </ol>
@@ -209,6 +578,7 @@
     ========================================================== --}}
 
     <div class="card request-card request-card-wrapper m-4 shadow-sm">
+
 
         {{-- =====================================================
             CARD HEADER
@@ -296,6 +666,7 @@
 
 
                             {{-- REQUEST TITLE --}}
+
                             <div class="col-12 col-md-6">
 
                                 <label class="form-label">
@@ -328,6 +699,7 @@
 
 
                             {{-- DESCRIPTION --}}
+
                             <div class="col-12 col-md-6">
 
                                 <label class="form-label">
@@ -373,11 +745,13 @@
                             @php
 
                                 $oldItems = old('items', [
+
                                     [
                                         'name' => '',
                                         'quantity' => 1,
                                         'unit' => '',
                                     ]
+
                                 ]);
 
                             @endphp
@@ -390,7 +764,9 @@
                                     data-item-index="{{ $index }}"
                                 >
 
+
                                     {{-- ITEM HEADER --}}
+
                                     <div class="item-card-header">
 
                                         <span class="item-number">
@@ -409,6 +785,7 @@
                                         <button
                                             type="button"
                                             class="btn btn-sm btn-outline-danger remove-item-btn"
+
                                             @if(count($oldItems) === 1)
                                                 disabled
                                             @endif
@@ -424,10 +801,12 @@
 
 
                                     {{-- ITEM FIELDS --}}
+
                                     <div class="row g-3">
 
 
                                         {{-- ITEM NAME --}}
+
                                         <div class="col-12 col-md-6">
 
                                             <label class="form-label">
@@ -460,6 +839,7 @@
 
 
                                         {{-- QUANTITY --}}
+
                                         <div class="col-12 col-md-3">
 
                                             <label class="form-label">
@@ -492,6 +872,7 @@
 
 
                                         {{-- UNIT --}}
+
                                         <div class="col-12 col-md-3">
 
                                             <label class="form-label">
@@ -521,6 +902,7 @@
 
 
                         {{-- ADD ITEM --}}
+
                         <button
                             type="button"
                             class="btn btn-add-item"
@@ -546,7 +928,9 @@
                     class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top"
                 >
 
+
                     {{-- CANCEL --}}
+
                     <a
                         href="{{ route('requests.index') }}"
                         class="btn btn-secondary"
@@ -560,6 +944,7 @@
 
 
                     {{-- SUBMIT --}}
+
                     <button
                         type="submit"
                         class="btn btn-primary-custom"
@@ -601,29 +986,63 @@
         /*
          * Textes traduits injectés depuis Laravel pour le JS.
          */
+
         const translations = {
+
             item: @json(__('menu.item')),
+
             remove: @json(__('menu.remove')),
+
             itemName: @json(__('menu.item_name')),
-            itemNamePlaceholder: @json(__('menu.item_name_placeholder_js')),
+
+            itemNamePlaceholder:
+            @json(__('menu.item_name_placeholder_js')),
+
             quantity: @json(__('menu.quantity')),
+
             unit: @json(__('menu.unit')),
-            unitPlaceholder: @json(__('menu.unit_placeholder')),
-            submitting: @json(__('menu.submitting')),
-            addAtLeastOneItem: @json(__('menu.add_at_least_one_item')),
+
+            unitPlaceholder:
+            @json(__('menu.unit_placeholder')),
+
+            submitting:
+            @json(__('menu.submitting')),
+
+            addAtLeastOneItem:
+            @json(__('menu.add_at_least_one_item')),
+
         };
 
 
         document.addEventListener('DOMContentLoaded', function () {
 
-            const form = document.getElementById('requestForm');
-            const itemsContainer = document.getElementById('itemsContainer');
-            const addItemBtn = document.getElementById('addItemBtn');
-            const saveBtn = document.getElementById('saveBtn');
-            const saveSpinner = document.getElementById('saveSpinner');
-            const saveText = document.getElementById('saveText');
 
-            let itemIndex = itemsContainer.querySelectorAll('.item-card').length;
+            const form =
+                document.getElementById('requestForm');
+
+
+            const itemsContainer =
+                document.getElementById('itemsContainer');
+
+
+            const addItemBtn =
+                document.getElementById('addItemBtn');
+
+
+            const saveBtn =
+                document.getElementById('saveBtn');
+
+
+            const saveSpinner =
+                document.getElementById('saveSpinner');
+
+
+            const saveText =
+                document.getElementById('saveText');
+
+
+            let itemIndex =
+                itemsContainer.querySelectorAll('.item-card').length;
 
 
             /* =====================================================
@@ -632,12 +1051,21 @@
 
             addItemBtn.addEventListener('click', function () {
 
+
                 const index = itemIndex++;
 
-                const itemCard = document.createElement('div');
 
-                itemCard.className = 'item-card';
-                itemCard.dataset.itemIndex = index;
+                const itemCard =
+                    document.createElement('div');
+
+
+                itemCard.className =
+                    'item-card';
+
+
+                itemCard.dataset.itemIndex =
+                    index;
+
 
                 itemCard.innerHTML = `
 
@@ -741,17 +1169,24 @@
 
                 itemsContainer.appendChild(itemCard);
 
+
                 updateItemNumbers();
+
                 updateRemoveButtons();
+
                 reindexItems();
 
 
-                const nameInput = itemCard.querySelector(
-                    'input[name*="[name]"]'
-                );
+                const nameInput =
+                    itemCard.querySelector(
+                        'input[name*="[name]"]'
+                    );
+
 
                 if (nameInput) {
+
                     nameInput.focus();
+
                 }
 
             });
@@ -761,42 +1196,63 @@
                REMOVE ITEM
             ====================================================== */
 
-            itemsContainer.addEventListener('click', function (event) {
+            itemsContainer.addEventListener(
+                'click',
+                function (event) {
 
-                const button = event.target.closest('.remove-item-btn');
 
-                if (!button) {
-                    return;
+                    const button =
+                        event.target.closest(
+                            '.remove-item-btn'
+                        );
+
+
+                    if (!button) {
+
+                        return;
+
+                    }
+
+
+                    const itemCard =
+                        button.closest('.item-card');
+
+
+                    if (!itemCard) {
+
+                        return;
+
+                    }
+
+
+                    const itemCards =
+                        itemsContainer.querySelectorAll(
+                            '.item-card'
+                        );
+
+
+                    /*
+                     * At least one item is required.
+                     */
+
+                    if (itemCards.length <= 1) {
+
+                        return;
+
+                    }
+
+
+                    itemCard.remove();
+
+
+                    updateItemNumbers();
+
+                    updateRemoveButtons();
+
+                    reindexItems();
+
                 }
-
-
-                const itemCard = button.closest('.item-card');
-
-                if (!itemCard) {
-                    return;
-                }
-
-
-                const itemCards = itemsContainer.querySelectorAll(
-                    '.item-card'
-                );
-
-
-                /*
-                 * At least one item is required.
-                 */
-                if (itemCards.length <= 1) {
-                    return;
-                }
-
-
-                itemCard.remove();
-
-                updateItemNumbers();
-                updateRemoveButtons();
-                reindexItems();
-
-            });
+            );
 
 
             /* =====================================================
@@ -805,20 +1261,27 @@
 
             function updateItemNumbers() {
 
-                const cards = itemsContainer.querySelectorAll(
-                    '.item-card'
-                );
+
+                const cards =
+                    itemsContainer.querySelectorAll(
+                        '.item-card'
+                    );
 
 
                 cards.forEach(function (card, index) {
 
-                    const number = card.querySelector(
-                        '.item-number-value'
-                    );
+
+                    const number =
+                        card.querySelector(
+                            '.item-number-value'
+                        );
 
 
                     if (number) {
-                        number.textContent = index + 1;
+
+                        number.textContent =
+                            index + 1;
+
                     }
 
                 });
@@ -832,39 +1295,59 @@
 
             function reindexItems() {
 
-                const cards = itemsContainer.querySelectorAll(
-                    '.item-card'
-                );
+
+                const cards =
+                    itemsContainer.querySelectorAll(
+                        '.item-card'
+                    );
 
 
                 cards.forEach(function (card, index) {
 
-                    card.dataset.itemIndex = index;
+
+                    card.dataset.itemIndex =
+                        index;
 
 
-                    const nameInput = card.querySelector(
-                        'input[name*="[name]"]'
-                    );
+                    const nameInput =
+                        card.querySelector(
+                            'input[name*="[name]"]'
+                        );
 
-                    const quantityInput = card.querySelector(
-                        'input[name*="[quantity]"]'
-                    );
 
-                    const unitInput = card.querySelector(
-                        'input[name*="[unit]"]'
-                    );
+                    const quantityInput =
+                        card.querySelector(
+                            'input[name*="[quantity]"]'
+                        );
+
+
+                    const unitInput =
+                        card.querySelector(
+                            'input[name*="[unit]"]'
+                        );
 
 
                     if (nameInput) {
-                        nameInput.name = `items[${index}][name]`;
+
+                        nameInput.name =
+                            `items[${index}][name]`;
+
                     }
+
 
                     if (quantityInput) {
-                        quantityInput.name = `items[${index}][quantity]`;
+
+                        quantityInput.name =
+                            `items[${index}][quantity]`;
+
                     }
 
+
                     if (unitInput) {
-                        unitInput.name = `items[${index}][unit]`;
+
+                        unitInput.name =
+                            `items[${index}][unit]`;
+
                     }
 
                 });
@@ -878,24 +1361,31 @@
 
             function updateRemoveButtons() {
 
-                const cards = itemsContainer.querySelectorAll(
-                    '.item-card'
-                );
+
+                const cards =
+                    itemsContainer.querySelectorAll(
+                        '.item-card'
+                    );
 
 
                 cards.forEach(function (card) {
 
-                    const button = card.querySelector(
-                        '.remove-item-btn'
-                    );
+
+                    const button =
+                        card.querySelector(
+                            '.remove-item-btn'
+                        );
 
 
                     if (!button) {
+
                         return;
+
                     }
 
 
-                    button.disabled = cards.length === 1;
+                    button.disabled =
+                        cards.length === 1;
 
                 });
 
@@ -906,65 +1396,90 @@
                SUBMIT
             ====================================================== */
 
-            form.addEventListener('submit', function (event) {
+            form.addEventListener(
+                'submit',
+                function (event) {
 
 
-                /*
-                 * Browser validation
-                 */
-                if (!form.checkValidity()) {
+                    /*
+                     * Browser validation
+                     */
 
-                    event.preventDefault();
-
-                    const invalidField = form.querySelector(':invalid');
+                    if (!form.checkValidity()) {
 
 
-                    if (invalidField) {
+                        event.preventDefault();
 
-                        invalidField.focus();
-                        invalidField.reportValidity();
+
+                        const invalidField =
+                            form.querySelector(':invalid');
+
+
+                        if (invalidField) {
+
+                            invalidField.focus();
+
+                            invalidField.reportValidity();
+
+                        }
+
+
+                        return;
 
                     }
 
-                    return;
+
+                    /*
+                     * At least one item
+                     */
+
+                    const itemCards =
+                        itemsContainer.querySelectorAll(
+                            '.item-card'
+                        );
+
+
+                    if (itemCards.length === 0) {
+
+
+                        event.preventDefault();
+
+
+                        alert(
+                            translations.addAtLeastOneItem
+                        );
+
+
+                        return;
+
+                    }
+
+
+                    /*
+                     * Make sure indexes are clean
+                     * before submitting.
+                     */
+
+                    reindexItems();
+
+
+                    /*
+                     * Prevent double submit
+                     */
+
+                    saveBtn.disabled = true;
+
+
+                    saveSpinner.classList.remove(
+                        'd-none'
+                    );
+
+
+                    saveText.innerHTML =
+                        translations.submitting;
+
                 }
-
-
-                /*
-                 * At least one item
-                 */
-                const itemCards = itemsContainer.querySelectorAll(
-                    '.item-card'
-                );
-
-
-                if (itemCards.length === 0) {
-
-                    event.preventDefault();
-
-                    alert(translations.addAtLeastOneItem);
-
-                    return;
-                }
-
-
-                /*
-                 * Make sure indexes are clean
-                 * before submitting.
-                 */
-                reindexItems();
-
-
-                /*
-                 * Prevent double submit
-                 */
-                saveBtn.disabled = true;
-
-                saveSpinner.classList.remove('d-none');
-
-                saveText.innerHTML = translations.submitting;
-
-            });
+            );
 
 
             /* =====================================================
@@ -972,7 +1487,9 @@
             ====================================================== */
 
             updateItemNumbers();
+
             updateRemoveButtons();
+
             reindexItems();
 
         });
