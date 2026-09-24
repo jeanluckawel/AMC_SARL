@@ -70,14 +70,33 @@
     <!--end::Accessibility Features-->
 
     <!--begin::Fonts-->
+{{--    <link--}}
+{{--        rel="stylesheet"--}}
+{{--        href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"--}}
+{{--        integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="--}}
+{{--        crossorigin="anonymous"--}}
+{{--        media="print"--}}
+{{--        onload="this.media = 'all'"--}}
+{{--    />--}}
+    <!--begin::Fonts-->
     <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    />
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    />
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
-        integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q="
-        crossorigin="anonymous"
         media="print"
         onload="this.media = 'all'"
     />
+    <!--end::Fonts-->
     <!--end::Fonts-->
 
     <!--begin::Third Party Plugin(OverlayScrollbars)-->
@@ -120,6 +139,18 @@
         href="https://cdn.datatables.net/buttons/3.2.5/css/buttons.dataTables.min.css"
     >
 
+
+    <style>
+
+        :root {
+            --bs-body-font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+
+    </style>
 
 
 </head>
