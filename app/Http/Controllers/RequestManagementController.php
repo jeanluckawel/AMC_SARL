@@ -99,6 +99,10 @@ class RequestManagementController extends Controller
 
     public function create(): View
     {
+        $employee = auth()->user()->employee;
+        if (!$employee) {
+            abort(404, 'Aucun profil employé associé à ce compte.');
+        }
         return view('requests.create');
     }
 //
