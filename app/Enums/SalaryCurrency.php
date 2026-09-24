@@ -9,6 +9,9 @@ enum SalaryCurrency: string
 
     public function label(): string
     {
-        return $this->value;
+        return match ($this) {
+            self::USD => 'Dollar Américain (USD)',
+            self::CDF => 'Franc Congolais (CDF)',
+        };
     }
 }

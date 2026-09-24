@@ -12,10 +12,10 @@ enum WorkLocation: string
     public function label(): string
     {
         return match ($this) {
-            self::HEAD_OFFICE => 'Head Office',
+            self::HEAD_OFFICE => 'Siège Social',
             self::KOLWEZI => 'Kolwezi',
             self::KAMOA_COPPER => 'Kamoa Copper SA',
-            self::REMOTE => 'Remote',
+            self::REMOTE => 'Télétravail',
         };
     }
 }

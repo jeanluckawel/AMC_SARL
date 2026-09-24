@@ -10,8 +10,8 @@ enum EmployeeType: string
     public function label(): string
     {
         return match ($this) {
-            self::FULL_TIME => 'Full Time',
-            self::PART_TIME => 'Part Time',
+            self::FULL_TIME => 'Temps plein',
+            self::PART_TIME => 'Temps partiel',
         };
     }
 }

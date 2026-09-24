@@ -32,6 +32,7 @@ enum SalaryCategory: string
 
     public function label(): string
     {
+        // Codes de catégorie salariale (A1, B2, ...) — non traduisibles
         return $this->value;
     }
 

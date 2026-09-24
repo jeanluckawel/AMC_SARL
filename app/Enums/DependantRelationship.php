@@ -13,11 +13,11 @@ enum DependantRelationship: string
     public function label(): string
     {
         return match ($this) {
-            self::FATHER => 'Father',
-            self::MOTHER => 'Mother',
-            self::SPOUSE => 'Spouse',
-            self::BROTHER => 'Brother',
-            self::SISTER => 'Sister',
+            self::FATHER => 'Père',
+            self::MOTHER => 'Mère',
+            self::SPOUSE => 'Conjoint(e)',
+            self::BROTHER => 'Frère',
+            self::SISTER => 'Sœur',
         };
     }
 }

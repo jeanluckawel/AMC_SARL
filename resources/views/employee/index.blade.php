@@ -317,13 +317,12 @@
                                             {{-- EDIT --}}
 
                                             <a
-                                                href="#"
+
+                                                href="{{ route('employees.edit', $employee) }}"
                                                 class="btn btn-sm btn-warning action-btn"
                                                 title="Edit Employee"
                                             >
-
                                                 <i class="bi bi-pencil"></i>
-
                                             </a>
 
 

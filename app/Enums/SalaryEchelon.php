@@ -28,6 +28,7 @@ enum SalaryEchelon: string
 
     public function label(): string
     {
+
         return $this->value;
     }
 }

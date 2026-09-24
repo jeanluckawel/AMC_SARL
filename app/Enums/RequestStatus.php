@@ -13,11 +13,11 @@ enum RequestStatus: string
     public function label(): string
     {
         return match ($this) {
-            self::PENDING_PROCUREMENT => 'Pending Procurement',
-            self::PENDING_FINANCE => 'Pending Finance',
-            self::PENDING_CEO => 'Pending CEO',
-            self::APPROVED => 'Approved',
-            self::REJECTED => 'Rejected',
+            self::PENDING_PROCUREMENT => 'En attente — Achats',
+            self::PENDING_FINANCE => 'En attente — Finance',
+            self::PENDING_CEO => 'En attente — Direction',
+            self::APPROVED => 'Approuvé',
+            self::REJECTED => 'Rejeté',
         };
     }
 }

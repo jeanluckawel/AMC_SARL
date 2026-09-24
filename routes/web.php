@@ -46,6 +46,16 @@ Route::middleware('auth')->group(function () {
     Route::post('/employees', [EmployeeController::class, 'store'])
         ->name('employees.store');
 
+    Route::get(
+        '/employees-{employee}-edit',
+        [EmployeeController::class, 'edit']
+    )->name('employees.edit');
+
+    Route::put(
+        '/employees-{employee}-update',
+        [EmployeeController::class, 'update']
+    )->name('employees.update');
+
 
 
     Route::get('/get-sections/{department}', [EmployeeController::class, 'getSections'])

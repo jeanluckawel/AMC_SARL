@@ -12,9 +12,9 @@ enum ContractType: string
     public function label(): string
     {
         return match ($this) {
-            self::CDI => 'CDI',
-            self::CDD => 'CDD',
-            self::INTERNSHIP => 'Internship',
+            self::CDI => 'CDI (Durée Indéterminée)',
+            self::CDD => 'CDD (Durée Déterminée)',
+            self::INTERNSHIP => 'Stage',
             self::CONSULTANT => 'Consultant',
         };
     }
