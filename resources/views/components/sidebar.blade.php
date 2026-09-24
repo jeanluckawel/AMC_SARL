@@ -5,15 +5,11 @@
     ========================================================== --}}
 
     <div class="sidebar-brand">
-
         <a href="{{ route('dashboard') }}" class="brand-link">
-
             <span class="brand-text fw-light">
                 AMC SARL
             </span>
-
         </a>
-
     </div>
 
 
@@ -34,31 +30,25 @@
                 id="navigation"
             >
 
-
                 {{-- =================================================
                      MAIN MENU
                 ================================================== --}}
 
                 <li class="nav-header">
-                    MAIN MENU
+                    {{ __('menu.main_menu') }}
                 </li>
 
-
                 <li class="nav-item">
-
                     <a
                         href="{{ route('dashboard') }}"
                         class="nav-link {{ request()->is('/') ? 'active' : '' }}"
                     >
-
                         <i class="nav-icon bi bi-speedometer"></i>
 
                         <p>
-                            Dashboard
+                            {{ __('menu.dashboard') }}
                         </p>
-
                     </a>
-
                 </li>
 
 
@@ -69,25 +59,20 @@
                 @can('requests.view')
 
                     <li class="nav-header">
-                        REQUESTS
+                        {{ __('menu.requests') }}
                     </li>
 
-
                     <li class="nav-item">
-
                         <a
                             href="{{ route('requests.index') }}"
                             class="nav-link {{ request()->routeIs('requests.index') ? 'active' : '' }}"
                         >
-
                             <i class="nav-icon bi bi-file-earmark-text"></i>
 
                             <p>
-                                Requests
+                                {{ __('menu.requests') }}
                             </p>
-
                         </a>
-
                     </li>
 
                 @endcan
@@ -97,10 +82,14 @@
                      PROCUREMENT
                 ================================================== --}}
 
-                @canany(['procurement.view', 'procurement.approve', 'procurement.reject'])
+                @canany([
+                    'procurement.view',
+                    'procurement.approve',
+                    'procurement.reject'
+                ])
 
                     <li class="nav-header">
-                        PROCUREMENT
+                        {{ __('menu.procurement') }}
                     </li>
 
 
@@ -109,16 +98,38 @@
                     @can('procurement.view')
 
                         <li class="nav-item">
-
                             <a
                                 href="{{ route('procurement.pending') }}"
                                 class="nav-link {{ request()->routeIs('procurement.pending') ? 'active' : '' }}"
                             >
-
                                 <i class="nav-icon bi bi-hourglass-split"></i>
 
                                 <p>
-                                    Pending Validation
+                                    {{ __('menu.pending_validation') }}
+                                </p>
+                            </a>
+                        </li>
+
+                    @endcan
+
+
+                    {{-- Approved --}}
+
+                    {{--
+
+                    @can('procurement.view')
+
+                        <li class="nav-item">
+
+                            <a
+                                href="{{ route('requests.approved') }}"
+                                class="nav-link {{ request()->routeIs('requests.approved') ? 'active' : '' }}"
+                            >
+
+                                <i class="nav-icon bi bi-check-circle"></i>
+
+                                <p>
+                                    Approved Requests
                                 </p>
 
                             </a>
@@ -127,53 +138,35 @@
 
                     @endcan
 
-
-                    {{-- Approved --}}
-
-{{--                    @can('procurement.view')--}}
-
-{{--                        <li class="nav-item">--}}
-
-{{--                            <a--}}
-{{--                                href="{{ route('requests.approved') }}"--}}
-{{--                                class="nav-link {{ request()->routeIs('requests.approved') ? 'active' : '' }}"--}}
-{{--                            >--}}
-
-{{--                                <i class="nav-icon bi bi-check-circle"></i>--}}
-
-{{--                                <p>--}}
-{{--                                    Approved Requests--}}
-{{--                                </p>--}}
-
-{{--                            </a>--}}
-
-{{--                        </li>--}}
-
-{{--                    @endcan--}}
+                    --}}
 
 
-{{--                    --}}{{-- Rejected --}}
+                    {{-- Rejected --}}
 
-{{--                    @can('procurement.view')--}}
+                    {{--
 
-{{--                        <li class="nav-item">--}}
+                    @can('procurement.view')
 
-{{--                            <a--}}
-{{--                                href="{{ route('procurement.requests.rejected') }}"--}}
-{{--                                class="nav-link {{ request()->routeIs('procurement.requests.rejected') ? 'active' : '' }}"--}}
-{{--                            >--}}
+                        <li class="nav-item">
 
-{{--                                <i class="nav-icon bi bi-x-circle"></i>--}}
+                            <a
+                                href="{{ route('procurement.requests.rejected') }}"
+                                class="nav-link {{ request()->routeIs('procurement.requests.rejected') ? 'active' : '' }}"
+                            >
 
-{{--                                <p>--}}
-{{--                                    Rejected Requests--}}
-{{--                                </p>--}}
+                                <i class="nav-icon bi bi-x-circle"></i>
 
-{{--                            </a>--}}
+                                <p>
+                                    Rejected Requests
+                                </p>
 
-{{--                        </li>--}}
+                            </a>
 
-{{--                    @endcan--}}
+                        </li>
+
+                    @endcan
+
+                    --}}
 
                 @endcanany
 
@@ -193,7 +186,7 @@
                 ])
 
                     <li class="nav-header">
-                        FINANCE
+                        {{ __('menu.finance') }}
                     </li>
 
 
@@ -202,20 +195,16 @@
                     @can('finance.view')
 
                         <li class="nav-item">
-
                             <a
                                 href="{{ route('finance.pending') }}"
                                 class="nav-link {{ request()->routeIs('finance.pending') ? 'active' : '' }}"
                             >
-
                                 <i class="nav-icon bi bi-hourglass-split"></i>
 
                                 <p>
-                                    Pending Validation
+                                    {{ __('menu.pending_validation') }}
                                 </p>
-
                             </a>
-
                         </li>
 
                     @endcan
@@ -231,20 +220,16 @@
                     ])
 
                         <li class="nav-item">
-
                             <a
                                 href="{{ route('finance.department-budgets') }}"
                                 class="nav-link {{ request()->routeIs('finance.department-budgets') ? 'active' : '' }}"
                             >
-
                                 <i class="nav-icon bi bi-wallet2"></i>
 
                                 <p>
-                                    Department Budget
+                                    {{ __('menu.department_budget') }}
                                 </p>
-
                             </a>
-
                         </li>
 
                     @endcanany
@@ -255,20 +240,16 @@
                     @can('finance.view')
 
                         <li class="nav-item">
-
                             <a
                                 href="{{ route('finance.approved') }}"
                                 class="nav-link {{ request()->routeIs('finance.approved') ? 'active' : '' }}"
                             >
-
                                 <i class="nav-icon bi bi-check-circle"></i>
 
                                 <p>
-                                    Approved Requests
+                                    {{ __('menu.approved_requests') }}
                                 </p>
-
                             </a>
-
                         </li>
 
                     @endcan
@@ -279,20 +260,16 @@
                     @can('finance.view')
 
                         <li class="nav-item">
-
                             <a
                                 href="{{ route('finance.rejected') }}"
                                 class="nav-link {{ request()->routeIs('finance.rejected') ? 'active' : '' }}"
                             >
-
                                 <i class="nav-icon bi bi-x-circle"></i>
 
                                 <p>
-                                    Rejected Requests
+                                    {{ __('menu.rejected_requests') }}
                                 </p>
-
                             </a>
-
                         </li>
 
                     @endcan
@@ -304,10 +281,14 @@
                      CEO
                 ================================================== --}}
 
-                @canany(['ceo.view', 'ceo.approve', 'ceo.reject'])
+                @canany([
+                    'ceo.view',
+                    'ceo.approve',
+                    'ceo.reject'
+                ])
 
                     <li class="nav-header">
-                        DG
+                        {{ __('menu.ceo') }}
                     </li>
 
 
@@ -316,20 +297,16 @@
                     @can('ceo.view')
 
                         <li class="nav-item">
-
                             <a
                                 href="{{ route('ceo.pending') }}"
                                 class="nav-link {{ request()->routeIs('ceo.pending') ? 'active' : '' }}"
                             >
-
                                 <i class="nav-icon bi bi-hourglass-split"></i>
 
                                 <p>
-                                    Pending Validation
+                                    {{ __('menu.pending_validation') }}
                                 </p>
-
                             </a>
-
                         </li>
 
                     @endcan
@@ -340,20 +317,16 @@
                     @can('ceo.view')
 
                         <li class="nav-item">
-
                             <a
                                 href="{{ route('ceo.approved') }}"
                                 class="nav-link {{ request()->routeIs('ceo.approved') ? 'active' : '' }}"
                             >
-
                                 <i class="nav-icon bi bi-check-circle"></i>
 
                                 <p>
-                                    Approved Requests
+                                    {{ __('menu.approved_requests') }}
                                 </p>
-
                             </a>
-
                         </li>
 
                     @endcan
@@ -364,20 +337,16 @@
                     @can('ceo.view')
 
                         <li class="nav-item">
-
                             <a
                                 href="{{ route('ceo.rejected') }}"
                                 class="nav-link {{ request()->routeIs('ceo.rejected') ? 'active' : '' }}"
                             >
-
                                 <i class="nav-icon bi bi-x-circle"></i>
 
                                 <p>
-                                    Rejected Requests
+                                    {{ __('menu.rejected_requests') }}
                                 </p>
-
                             </a>
-
                         </li>
 
                     @endcan
@@ -397,7 +366,7 @@
                 ])
 
                     <li class="nav-header">
-                        EMPLOYEE MANAGEMENT
+                        {{ __('menu.employee_management') }}
                     </li>
 
 
@@ -406,7 +375,6 @@
                     @can('employees.view')
 
                         <li class="nav-item">
-
                             <a
                                 href="{{ route('employees.index') }}"
                                 class="nav-link {{
@@ -417,15 +385,12 @@
                                         : ''
                                 }}"
                             >
-
                                 <i class="nav-icon bi bi-people"></i>
 
                                 <p>
-                                    Employees
+                                    {{ __('menu.employees') }}
                                 </p>
-
                             </a>
-
                         </li>
 
                     @endcan
@@ -436,20 +401,16 @@
                     @can('employees.create')
 
                         <li class="nav-item">
-
                             <a
                                 href="{{ route('employees.create') }}"
                                 class="nav-link {{ request()->routeIs('employees.create') ? 'active' : '' }}"
                             >
-
                                 <i class="nav-icon bi bi-person-plus"></i>
 
                                 <p>
-                                    Add Employee
+                                    {{ __('menu.add_employee') }}
                                 </p>
-
                             </a>
-
                         </li>
 
                     @endcan
@@ -469,7 +430,7 @@
                 ])
 
                     <li class="nav-header">
-                        ORGANIZATION
+                        {{ __('menu.organization') }}
                     </li>
 
 
@@ -478,20 +439,16 @@
                     @can('departments.view')
 
                         <li class="nav-item">
-
                             <a
                                 href="{{ route('departments.index') }}"
                                 class="nav-link {{ request()->routeIs('departments.*') ? 'active' : '' }}"
                             >
-
                                 <i class="nav-icon bi bi-diagram-3"></i>
 
                                 <p>
-                                    Departments
+                                    {{ __('menu.departments') }}
                                 </p>
-
                             </a>
-
                         </li>
 
                     @endcan
@@ -499,9 +456,9 @@
                 @endcanany
 
 
-                {{-- =========================================================
-     QUOTATIONS
-========================================================== --}}
+                {{-- =================================================
+                     QUOTATIONS
+                ================================================== --}}
 
                 @canany([
                     'quotations.view',
@@ -511,7 +468,7 @@
                 ])
 
                     <li class="nav-header">
-                        QUOTATIONS
+                        {{ __('menu.quotations') }}
                     </li>
 
 
@@ -520,20 +477,22 @@
                     @can('quotations.view')
 
                         <li class="nav-item">
-
                             <a
                                 href="{{ route('quotations.index') }}"
-                                class="nav-link {{ request()->routeIs('quotations.index') || request()->routeIs('quotations.show') || request()->routeIs('quotations.edit') ? 'active' : '' }}"
+                                class="nav-link {{
+                                    request()->routeIs('quotations.index') ||
+                                    request()->routeIs('quotations.show') ||
+                                    request()->routeIs('quotations.edit')
+                                        ? 'active'
+                                        : ''
+                                }}"
                             >
-
                                 <i class="nav-icon bi bi-file-earmark-spreadsheet"></i>
 
                                 <p>
-                                    Quotations
+                                    {{ __('menu.quotations') }}
                                 </p>
-
                             </a>
-
                         </li>
 
                     @endcan
@@ -544,20 +503,16 @@
                     @can('quotations.create')
 
                         <li class="nav-item">
-
                             <a
                                 href="{{ route('quotations.create') }}"
                                 class="nav-link {{ request()->routeIs('quotations.create') ? 'active' : '' }}"
                             >
-
                                 <i class="nav-icon bi bi-file-earmark-plus"></i>
 
                                 <p>
-                                    Add Quotation
+                                    {{ __('menu.add_quotation') }}
                                 </p>
-
                             </a>
-
                         </li>
 
                     @endcan
@@ -565,7 +520,12 @@
                 @endcanany
 
 
+                {{-- =================================================
+                     PURCHASE ORDERS
+                ================================================== --}}
+
                 @can('purchase_orders.view')
+
                     <li class="nav-item">
                         <a
                             href="{{ route('purchase-orders.index') }}"
@@ -574,14 +534,17 @@
                             <i class="nav-icon bi bi-file-earmark-check"></i>
 
                             <p>
-                                Purchase Orders
+                                {{ __('menu.purchase_orders') }}
                             </p>
                         </a>
                     </li>
+
                 @endcan
 
 
-
+                {{-- =================================================
+                     ADMINISTRATION
+                ================================================== --}}
 
                 @canany([
                     'users.view',
@@ -599,7 +562,7 @@
                 ])
 
                     <li class="nav-header">
-                        ADMINISTRATION
+                        {{ __('menu.administration') }}
                     </li>
 
 
@@ -608,20 +571,16 @@
                     @can('users.view')
 
                         <li class="nav-item">
-
                             <a
                                 href="{{ route('users.index') }}"
                                 class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}"
                             >
-
                                 <i class="nav-icon bi bi-people"></i>
 
                                 <p>
-                                    Users
+                                    {{ __('menu.users') }}
                                 </p>
-
                             </a>
-
                         </li>
 
                     @endcan
@@ -632,20 +591,16 @@
                     @can('roles.view')
 
                         <li class="nav-item">
-
                             <a
                                 href="{{ route('roles.index') }}"
                                 class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}"
                             >
-
                                 <i class="nav-icon bi bi-shield-lock"></i>
 
                                 <p>
-                                    Roles
+                                    {{ __('menu.roles') }}
                                 </p>
-
                             </a>
-
                         </li>
 
                     @endcan
@@ -660,25 +615,21 @@
                 @can('audit_logs.view')
 
                     <li class="nav-header">
-                        AUDIT
+                        {{ __('menu.audit') }}
                     </li>
 
 
                     <li class="nav-item">
-
                         <a
                             href="{{ route('audit-logs.index') }}"
                             class="nav-link {{ request()->routeIs('audit-logs.*') ? 'active' : '' }}"
                         >
-
                             <i class="nav-icon bi bi-journal-text"></i>
 
                             <p>
-                                Audit Logs
+                                {{ __('menu.audit_logs') }}
                             </p>
-
                         </a>
-
                     </li>
 
                 @endcan
@@ -689,34 +640,29 @@
                 ================================================== --}}
 
                 <li class="nav-header">
-                    ACCOUNT
+                    {{ __('menu.account') }}
                 </li>
 
 
                 {{-- Profile --}}
 
                 <li class="nav-item">
-
                     <a
                         href="{{ route('employees.myProfile') }}"
                         class="nav-link"
                     >
-
                         <i class="nav-icon bi bi-person"></i>
 
                         <p>
-                            My Profile
+                            {{ __('menu.my_profile') }}
                         </p>
-
                     </a>
-
                 </li>
 
 
                 {{-- Logout --}}
 
                 <li class="nav-item">
-
                     <a
                         href="#"
                         class="nav-link"
@@ -725,15 +671,12 @@
                             document.getElementById('logout-form').submit();
                         "
                     >
-
                         <i class="nav-icon bi bi-box-arrow-right"></i>
 
                         <p>
-                            Logout
+                            {{ __('menu.logout') }}
                         </p>
-
                     </a>
-
 
                     <form
                         id="logout-form"
@@ -741,13 +684,9 @@
                         method="POST"
                         class="d-none"
                     >
-
                         @csrf
-
                     </form>
-
                 </li>
-
 
             </ul>
 

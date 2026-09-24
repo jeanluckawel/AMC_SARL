@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentBudgetsController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\QuotationController;
@@ -397,6 +398,11 @@ Route::middleware([
         '/my-profile',
         [EmployeeController::class, 'myProfile']
     )->name('employees.myProfile');
+
+    Route::get(
+        '/language/{locale}',
+        [LanguageController::class, 'switch']
+    )->name('language.switch');
 
 
 });

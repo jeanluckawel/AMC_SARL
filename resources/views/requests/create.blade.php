@@ -4,8 +4,11 @@
 
 @section('content')
 
-    <style>
+    {{-- =========================================================
+        CSS
+    ========================================================== --}}
 
+    <style>
 
         .request-card {
             border: 0;
@@ -43,8 +46,6 @@
             border-color: #dc3545 !important;
         }
 
-
-
         .request-section {
             border: 1px solid #dee2e6;
             margin-bottom: 25px;
@@ -70,8 +71,6 @@
         .request-section-body {
             padding: 20px;
         }
-
-
 
         .item-card {
             border: 1px solid #dee2e6;
@@ -111,12 +110,9 @@
             color: #fff;
         }
 
-
         .request-info {
             border-radius: 0 !important;
         }
-
-
 
         .btn-primary-custom {
             background-color: #0d6efd;
@@ -155,6 +151,10 @@
     </style>
 
 
+    {{-- =========================================================
+        PAGE HEADER
+    ========================================================== --}}
+
     <div class="app-content-header">
 
         <div class="container-fluid">
@@ -164,7 +164,7 @@
                 <div class="col-md-6 col-12">
 
                     <h3 class="mb-0">
-                        Create a New Request
+                        {{ __('menu.create_request') }}
                     </h3>
 
                 </div>
@@ -176,7 +176,7 @@
                         <li class="breadcrumb-item">
 
                             <a href="{{ url('/') }}">
-                                Home
+                                {{ __('menu.dashboard') }}
                             </a>
 
                         </li>
@@ -184,13 +184,13 @@
                         <li class="breadcrumb-item">
 
                             <a href="{{ route('requests.index') }}">
-                                Requests
+                                {{ __('menu.requests') }}
                             </a>
 
                         </li>
 
                         <li class="breadcrumb-item active">
-                            Create
+                            {{ __('menu.create') }}
                         </li>
 
                     </ol>
@@ -203,8 +203,16 @@
 
     </div>
 
+
+    {{-- =========================================================
+        REQUEST CARD
+    ========================================================== --}}
+
     <div class="card request-card request-card-wrapper m-4 shadow-sm">
 
+        {{-- =====================================================
+            CARD HEADER
+        ====================================================== --}}
 
         <div class="card-header request-header">
 
@@ -212,16 +220,23 @@
 
                 <i class="bi bi-file-earmark-plus me-2"></i>
 
-                New Request
+                {{ __('menu.new_request_title') }}
 
             </h5>
 
         </div>
 
 
+        {{-- =====================================================
+            CARD BODY
+        ====================================================== --}}
+
         <div class="card-body">
 
 
+            {{-- =================================================
+                VALIDATION ERRORS
+            ================================================== --}}
 
             @if($errors->any())
 
@@ -234,7 +249,7 @@
 
                         <i class="bi bi-exclamation-triangle-fill me-2"></i>
 
-                        Please correct the following errors:
+                        {{ __('menu.please_correct_errors') }}
 
                     </div>
 
@@ -255,6 +270,9 @@
             @endif
 
 
+            {{-- =================================================
+                FORM
+            ================================================== --}}
 
             <form
                 action="{{ route('requests.store') }}"
@@ -266,27 +284,23 @@
                 @csrf
 
 
+                {{-- =================================================
+                    REQUEST INFORMATION
+                ================================================== --}}
 
                 <div class="request-section">
-
-
-
-
 
                     <div class="request-section-body">
 
                         <div class="row g-3">
 
 
-                            {{-- =====================================
-                                 REQUEST TITLE
-                            ====================================== --}}
-
+                            {{-- REQUEST TITLE --}}
                             <div class="col-12 col-md-6">
 
                                 <label class="form-label">
 
-                                    Request Title
+                                    {{ __('menu.request_title') }}
 
                                     <span class="text-danger">*</span>
 
@@ -297,7 +311,7 @@
                                     name="title"
                                     class="form-control @error('title') is-invalid @enderror"
                                     value="{{ old('title') }}"
-                                    placeholder="Example: Request for construction materials"
+                                    placeholder="{{ __('menu.request_title_placeholder') }}"
                                     maxlength="255"
                                     required
                                 >
@@ -313,15 +327,12 @@
                             </div>
 
 
-                            {{-- =====================================
-                                 DESCRIPTION
-                            ====================================== --}}
-
+                            {{-- DESCRIPTION --}}
                             <div class="col-12 col-md-6">
 
                                 <label class="form-label">
 
-                                    Description / Remark
+                                    {{ __('menu.description_remark') }}
 
                                 </label>
 
@@ -329,7 +340,7 @@
                                     name="description"
                                     class="form-control @error('description') is-invalid @enderror"
                                     rows="1"
-                                    placeholder="Describe the reason for this request..."
+                                    placeholder="{{ __('menu.description_placeholder') }}"
                                 >{{ old('description') }}</textarea>
 
                                 @error('description')
@@ -342,10 +353,6 @@
 
                             </div>
 
-
-
-
-
                         </div>
 
                     </div>
@@ -354,19 +361,14 @@
 
 
                 {{-- =================================================
-                     REQUEST ITEMS
+                    REQUEST ITEMS
                 ================================================== --}}
 
                 <div class="request-section">
 
-
-
-
                     <div class="request-section-body">
 
-
                         <div id="itemsContainer">
-
 
                             @php
 
@@ -383,23 +385,19 @@
 
                             @foreach($oldItems as $index => $item)
 
-
                                 <div
                                     class="item-card"
                                     data-item-index="{{ $index }}"
                                 >
 
-
-
-
+                                    {{-- ITEM HEADER --}}
                                     <div class="item-card-header">
-
 
                                         <span class="item-number">
 
                                             <i class="bi bi-box me-1"></i>
 
-                                            Item
+                                            {{ __('menu.item') }}
 
                                             <span class="item-number-value">
                                                 {{ $index + 1 }}
@@ -418,24 +416,23 @@
 
                                             <i class="bi bi-trash me-1"></i>
 
-                                            Remove
+                                            {{ __('menu.remove') }}
 
                                         </button>
-
 
                                     </div>
 
 
+                                    {{-- ITEM FIELDS --}}
                                     <div class="row g-3">
 
 
-
-
+                                        {{-- ITEM NAME --}}
                                         <div class="col-12 col-md-6">
 
                                             <label class="form-label">
 
-                                                Item Name
+                                                {{ __('menu.item_name') }}
 
                                                 <span class="text-danger">*</span>
 
@@ -446,7 +443,7 @@
                                                 name="items[{{ $index }}][name]"
                                                 class="form-control @error('items.' . $index . '.name') is-invalid @enderror"
                                                 value="{{ $item['name'] ?? '' }}"
-                                                placeholder="Keyboard"
+                                                placeholder="{{ __('menu.item_name_placeholder') }}"
                                                 maxlength="255"
                                                 required
                                             >
@@ -463,12 +460,11 @@
 
 
                                         {{-- QUANTITY --}}
-
                                         <div class="col-12 col-md-3">
 
                                             <label class="form-label">
 
-                                                Quantity
+                                                {{ __('menu.quantity') }}
 
                                                 <span class="text-danger">*</span>
 
@@ -495,12 +491,12 @@
                                         </div>
 
 
-
+                                        {{-- UNIT --}}
                                         <div class="col-12 col-md-3">
 
                                             <label class="form-label">
 
-                                                Unit
+                                                {{ __('menu.unit') }}
 
                                             </label>
 
@@ -509,29 +505,22 @@
                                                 name="items[{{ $index }}][unit]"
                                                 class="form-control"
                                                 value="{{ $item['unit'] ?? '' }}"
-                                                placeholder="pcs, kg, m³..."
+                                                placeholder="{{ __('menu.unit_placeholder') }}"
                                                 maxlength="100"
                                             >
 
                                         </div>
 
-
                                     </div>
-
 
                                 </div>
 
-
                             @endforeach
-
 
                         </div>
 
 
-                        {{-- =========================================
-                             ADD ITEM
-                        ========================================== --}}
-
+                        {{-- ADD ITEM --}}
                         <button
                             type="button"
                             class="btn btn-add-item"
@@ -540,10 +529,9 @@
 
                             <i class="bi bi-plus-lg me-1"></i>
 
-                            Add Another Item
+                            {{ __('menu.add_another_item') }}
 
                         </button>
-
 
                     </div>
 
@@ -551,16 +539,14 @@
 
 
                 {{-- =================================================
-                     FORM ACTIONS
+                    FORM ACTIONS
                 ================================================== --}}
 
                 <div
                     class="d-flex justify-content-between align-items-center mt-4 pt-3 border-top"
                 >
 
-
                     {{-- CANCEL --}}
-
                     <a
                         href="{{ route('requests.index') }}"
                         class="btn btn-secondary"
@@ -568,13 +554,12 @@
 
                         <i class="bi bi-x-lg me-1"></i>
 
-                        Cancel
+                        {{ __('menu.cancel') }}
 
                     </a>
 
 
                     {{-- SUBMIT --}}
-
                     <button
                         type="submit"
                         class="btn btn-primary-custom"
@@ -592,15 +577,13 @@
 
                             <i class="bi bi-send me-1"></i>
 
-                            Submit Request
+                            {{ __('menu.submit_request') }}
 
                         </span>
 
                     </button>
 
-
                 </div>
-
 
             </form>
 
@@ -610,10 +593,27 @@
 
 
     {{-- =========================================================
-         JAVASCRIPT
+        JAVASCRIPT
     ========================================================== --}}
 
     <script>
+
+        /*
+         * Textes traduits injectés depuis Laravel pour le JS.
+         */
+        const translations = {
+            item: @json(__('menu.item')),
+            remove: @json(__('menu.remove')),
+            itemName: @json(__('menu.item_name')),
+            itemNamePlaceholder: @json(__('menu.item_name_placeholder_js')),
+            quantity: @json(__('menu.quantity')),
+            unit: @json(__('menu.unit')),
+            unitPlaceholder: @json(__('menu.unit_placeholder')),
+            submitting: @json(__('menu.submitting')),
+            addAtLeastOneItem: @json(__('menu.add_at_least_one_item')),
+        };
+
+
         document.addEventListener('DOMContentLoaded', function () {
 
             const form = document.getElementById('requestForm');
@@ -624,6 +624,7 @@
             const saveText = document.getElementById('saveText');
 
             let itemIndex = itemsContainer.querySelectorAll('.item-card').length;
+
 
             /* =====================================================
                ADD ITEM
@@ -639,87 +640,111 @@
                 itemCard.dataset.itemIndex = index;
 
                 itemCard.innerHTML = `
-                <div class="item-card-header">
 
-                    <span class="item-number">
-                        <i class="bi bi-box me-1"></i>
-                        Item
-                        <span class="item-number-value"></span>
-                    </span>
+                    <div class="item-card-header">
 
-                    <button
-                        type="button"
-                        class="btn btn-sm btn-outline-danger remove-item-btn"
-                    >
-                        <i class="bi bi-trash me-1"></i>
-                        Remove
-                    </button>
+                        <span class="item-number">
 
-                </div>
+                            <i class="bi bi-box me-1"></i>
 
-                <div class="row g-3">
+                            ${translations.item}
 
-                    <div class="col-12 col-md-6">
+                            <span class="item-number-value"></span>
 
-                        <label class="form-label">
-                            Item Name
-                            <span class="text-danger">*</span>
-                        </label>
+                        </span>
 
-                        <input
-                            type="text"
-                            name="items[${index}][name]"
-                            class="form-control"
-                            placeholder="Example: Cement"
-                            maxlength="255"
-                            required
+
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-outline-danger remove-item-btn"
                         >
+
+                            <i class="bi bi-trash me-1"></i>
+
+                            ${translations.remove}
+
+                        </button>
 
                     </div>
 
-                    <div class="col-12 col-md-3">
 
-                        <label class="form-label">
-                            Quantity
-                            <span class="text-danger">*</span>
-                        </label>
+                    <div class="row g-3">
 
-                        <input
-                            type="number"
-                            name="items[${index}][quantity]"
-                            class="form-control"
-                            value="1"
-                            min="0.01"
-                            step="0.01"
-                            required
-                        >
+
+                        <div class="col-12 col-md-6">
+
+                            <label class="form-label">
+
+                                ${translations.itemName}
+
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="items[${index}][name]"
+                                class="form-control"
+                                placeholder="${translations.itemNamePlaceholder}"
+                                maxlength="255"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="col-12 col-md-3">
+
+                            <label class="form-label">
+
+                                ${translations.quantity}
+
+                                <span class="text-danger">*</span>
+
+                            </label>
+
+                            <input
+                                type="number"
+                                name="items[${index}][quantity]"
+                                class="form-control"
+                                value="1"
+                                min="0.01"
+                                step="0.01"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="col-12 col-md-3">
+
+                            <label class="form-label">
+
+                                ${translations.unit}
+
+                            </label>
+
+                            <input
+                                type="text"
+                                name="items[${index}][unit]"
+                                class="form-control"
+                                placeholder="${translations.unitPlaceholder}"
+                                maxlength="100"
+                            >
+
+                        </div>
+
 
                     </div>
+                `;
 
-                    <div class="col-12 col-md-3">
-
-                        <label class="form-label">
-                            Unit
-                        </label>
-
-                        <input
-                            type="text"
-                            name="items[${index}][unit]"
-                            class="form-control"
-                            placeholder="pcs, kg, m³..."
-                            maxlength="100"
-                        >
-
-                    </div>
-
-                </div>
-            `;
 
                 itemsContainer.appendChild(itemCard);
 
                 updateItemNumbers();
                 updateRemoveButtons();
                 reindexItems();
+
 
                 const nameInput = itemCard.querySelector(
                     'input[name*="[name]"]'
@@ -728,6 +753,7 @@
                 if (nameInput) {
                     nameInput.focus();
                 }
+
             });
 
 
@@ -743,13 +769,18 @@
                     return;
                 }
 
+
                 const itemCard = button.closest('.item-card');
 
                 if (!itemCard) {
                     return;
                 }
 
-                const itemCards = itemsContainer.querySelectorAll('.item-card');
+
+                const itemCards = itemsContainer.querySelectorAll(
+                    '.item-card'
+                );
+
 
                 /*
                  * At least one item is required.
@@ -758,11 +789,13 @@
                     return;
                 }
 
+
                 itemCard.remove();
 
                 updateItemNumbers();
                 updateRemoveButtons();
                 reindexItems();
+
             });
 
 
@@ -772,7 +805,10 @@
 
             function updateItemNumbers() {
 
-                const cards = itemsContainer.querySelectorAll('.item-card');
+                const cards = itemsContainer.querySelectorAll(
+                    '.item-card'
+                );
+
 
                 cards.forEach(function (card, index) {
 
@@ -780,10 +816,13 @@
                         '.item-number-value'
                     );
 
+
                     if (number) {
                         number.textContent = index + 1;
                     }
+
                 });
+
             }
 
 
@@ -793,11 +832,15 @@
 
             function reindexItems() {
 
-                const cards = itemsContainer.querySelectorAll('.item-card');
+                const cards = itemsContainer.querySelectorAll(
+                    '.item-card'
+                );
+
 
                 cards.forEach(function (card, index) {
 
                     card.dataset.itemIndex = index;
+
 
                     const nameInput = card.querySelector(
                         'input[name*="[name]"]'
@@ -811,6 +854,7 @@
                         'input[name*="[unit]"]'
                     );
 
+
                     if (nameInput) {
                         nameInput.name = `items[${index}][name]`;
                     }
@@ -822,7 +866,9 @@
                     if (unitInput) {
                         unitInput.name = `items[${index}][unit]`;
                     }
+
                 });
+
             }
 
 
@@ -832,7 +878,10 @@
 
             function updateRemoveButtons() {
 
-                const cards = itemsContainer.querySelectorAll('.item-card');
+                const cards = itemsContainer.querySelectorAll(
+                    '.item-card'
+                );
+
 
                 cards.forEach(function (card) {
 
@@ -840,12 +889,16 @@
                         '.remove-item-btn'
                     );
 
+
                     if (!button) {
                         return;
                     }
 
+
                     button.disabled = cards.length === 1;
+
                 });
+
             }
 
 
@@ -854,6 +907,7 @@
             ====================================================== */
 
             form.addEventListener('submit', function (event) {
+
 
                 /*
                  * Browser validation
@@ -864,9 +918,12 @@
 
                     const invalidField = form.querySelector(':invalid');
 
+
                     if (invalidField) {
+
                         invalidField.focus();
                         invalidField.reportValidity();
+
                     }
 
                     return;
@@ -880,13 +937,12 @@
                     '.item-card'
                 );
 
+
                 if (itemCards.length === 0) {
 
                     event.preventDefault();
 
-                    alert(
-                        'Please add at least one item to the request.'
-                    );
+                    alert(translations.addAtLeastOneItem);
 
                     return;
                 }
@@ -906,7 +962,8 @@
 
                 saveSpinner.classList.remove('d-none');
 
-                saveText.innerHTML = 'Submitting...';
+                saveText.innerHTML = translations.submitting;
+
             });
 
 
@@ -919,6 +976,7 @@
             reindexItems();
 
         });
+
     </script>
 
 @endsection

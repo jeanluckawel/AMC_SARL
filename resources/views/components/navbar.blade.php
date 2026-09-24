@@ -61,12 +61,13 @@
 
 
             <!-- Language -->
+            <!-- Language -->
             <li class="nav-item dropdown">
-
                 <a
-                    class="nav-link"
+                    class="nav-link dropdown-toggle"
                     href="#"
                     id="language-menu"
+                    role="button"
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                     aria-label="Change language"
@@ -78,23 +79,34 @@
                     class="dropdown-menu dropdown-menu-end"
                     aria-labelledby="language-menu"
                 >
-
                     <li>
-                        <a class="dropdown-item active" href="#">
+                        <a
+                            class="dropdown-item {{ app()->getLocale() === 'fr' ? 'active' : '' }}"
+                            href="{{ route('language.switch', 'fr') }}"
+                        >
                             Français
-                            <i class="bi bi-check-lg ms-2"></i>
+
+                            @if(app()->getLocale() === 'fr')
+                                <i class="bi bi-check-lg ms-2"></i>
+                            @endif
                         </a>
                     </li>
 
                     <li>
-                        <a class="dropdown-item" href="#">
+                        <a
+                            class="dropdown-item {{ app()->getLocale() === 'en' ? 'active' : '' }}"
+                            href="{{ route('language.switch', 'en') }}"
+                        >
                             English
+
+                            @if(app()->getLocale() === 'en')
+                                <i class="bi bi-check-lg ms-2"></i>
+                            @endif
                         </a>
                     </li>
-
                 </ul>
-
             </li>
+
 
 
             <!-- Fullscreen -->

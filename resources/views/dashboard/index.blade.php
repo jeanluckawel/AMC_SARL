@@ -2,39 +2,32 @@
 
 @section('content')
 
-
     {{-- =========================================================
         HEADER
     ========================================================== --}}
 
     <div class="app-content-header">
         <div class="container-fluid">
-
             <div class="row align-items-center">
 
                 <div class="col-md-7">
-
                     <h3 class="mb-1">
-                        HI, {{ $user->name }}
+                        {{ __('menu.greeting', ['name' => $user->name]) }}
                     </h3>
 
                     <div class="text-muted">
-                        Welcome to AMC SARL
+                        {{ __('menu.welcome', ['app' => env('APP_NAME')]) }}
                     </div>
-
                 </div>
 
                 <div class="col-md-5 text-md-end mt-3 mt-md-0">
-
                     <div class="dashboard-date">
                         <i class="bi bi-calendar3 me-2"></i>
-                        {{ now()->format('l, F d, Y') }}
+                        {{ now()->locale(app()->getLocale())->translatedFormat('l, d F Y') }}
                     </div>
-
                 </div>
 
             </div>
-
         </div>
     </div>
 
@@ -44,9 +37,7 @@
     ========================================================== --}}
 
     <div class="app-content">
-
         <div class="container-fluid">
-
 
             {{-- =====================================================
                 MAIN STATISTICS
@@ -56,9 +47,7 @@
 
                 {{-- PENDING REQUESTS --}}
                 @can('requests.view')
-
                     <div class="col-xl-3 col-md-6">
-
                         <div class="dashboard-stat-card">
 
                             <div class="stat-icon stat-warning">
@@ -66,19 +55,17 @@
                             </div>
 
                             <div class="stat-content">
-
-                            <span class="stat-label">
-                                Pending Requests
-                            </span>
+                                <span class="stat-label">
+                                    {{ __('menu.pending_requests') }}
+                                </span>
 
                                 <h3>
                                     {{ $pendingRequests }}
                                 </h3>
 
                                 <span class="stat-description">
-                                Awaiting validation
-                            </span>
-
+                                    {{ __('menu.awaiting_validation') }}
+                                </span>
                             </div>
 
                             <div class="stat-arrow">
@@ -86,17 +73,13 @@
                             </div>
 
                         </div>
-
                     </div>
-
                 @endcan
 
 
                 {{-- APPROVED REQUESTS --}}
                 @can('requests.view')
-
                     <div class="col-xl-3 col-md-6">
-
                         <div class="dashboard-stat-card">
 
                             <div class="stat-icon stat-success">
@@ -104,19 +87,17 @@
                             </div>
 
                             <div class="stat-content">
-
-                            <span class="stat-label">
-                                Approved Requests
-                            </span>
+                                <span class="stat-label">
+                                    {{ __('menu.approved_requests') }}
+                                </span>
 
                                 <h3>
                                     {{ $approvedRequests }}
                                 </h3>
 
                                 <span class="stat-description">
-                                Total approved
-                            </span>
-
+                                    {{ __('menu.total_approved') }}
+                                </span>
                             </div>
 
                             <div class="stat-arrow">
@@ -124,17 +105,13 @@
                             </div>
 
                         </div>
-
                     </div>
-
                 @endcan
 
 
                 {{-- EMPLOYEES --}}
                 @can('employees.view')
-
                     <div class="col-xl-3 col-md-6">
-
                         <div class="dashboard-stat-card">
 
                             <div class="stat-icon stat-primary">
@@ -142,19 +119,17 @@
                             </div>
 
                             <div class="stat-content">
-
-                            <span class="stat-label">
-                                Employees
-                            </span>
+                                <span class="stat-label">
+                                    {{ __('menu.employees') }}
+                                </span>
 
                                 <h3>
                                     {{ $totalEmployees }}
                                 </h3>
 
                                 <span class="stat-description">
-                                Active employees
-                            </span>
-
+                                    {{ __('menu.active_employees') }}
+                                </span>
                             </div>
 
                             <div class="stat-arrow">
@@ -162,17 +137,13 @@
                             </div>
 
                         </div>
-
                     </div>
-
                 @endcan
 
 
                 {{-- DEPARTMENT BUDGET --}}
                 @can('finance.budget.view')
-
                     <div class="col-xl-3 col-md-6">
-
                         <div class="dashboard-stat-card">
 
                             <div class="stat-icon stat-finance">
@@ -180,19 +151,17 @@
                             </div>
 
                             <div class="stat-content">
-
-                            <span class="stat-label">
-                                Department Budget
-                            </span>
+                                <span class="stat-label">
+                                    {{ __('menu.department_budget') }}
+                                </span>
 
                                 <h3>
                                     ${{ number_format($budgets->sum('amount'), 0) }}
                                 </h3>
 
                                 <span class="stat-description">
-                                Current allocation
-                            </span>
-
+                                    {{ __('menu.current_allocation') }}
+                                </span>
                             </div>
 
                             <div class="stat-arrow">
@@ -200,9 +169,7 @@
                             </div>
 
                         </div>
-
                     </div>
-
                 @endcan
 
             </div>
@@ -214,172 +181,135 @@
 
             <div class="row g-3 mb-4">
 
-
                 {{-- DEPARTMENTS --}}
                 @can('departments.view')
-
                     <div class="col-xl-2 col-md-4 col-6">
-
                         <div class="mini-stat-card">
 
                             <i class="bi bi-building"></i>
 
                             <div>
-
-                            <span>
-                                Departments
-                            </span>
+                                <span>
+                                    {{ __('menu.departments') }}
+                                </span>
 
                                 <strong>
                                     {{ $department }}
                                 </strong>
-
                             </div>
 
                         </div>
-
                     </div>
-
                 @endcan
 
 
                 {{-- USERS --}}
                 @can('users.view')
-
                     <div class="col-xl-2 col-md-4 col-6">
-
                         <div class="mini-stat-card">
 
                             <i class="bi bi-person-badge"></i>
 
                             <div>
-
-                            <span>
-                                Users
-                            </span>
+                                <span>
+                                    {{ __('menu.users') }}
+                                </span>
 
                                 <strong>
                                     {{ $totalUsers }}
                                 </strong>
-
                             </div>
 
                         </div>
-
                     </div>
-
                 @endcan
 
 
                 {{-- ROLES --}}
                 @can('roles.view')
-
                     <div class="col-xl-2 col-md-4 col-6">
-
                         <div class="mini-stat-card">
 
                             <i class="bi bi-shield-lock"></i>
 
                             <div>
-
-                            <span>
-                                Roles
-                            </span>
+                                <span>
+                                    {{ __('menu.roles') }}
+                                </span>
 
                                 <strong>
                                     {{ \Spatie\Permission\Models\Role::count() }}
                                 </strong>
-
                             </div>
 
                         </div>
-
                     </div>
-
                 @endcan
 
 
                 {{-- REJECTED --}}
                 @can('requests.view')
-
                     <div class="col-xl-2 col-md-4 col-6">
-
                         <div class="mini-stat-card">
 
                             <i class="bi bi-x-circle"></i>
 
                             <div>
-
-                            <span>
-                                Rejected
-                            </span>
+                                <span>
+                                    {{ __('menu.rejected') }}
+                                </span>
 
                                 <strong>
                                     {{ $rejectedRequests }}
                                 </strong>
-
                             </div>
 
                         </div>
-
                     </div>
-
                 @endcan
 
 
                 {{-- AUDIT LOGS --}}
                 @can('audit_logs.view')
-
                     <div class="col-xl-2 col-md-4 col-6">
-
                         <div class="mini-stat-card">
 
                             <i class="bi bi-journal-text"></i>
 
                             <div>
-
-                            <span>
-                                Audit Logs
-                            </span>
+                                <span>
+                                    {{ __('menu.audit_logs') }}
+                                </span>
 
                                 <strong>
                                     <i class="bi bi-check-lg"></i>
                                 </strong>
-
                             </div>
 
                         </div>
-
                     </div>
-
                 @endcan
 
 
                 {{-- TODAY --}}
                 @can('requests.view')
-
                     <div class="col-xl-2 col-md-4 col-6">
-
                         <div class="mini-stat-card">
 
                             <i class="bi bi-clock-history"></i>
 
                             <div>
-
-                            <span>
-                                Today
-                            </span>
+                                <span>
+                                    {{ __('menu.today') }}
+                                </span>
 
                                 <strong>
                                     {{ \App\Models\RequestModel::whereDate('created_at', today())->count() }}
                                 </strong>
-
                             </div>
 
                         </div>
-
                     </div>
-
                 @endcan
 
             </div>
@@ -391,13 +321,11 @@
 
             <div class="row g-4">
 
-
                 {{-- =================================================
                     RECENT REQUESTS
                 ================================================== --}}
 
                 @can('requests.view')
-
                     <div class="col-xl-8">
 
                         <div class="dashboard-card">
@@ -405,60 +333,52 @@
                             <div class="dashboard-card-header">
 
                                 <div>
-
                                     <h5>
-                                        Recent Requests
+                                        {{ __('menu.recent_requests') }}
                                     </h5>
 
                                     <span>
-                                    Latest requests submitted by employees
-                                </span>
-
+                                        {{ __('menu.recent_requests_desc') }}
+                                    </span>
                                 </div>
 
                                 <a
                                     href="{{ route('requests.index') }}"
                                     class="dashboard-link"
                                 >
-                                    View all
+                                    {{ __('menu.view_all') }}
                                     <i class="bi bi-arrow-right ms-1"></i>
                                 </a>
 
                             </div>
-
 
                             <div class="table-responsive">
 
                                 <table class="table dashboard-table mb-0">
 
                                     <thead>
-
                                     <tr>
-
                                         <th>
-                                            Request
+                                            {{ __('menu.request') }}
                                         </th>
 
                                         <th>
-                                            Employee
+                                            {{ __('menu.employee') }}
                                         </th>
 
                                         <th>
-                                            Department
+                                            {{ __('menu.departments') }}
                                         </th>
 
                                         <th>
-                                            Amount
+                                            {{ __('menu.amount') }}
                                         </th>
 
                                         <th>
-                                            Status
+                                            {{ __('menu.status') }}
                                         </th>
-
                                     </tr>
-
                                     </thead>
-
 
                                     <tbody>
 
@@ -468,13 +388,11 @@
 
                                             {{-- REQUEST --}}
                                             <td>
-
                                                 <div class="request-name">
 
                                                     <div class="request-icon">
 
                                                         @php
-
                                                             $title = strtolower($request->title ?? '');
 
                                                             $icon = 'bi-cart3';
@@ -490,16 +408,13 @@
                                                             } elseif (str_contains($title, 'office')) {
                                                                 $icon = 'bi-building';
                                                             }
-
                                                         @endphp
 
                                                         <i class="bi {{ $icon }}"></i>
 
                                                     </div>
 
-
                                                     <div>
-
                                                         <strong>
                                                             {{ $request->title }}
                                                         </strong>
@@ -507,37 +422,29 @@
                                                         <small>
                                                             {{ $request->reference }}
                                                         </small>
-
                                                     </div>
 
                                                 </div>
-
                                             </td>
 
 
                                             {{-- EMPLOYEE --}}
                                             <td>
-
-                                                {{ $request->requester?->name ?? 'Unknown' }}
-
+                                                {{ $request->requester?->name ?? __('menu.unknown') }}
                                             </td>
 
 
                                             {{-- DEPARTMENT --}}
                                             <td>
+                                                {{-- {{ $employee->department->nom }} --}}
 
-{{--                                                {{ $employee->department->nom  }}--}}
-
-                                                {{ $request->requester?->employee?->department?->name ?? 'N/A' }}
-
+                                                {{ $request->requester?->employee?->department?->name ?? __('menu.na') }}
                                             </td>
 
 
                                             {{-- AMOUNT --}}
                                             <td>
-
                                                 ${{ number_format((float) $request->total_amount, 2) }}
-
                                             </td>
 
 
@@ -545,7 +452,6 @@
                                             <td>
 
                                                 @php
-
                                                     $status = $request->status;
 
                                                     $statusValue = $status instanceof \BackedEnum
@@ -557,19 +463,18 @@
                                                         'pending_procurement',
                                                         'pending_finance',
                                                         'pending_ceo'
-                                                            => 'Pending',
+                                                            => __('menu.pending'),
 
                                                         'approved'
-                                                            => 'Approved',
+                                                            => __('menu.approved'),
 
                                                         'rejected'
-                                                            => 'Rejected',
+                                                            => __('menu.rejected_status'),
 
                                                         default
                                                             => ucfirst(
                                                                 str_replace('_', ' ', $statusValue)
                                                             ),
-
                                                     };
 
                                                     $statusClass = match ($statusValue) {
@@ -582,14 +487,12 @@
 
                                                         default
                                                             => 'status-pending',
-
                                                     };
-
                                                 @endphp
 
                                                 <span class="status-badge {{ $statusClass }}">
-                                                {{ $statusLabel }}
-                                            </span>
+                                                    {{ $statusLabel }}
+                                                </span>
 
                                             </td>
 
@@ -598,14 +501,12 @@
                                     @empty
 
                                         <tr>
-
                                             <td
                                                 colspan="5"
                                                 class="text-center py-4"
                                             >
-                                                No recent requests found.
+                                                {{ __('menu.no_recent_requests') }}
                                             </td>
-
                                         </tr>
 
                                     @endforelse
@@ -619,9 +520,7 @@
                         </div>
 
                     </div>
-
                 @endcan
-
 
 
                 {{-- =================================================
@@ -635,22 +534,19 @@
                         <div class="dashboard-card-header">
 
                             <div>
-
                                 <h5>
-                                    Quick Actions
+                                    {{ __('menu.quick_actions') }}
                                 </h5>
 
                                 <span>
-                                Frequently used modules
-                            </span>
-
+                                    {{ __('menu.frequently_used') }}
+                                </span>
                             </div>
 
                         </div>
 
 
                         <div class="quick-actions">
-
 
                             {{-- NEW REQUEST --}}
                             @can('requests.create')
@@ -661,21 +557,17 @@
                                 >
 
                                     <div class="quick-icon quick-orange">
-
                                         <i class="bi bi-file-earmark-plus"></i>
-
                                     </div>
 
                                     <div>
-
                                         <strong>
-                                            New Request
+                                            {{ __('menu.new_request') }}
                                         </strong>
 
                                         <small>
-                                            Create a new request
+                                            {{ __('menu.new_request_desc') }}
                                         </small>
-
                                     </div>
 
                                     <i class="bi bi-chevron-right"></i>
@@ -694,21 +586,17 @@
                                 >
 
                                     <div class="quick-icon quick-blue">
-
                                         <i class="bi bi-people"></i>
-
                                     </div>
 
                                     <div>
-
                                         <strong>
-                                            Employees
+                                            {{ __('menu.employees') }}
                                         </strong>
 
                                         <small>
-                                            Manage employees
+                                            {{ __('menu.manage_employees') }}
                                         </small>
-
                                     </div>
 
                                     <i class="bi bi-chevron-right"></i>
@@ -727,21 +615,17 @@
                                 >
 
                                     <div class="quick-icon quick-green">
-
                                         <i class="bi bi-wallet2"></i>
-
                                     </div>
 
                                     <div>
-
                                         <strong>
-                                            Department Budget
+                                            {{ __('menu.department_budget') }}
                                         </strong>
 
                                         <small>
-                                            Manage budgets
+                                            {{ __('menu.manage_budgets') }}
                                         </small>
-
                                     </div>
 
                                     <i class="bi bi-chevron-right"></i>
@@ -760,21 +644,17 @@
                                 >
 
                                     <div class="quick-icon quick-purple">
-
                                         <i class="bi bi-shield-lock"></i>
-
                                     </div>
 
                                     <div>
-
                                         <strong>
-                                            Roles & Permissions
+                                            {{ __('menu.roles_permissions') }}
                                         </strong>
 
                                         <small>
-                                            Manage access control
+                                            {{ __('menu.manage_access_control') }}
                                         </small>
-
                                     </div>
 
                                     <i class="bi bi-chevron-right"></i>
@@ -793,21 +673,17 @@
                                 >
 
                                     <div class="quick-icon quick-dark">
-
                                         <i class="bi bi-journal-text"></i>
-
                                     </div>
 
                                     <div>
-
                                         <strong>
-                                            Audit Logs
+                                            {{ __('menu.audit_logs') }}
                                         </strong>
 
                                         <small>
-                                            Review system activity
+                                            {{ __('menu.review_system_activity') }}
                                         </small>
-
                                     </div>
 
                                     <i class="bi bi-chevron-right"></i>
@@ -826,21 +702,17 @@
                                 >
 
                                     <div class="quick-icon quick-orange">
-
                                         <i class="bi bi-cart-check"></i>
-
                                     </div>
 
                                     <div>
-
                                         <strong>
-                                            Procurement
+                                            {{ __('menu.procurement') }}
                                         </strong>
 
                                         <small>
-                                            Manage procurement
+                                            {{ __('menu.manage_procurement') }}
                                         </small>
-
                                     </div>
 
                                     <i class="bi bi-chevron-right"></i>
@@ -859,21 +731,17 @@
                                 >
 
                                     <div class="quick-icon quick-blue">
-
                                         <i class="bi bi-file-earmark-text"></i>
-
                                     </div>
 
                                     <div>
-
                                         <strong>
-                                            Quotations
+                                            {{ __('menu.quotations') }}
                                         </strong>
 
                                         <small>
-                                            Manage quotations
+                                            {{ __('menu.manage_quotations') }}
                                         </small>
-
                                     </div>
 
                                     <i class="bi bi-chevron-right"></i>
@@ -892,21 +760,17 @@
                                 >
 
                                     <div class="quick-icon quick-green">
-
                                         <i class="bi bi-receipt"></i>
-
                                     </div>
 
                                     <div>
-
                                         <strong>
-                                            Purchase Orders
+                                            {{ __('menu.purchase_orders') }}
                                         </strong>
 
                                         <small>
-                                            Manage purchase orders
+                                            {{ __('menu.manage_purchase_orders') }}
                                         </small>
-
                                     </div>
 
                                     <i class="bi bi-chevron-right"></i>
@@ -924,13 +788,11 @@
             </div>
 
 
-
             {{-- =====================================================
                 BOTTOM ROW
             ====================================================== --}}
 
             <div class="row g-4 mt-1">
-
 
                 {{-- =================================================
                     BUDGET OVERVIEW
@@ -945,22 +807,20 @@
                             <div class="dashboard-card-header">
 
                                 <div>
-
                                     <h5>
-                                        Budget Overview
+                                        {{ __('menu.budget_overview') }}
                                     </h5>
 
                                     <span>
-                                    Department budget utilization
-                                </span>
-
+                                        {{ __('menu.budget_overview_desc') }}
+                                    </span>
                                 </div>
 
                                 <a
                                     href="{{ route('finance.department-budgets') }}"
                                     class="dashboard-link"
                                 >
-                                    View budgets
+                                    {{ __('menu.view_budgets') }}
                                 </a>
 
                             </div>
@@ -971,14 +831,12 @@
                                 @forelse ($budgets as $budget)
 
                                     @php
-
                                         $amount = (float) $budget->amount;
                                         $used = (float) $budget->used_amount;
 
                                         $percentage = $amount > 0
                                             ? min(100, round(($used / $amount) * 100))
                                             : 0;
-
                                     @endphp
 
 
@@ -986,9 +844,9 @@
 
                                         <div class="budget-header">
 
-                                        <span>
-                                            {{ $budget->department?->name ?? 'Unknown Department' }}
-                                        </span>
+                                            <span>
+                                                {{ $budget->department?->name ?? __('menu.unknown_department') }}
+                                            </span>
 
                                             <strong>
                                                 {{ $percentage }}%
@@ -1009,14 +867,14 @@
 
                                         <div class="budget-footer">
 
-                                        <span>
-                                            Used:
-                                            ${{ number_format($used, 0) }}
-                                        </span>
+                                            <span>
+                                                {{ __('menu.used') }}:
+                                                ${{ number_format($used, 0) }}
+                                            </span>
 
                                             <span>
-                                            ${{ number_format($amount, 0) }}
-                                        </span>
+                                                ${{ number_format($amount, 0) }}
+                                            </span>
 
                                         </div>
 
@@ -1025,9 +883,7 @@
                                 @empty
 
                                     <div class="text-muted text-center py-3">
-
-                                        No department budgets available.
-
+                                        {{ __('menu.no_budgets') }}
                                     </div>
 
                                 @endforelse
@@ -1039,7 +895,6 @@
                     </div>
 
                 @endcan
-
 
 
                 {{-- =================================================
@@ -1055,22 +910,20 @@
                             <div class="dashboard-card-header">
 
                                 <div>
-
                                     <h5>
-                                        Recent Activity
+                                        {{ __('menu.recent_activity') }}
                                     </h5>
 
                                     <span>
-                                    Latest system activity
-                                </span>
-
+                                        {{ __('menu.recent_activity_desc') }}
+                                    </span>
                                 </div>
 
                                 <a
                                     href="{{ route('audit-logs.index') }}"
                                     class="dashboard-link"
                                 >
-                                    View logs
+                                    {{ __('menu.view_logs') }}
                                 </a>
 
                             </div>
@@ -1083,14 +936,14 @@
                                     <i class="bi bi-journal-text"></i>
 
                                     <span>
-                                    Recent system activity is available in the audit logs.
-                                </span>
+                                        {{ __('menu.activity_placeholder') }}
+                                    </span>
 
                                     <a
                                         href="{{ route('audit-logs.index') }}"
                                         class="btn btn-sm btn-outline-secondary"
                                     >
-                                        View Audit Logs
+                                        {{ __('menu.view_audit_logs') }}
                                     </a>
 
                                 </div>
@@ -1106,9 +959,7 @@
             </div>
 
         </div>
-
     </div>
-
 
 
     {{-- =========================================================
@@ -1130,6 +981,7 @@
             color: #6c757d;
             font-size: 13px;
         }
+
 
         /* =====================================================
            STAT CARDS
@@ -1216,6 +1068,7 @@
             font-size: 14px;
         }
 
+
         /* =====================================================
            MINI STATS
         ====================================================== */
@@ -1251,6 +1104,7 @@
             color: #212529;
             font-size: 18px;
         }
+
 
         /* =====================================================
            DASHBOARD CARDS
@@ -1292,6 +1146,7 @@
         .dashboard-link:hover {
             color: #cc5200;
         }
+
 
         /* =====================================================
            REQUEST TABLE
@@ -1349,6 +1204,7 @@
             margin-top: 2px;
         }
 
+
         /* =====================================================
            STATUS
         ====================================================== */
@@ -1374,6 +1230,7 @@
             background: #f8d7da;
             color: #b02a37;
         }
+
 
         /* =====================================================
            QUICK ACTIONS
@@ -1460,6 +1317,7 @@
             font-size: 12px;
         }
 
+
         /* =====================================================
            BUDGET
         ====================================================== */
@@ -1509,6 +1367,7 @@
             font-size: 10px;
         }
 
+
         /* =====================================================
            ACTIVITY
         ====================================================== */
@@ -1534,6 +1393,7 @@
             color: #FF6600;
         }
 
+
         /* =====================================================
            RESPONSIVE
         ====================================================== */
@@ -1558,6 +1418,7 @@
 
         }
 
+
         @media (max-width: 480px) {
 
             .stat-content h3 {
@@ -1573,6 +1434,5 @@
         }
 
     </style>
-
 
 @endsection
