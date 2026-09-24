@@ -7,6 +7,7 @@ use App\Http\Controllers\DepartmentBudgetsController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\QuotationController;
@@ -415,6 +416,30 @@ Route::middleware([
     Route::get('/payroll', [\App\Http\Controllers\PayrollController::class, 'index'])
         ->name('payroll.index');
 
+
+    Route::get('/payroll-create', [PayrollController::class, 'create'])
+        ->middleware('can:payroll.create')
+        ->name('payroll.create');
+
+    Route::post('/payroll', [PayrollController::class, 'store'])
+        ->middleware('can:payroll.create')
+        ->name('payroll.store');
+
+    Route::get('/payroll-{payroll}', [PayrollController::class, 'show'])
+        ->middleware('can:payroll.view')
+        ->name('payroll.show');
+
+    Route::get('/payroll-{payroll}-edit', [PayrollController::class, 'edit'])
+        ->middleware('can:payroll.edit')
+        ->name('payroll.edit');
+
+    Route::put('/payroll-{payroll}', [PayrollController::class, 'update'])
+        ->middleware('can:payroll.edit')
+        ->name('payroll.update');
+
+    Route::delete('/payroll-{payroll}', [PayrollController::class, 'destroy'])
+        ->middleware('can:payroll.delete')
+        ->name('payroll.destroy');
 
 });
 

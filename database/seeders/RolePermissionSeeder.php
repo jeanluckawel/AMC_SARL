@@ -194,6 +194,12 @@ class RolePermissionSeeder extends Seeder
             'reports.view',
             'reports.create',
             'reports.export',
+
+//            payroll
+            'payroll.view',
+            'payroll.create',
+            'payroll.edit',
+            'payroll.delete',
         ]);
 
 

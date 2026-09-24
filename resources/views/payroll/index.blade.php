@@ -68,6 +68,120 @@
 
                 <div class="card-body">
 
+
+                    {{-- =================================================
+                        PAYROLL PERIOD FILTER
+                    ================================================== --}}
+
+                    <div class="payroll-filter">
+
+                        <form
+                            method="GET"
+                            action="{{ route('payroll.index') }}"
+                            class="payroll-filter-form"
+                        >
+
+                            {{-- YEAR --}}
+
+                            <div class="payroll-filter-group">
+
+                                <label for="year">
+                                    Year
+                                </label>
+
+                                <select
+                                    name="year"
+                                    id="year"
+                                    class="form-select payroll-filter-select"
+                                    onchange="this.form.submit()"
+                                >
+
+                                    @for(
+                                        $year = now()->year - 2;
+                                        $year <= now()->year + 1;
+                                        $year++
+                                    )
+
+                                        <option
+                                            value="{{ $year }}"
+                                            {{ (int) $selectedYear === $year ? 'selected' : '' }}
+                                        >
+                                            {{ $year }}
+                                        </option>
+
+                                    @endfor
+
+                                </select>
+
+                            </div>
+
+
+                            {{-- MONTH --}}
+
+                            <div class="payroll-filter-group">
+
+                                <label for="month">
+                                    Month
+                                </label>
+
+                                <select
+                                    name="month"
+                                    id="month"
+                                    class="form-select payroll-filter-select"
+                                    onchange="this.form.submit()"
+                                >
+
+                                    @foreach($months as $month)
+
+                                        <option
+                                            value="{{ $month->value }}"
+                                            {{ (int) $selectedMonth === $month->value ? 'selected' : '' }}
+                                        >
+
+                                            {{ app()->getLocale() === 'fr'
+                                                ? $month->labelFr()
+                                                : $month->label()
+                                            }}
+
+                                        </option>
+
+                                    @endforeach
+
+                                </select>
+
+                            </div>
+
+                        </form>
+
+
+                        {{-- CURRENT PERIOD --}}
+
+                        <div class="payroll-period">
+
+                            <i class="bi bi-calendar3 me-1"></i>
+
+                            Payroll:
+
+                            <strong>
+
+                                {{ $selectedYear }}
+
+                                -
+
+                                {{ str_pad(
+                                    $selectedMonth,
+                                    2,
+                                    '0',
+                                    STR_PAD_LEFT
+                                ) }}
+
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
                     {{-- =================================================
                         TABLE WRAPPER
                     ================================================== --}}
@@ -87,21 +201,37 @@
 
                             <tr>
 
-                                <th>#</th>
+                                <th>
+                                    #
+                                </th>
 
-                                <th>Employee</th>
+                                <th>
+                                    Employee
+                                </th>
 
-                                <th>Matricule</th>
+                                <th>
+                                    Matricule
+                                </th>
 
-                                <th>Gender</th>
+                                <th>
+                                    Gender
+                                </th>
 
-                                <th>Salary</th>
+                                <th>
+                                    Salary
+                                </th>
 
-                                <th>Category</th>
+                                <th>
+                                    Category
+                                </th>
 
-                                <th>Echelon</th>
+                                <th>
+                                    Echelon
+                                </th>
 
-                                <th>Actions</th>
+                                <th>
+                                    Actions
+                                </th>
 
                             </tr>
 
@@ -228,9 +358,9 @@
                                                         2
                                                     ) }}
 
+                                                    {{ $employee->salary->currency }}
 
-                                                        {{ $employee->salary->currency }}
-
+                                                </span>
 
                                             </div>
 
@@ -283,9 +413,7 @@
                                                 title="View Employee"
                                                 aria-label="View Employee"
                                             >
-
                                                 <i class="bi bi-eye"></i>
-
                                             </a>
 
 
@@ -297,23 +425,23 @@
                                                 title="Edit Employee Salary"
                                                 aria-label="Edit Employee Salary"
                                             >
-
                                                 <i class="bi bi-pencil"></i>
-
                                             </a>
 
 
                                             {{-- PAY EMPLOYEE --}}
 
                                             <a
-                                                href="#"
+                                                href="{{ route('payroll.create', [
+                'employee' => $employee->id,
+                'year' => $selectedYear,
+                'month' => $selectedMonth,
+            ]) }}"
                                                 class="btn btn-sm btn-success action-btn"
                                                 title="Pay Employee"
                                                 aria-label="Pay Employee"
                                             >
-
                                                 <i class="bi bi-cash-stack"></i>
-
                                             </a>
 
                                         </div>
@@ -354,6 +482,124 @@
             border-radius: 0 !important;
 
             border: 1px solid #dee2e6;
+
+        }
+
+
+        /* =========================================================
+           PAYROLL FILTER
+        ========================================================== */
+
+        .payroll-filter {
+
+            width: 100%;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-bottom: 20px;
+
+            padding: 12px;
+
+            border: 1px solid #dee2e6;
+
+            background: #f8f9fa;
+
+        }
+
+
+        .payroll-filter-form {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+
+        }
+
+
+        .payroll-filter-group {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+        }
+
+
+        .payroll-filter-group label {
+
+            margin: 0;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            color: #212529;
+
+            white-space: nowrap;
+
+        }
+
+
+        .payroll-filter-select {
+
+            min-width: 130px;
+
+            height: 36px;
+
+            border-radius: 0 !important;
+
+            border: 1px solid #ced4da;
+
+            font-size: 13px;
+
+            box-shadow: none !important;
+
+        }
+
+
+        .payroll-filter-select:focus {
+
+            border-color: #FF6600;
+
+            box-shadow:
+                0 0 0 0.15rem
+                rgba(255, 102, 0, .15) !important;
+
+        }
+
+
+        .payroll-period {
+
+            display: flex;
+
+            align-items: center;
+
+            white-space: nowrap;
+
+            font-size: 13px;
+
+            color: #555;
+
+        }
+
+
+        .payroll-period strong {
+
+            margin-left: 4px;
+
+            color: #FF6600;
 
         }
 
@@ -803,6 +1049,49 @@
                 float: none !important;
 
                 justify-content: flex-start;
+
+            }
+
+
+            .payroll-filter {
+
+                align-items: flex-start;
+
+                flex-direction: column;
+
+            }
+
+
+            .payroll-filter-form {
+
+                width: 100%;
+
+                flex-direction: column;
+
+                align-items: stretch;
+
+            }
+
+
+            .payroll-filter-group {
+
+                width: 100%;
+
+                justify-content: space-between;
+
+            }
+
+
+            .payroll-filter-select {
+
+                flex: 1;
+
+            }
+
+
+            .payroll-period {
+
+                width: 100%;
 
             }
 
