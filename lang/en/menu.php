@@ -114,4 +114,10 @@ return [
     'submitting' => 'Submitting...',
     'add_at_least_one_item' => 'Please add at least one item to the request.',
     'create' => 'Create',
+//    payroll
+
+    'payroll_management' => 'PAYROLL MANAGEMENT',
+    'payroll' => 'Payroll',
+    'add_payroll' => 'Add Payroll',
+
 ];

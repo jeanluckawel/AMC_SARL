@@ -160,6 +160,12 @@ class PermissionSeeder extends Seeder
             'reports.view',
             'reports.create',
             'reports.export',
+
+            // Payroll
+            'payroll.view',
+            'payroll.create',
+            'payroll.edit',
+            'payroll.delete',
         ];
 
         foreach ($permissions as $permission) {

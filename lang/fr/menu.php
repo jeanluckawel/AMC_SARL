@@ -29,6 +29,12 @@ return [
     'audit' => 'AUDIT',
     'account' => 'COMPTE',
 
+//    payroll
+
+    'payroll_management' => 'GESTION DE LA PAIE',
+    'payroll' => 'Paie',
+    'add_payroll' => 'Ajouter une paie',
+
     /*
     |--------------------------------------------------------------------------
     | DASHBOARD

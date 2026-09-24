@@ -418,6 +418,84 @@
                 @endcanany
 
 
+
+
+                {{-- =================================================
+                     PAYROLL MANAGEMENT
+                ================================================== --}}
+
+                @canany([
+                    'payroll.view',
+                    'payroll.create',
+                    'payroll.edit',
+                    'payroll.delete'
+                ])
+
+                    <li class="nav-header">
+                        {{ __('menu.payroll_management') }}
+                    </li>
+
+
+                    {{-- Payroll --}}
+
+                    @can('payroll.view')
+
+                        <li class="nav-item">
+
+                            <a
+                                href="{{ route('payroll.index') }}"
+                                class="nav-link {{
+                                request()->routeIs('payroll.index') ||
+                                request()->routeIs('payroll.show') ||
+                                request()->routeIs('payroll.edit')
+                                    ? 'active'
+                                    : ''
+                            }}"
+                            >
+
+                                <i class="nav-icon bi bi-cash-stack"></i>
+
+                                <p>
+                                    {{ __('menu.payroll') }}
+                                </p>
+
+                            </a>
+
+                        </li>
+
+                    @endcan
+
+
+                    {{-- Add Payroll --}}
+
+                    @can('payroll.create')
+
+                        <li class="nav-item">
+
+                            <a
+                                href="#"
+                                class="nav-link {{
+                    request()->routeIs('payroll.create')
+                        ? 'active'
+                        : ''
+                }}"
+                            >
+
+                                <i class="nav-icon bi bi-plus-circle"></i>
+
+                                <p>
+                                    {{ __('menu.add_payroll') }}
+                                </p>
+
+                            </a>
+
+                        </li>
+
+                    @endcan
+
+                @endcanany
+
+
                 {{-- =================================================
                      ORGANIZATION
                 ================================================== --}}

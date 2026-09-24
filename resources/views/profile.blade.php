@@ -1,37 +1,59 @@
+@php
+    use Carbon\Carbon;
+@endphp
+
 @extends('layouts.admin')
 
-@section('title', 'Employee Information Sheet')
+@section('title', 'AMC SARL | Profil')
+
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
 @section('content')
 
     <style>
 
         /* =========================================================
-           GLOBAL
+           PAGE / WRAPPER
         ========================================================== */
 
-        body {
-            background: #eef1f3;
+        .fiche-wrapper {
+            display: flex;
+            justify-content: center;
+            padding-top: 20px;
+            position: relative;
+            background-color: #f8f9fa;
+            min-height: 100vh;
         }
 
         /* =========================================================
-           WRAPPER
+           FICHE
         ========================================================== */
 
-        .employee-wrapper {
+        .fiche-container {
             position: relative;
             width: fit-content;
-            margin: 0 auto;
+        }
+
+        .fiche {
+            width: 100%;
+            max-width: 21cm;
+            padding: 1.5cm;
+            font-size: 11px;
+            box-sizing: border-box;
+            background-color: #fff;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+            position: relative;
         }
 
         /* =========================================================
-           DOWNLOAD
+           DOWNLOAD BUTTON
         ========================================================== */
 
-        .employee-actions {
+        .fiche-download {
             position: absolute;
-            top: 18px;
-            right: 18px;
+            top: 20px;
+            right: 15px;
             z-index: 1000;
 
             opacity: 0;
@@ -40,753 +62,130 @@
             transition: all .2s ease;
         }
 
-        .employee-wrapper:hover .employee-actions {
+        .fiche-container:hover .fiche-download {
             opacity: 1;
             visibility: visible;
         }
 
-        .employee-download-btn {
+        .fiche-download-btn {
             border: 0;
-            background: #0a9745;
+            background: #4f8136;
             color: #fff;
 
-            padding: 9px 15px;
+            padding: 8px 13px;
 
             font-size: 12px;
-            font-weight: 700;
+            font-weight: 600;
 
             cursor: pointer;
 
-            box-shadow: 0 3px 10px rgba(0, 0, 0, .18);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .15);
 
-            transition: all .2s ease;
+            border-radius: 0 !important;
         }
 
-        .employee-download-btn:hover {
-            background: #087d39;
-            transform: translateY(-1px);
-        }
-
-        /* =========================================================
-           A4
-        ========================================================== */
-
-        .employee-page {
-            width: 210mm;
-            min-height: 297mm;
-
-            margin: 18px auto;
-
-            background: #fff;
-
-            padding: 9mm 10mm;
-
-            box-sizing: border-box;
-
-            box-shadow: 0 4px 22px rgba(0, 0, 0, .10);
-        }
-
-        /* =========================================================
-           DOCUMENT
-        ========================================================== */
-
-        .employee-document {
-            width: 100%;
-
-            background: #fff;
-
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
-
-            color: #222;
-
-            font-size: 10px;
-        }
-
-        /* =========================================================
-           HEADER
-        ========================================================== */
-
-        .employee-header {
-            border: 1px solid #222;
-        }
-
-        .employee-header-top {
-            display: grid;
-            grid-template-columns: 32% 1fr;
-
-            min-height: 70px;
-
-            border-bottom: 1px solid #222;
-        }
-
-        .employee-logo-area {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            padding: 8px;
-
-            border-right: 1px solid #222;
-        }
-
-        .employee-logo {
-            width: 125px;
-            height: auto;
-        }
-
-        .employee-title-area {
-            display: flex;
-            flex-direction: column;
-
-            justify-content: center;
-
-            padding: 8px 15px;
-        }
-
-        .employee-title {
-            color: #0a9745;
-
-            font-size: 20px;
-
-            font-weight: 800;
-
-            text-transform: uppercase;
-
-            letter-spacing: .3px;
-        }
-
-        .employee-title-line {
-            width: 55px;
-            height: 3px;
-
-            background: #fcec10;
-
-            margin-top: 6px;
-        }
-
-        .employee-title-subtitle {
-            margin-top: 5px;
-
-            color: #666;
-
-            font-size: 9px;
-
-            font-weight: 600;
-
-            letter-spacing: .5px;
-        }
-
-        /* =========================================================
-           COMPANY BAR
-        ========================================================== */
-
-        .employee-company-row {
-            display: grid;
-
-            grid-template-columns:
-                17%
-                1fr
-                9%
-                9%
-                9%
-                10%;
-
-            min-height: 30px;
-        }
-
-        .employee-company-label {
-            display: flex;
-            align-items: center;
-
-            padding: 5px;
-
-            font-weight: 800;
-
-            color: #0a9745;
-
-            background: #f7faf8;
-
-            border-right: 1px solid #222;
-        }
-
-        .employee-company-name {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            padding: 5px;
-
-            font-size: 12px;
-
-            font-weight: 800;
-
-            color: #0a9745;
-
-            border-right: 1px solid #222;
-        }
-
-        .employee-company-letter {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            font-weight: 800;
-
-            font-style: italic;
-
-            border-right: 1px solid #222;
-        }
-
-        .employee-company-letter:last-child {
-            border-right: 0;
-        }
-
-        /* =========================================================
-           SECTION HEADER
-        ========================================================== */
-
-        .employee-section-header {
-            display: flex;
-            align-items: center;
-
-            margin-top: 9px;
-            margin-bottom: 0;
-
-            background: black;
-
-            color: #fff;
-
-            font-size: 10px;
-
-            font-weight: 800;
-
-            text-transform: uppercase;
-
-            padding: 6px 9px;
-
-            letter-spacing: .2px;
-        }
-
-        /*.employee-section-header::before {*/
-        /*    content: "";*/
-
-        /*    width: 4px;*/
-        /*    height: 14px;*/
-
-        /*    background: #fcec10;*/
-
-        /*    margin-right: 7px;*/
-        /*}*/
-
-        /* =========================================================
-           INFORMATION TABLE
-        ========================================================== */
-
-        .employee-info-table {
-            width: 100%;
-
-            border-collapse: collapse;
-
-            table-layout: fixed;
-        }
-
-        .employee-info-table td {
-            border: 1px solid #c9c9c9;
-
-            padding: 5px 7px;
-
-            min-height: 24px;
-
-            vertical-align: middle;
-        }
-
-        .employee-label {
-            width: 21%;
-
-            background: #f7f8f8;
-
-            font-weight: 700;
-
-            color: #444;
-        }
-
-        .employee-value {
-            width: 29%;
-
-            font-weight: 600;
-
-            color: #111;
-        }
-
-        .employee-value-highlight {
-            color: #0a9745;
-
-            font-weight: 800;
-        }
-
-        /* =========================================================
-           CLASSIFICATION
-        ========================================================== */
-
-        .employee-classification {
-            width: 100%;
-
-            border-collapse: collapse;
-        }
-
-        .employee-classification td {
-            border: 1px solid #c9c9c9;
-
-            padding: 6px 7px;
-
-            font-weight: 700;
-        }
-
-        .employee-classification-head {
-            background: #f3f5f4;
-
-            color: #0a9745;
-
-            font-weight: 800 !important;
-        }
-
-        /* =========================================================
-           CHECKBOX
-        ========================================================== */
-
-        .employee-checkbox {
-            width: 18px;
-            height: 18px;
-
-            display: inline-flex;
-
-            align-items: center;
-            justify-content: center;
-
-            border: 1.5px solid #555;
-
-            margin-right: 5px;
-
-            vertical-align: middle;
-
-            background: #fff;
-        }
-
-        .employee-checkbox.checked {
-            border-color: #0a9745;
-
-            background: #0a9745;
-
+        .fiche-download-btn:hover {
+            background: #3f692b;
             color: #fff;
         }
 
-        .employee-checkbox.checked::after {
-            content: "✓";
+        /* =========================================================
+           TABLE
+        ========================================================== */
 
-            font-size: 13px;
-
-            font-weight: 800;
-        }
-
-        .employee-status-row {
-            display: flex;
-
-            align-items: center;
-
-            justify-content: space-between;
-
-            gap: 10px;
-
-            padding: 6px 8px;
-        }
-
-        .employee-status-item {
-            display: flex;
-
-            align-items: center;
-
-            font-weight: 700;
-
-            white-space: nowrap;
+        .table td,
+        .table th {
+            vertical-align: middle;
+            border-radius: 0 !important;
+            border: 1px solid #000 !important;
         }
 
         /* =========================================================
-           CONTRACT
+           PHOTO / SIGNATURE
         ========================================================== */
 
-        .employee-contract-row {
-            display: grid;
-
-            grid-template-columns:
-                1fr
-                1fr
-                1fr
-                1fr;
-
-            border: 1px solid #c9c9c9;
-        }
-
-        .employee-contract-item {
-            padding: 7px;
-
-            font-weight: 700;
-
-            border-right: 1px solid #c9c9c9;
-        }
-
-        .employee-contract-item:last-child {
-            border-right: 0;
+        .photo-box,
+        .signature-box,
+        .alert {
+            border-radius: 0 !important;
         }
 
         /* =========================================================
-           CHILDREN
+           HEADER LOGO
         ========================================================== */
 
-        .employee-children-title {
-            margin-top: 10px;
-
-            padding: 6px;
-
-            text-align: center;
-
-            color: #0a9745;
-
-            background: #f5f8f6;
-
-            border: 1px solid #c9c9c9;
-
-            border-bottom: 0;
-
-            font-size: 10px;
-
-            font-weight: 800;
-        }
-
-        .employee-children-table,
-        .employee-emergency-table {
+        .header-logo img {
             width: 100%;
-
-            border-collapse: collapse;
-
-            table-layout: fixed;
-        }
-
-        .employee-children-table th,
-        .employee-children-table td,
-        .employee-emergency-table th,
-        .employee-emergency-table td {
-            border: 1px solid #c9c9c9;
-
-            padding: 5px;
-        }
-
-        .employee-children-table th,
-        .employee-emergency-table th {
-            background: #f3f5f4;
-
-            color: black;
-
-            text-align: center;
-
-            font-weight: 800;
-        }
-
-        .employee-children-table td,
-        .employee-emergency-table td {
-            text-align: center;
-        }
-
-        .employee-children-table tbody tr {
-            height: 24px;
-        }
-
-        /* =========================================================
-           EMERGENCY
-        ========================================================== */
-
-        .employee-emergency-title {
-            margin-bottom: 0;
-
-            padding: 6px;
-
-            text-align: center;
-
-            color: black;
-
-            background: #f5f8f6;
-
-            border: 1px solid #c9c9c9;
-
-            border-bottom: 0;
-
-            font-weight: 800;
-
-            font-size: 11px;
-        }
-
-        /* =========================================================
-           ATTENTION
-        ========================================================== */
-
-        .employee-attention {
-            margin-top: 12px;
-
-            border: 1px solid #c9c9c9;
-
-            background: #fff;
-        }
-
-        .employee-attention-title {
-            color: #d84f5d;
-
-            text-align: center;
-
-            font-size: 11px;
-
-            font-weight: 800;
-
-            padding: 5px;
-
-            border-bottom: 1px solid #ddd;
-        }
-
-        .employee-attention-text {
-            text-align: center;
-
-            font-size: 9px;
-
-            font-weight: 600;
-
-            line-height: 1.5;
-
-            padding: 6px;
-        }
-
-        .employee-attention-note {
-            color: #a64f58;
-
-            font-style: italic;
-        }
-
-        /* =========================================================
-           SIGNATURE
-        ========================================================== */
-
-        .employee-signature-table {
-            width: 100%;
-
-            margin-top: 12px;
-
-            border-collapse: collapse;
-        }
-
-        .employee-signature-table th {
-            border: 1px solid #222;
-
-            background: #f3f5f4;
-
-            padding: 6px;
-
-            text-align: left;
-
-            font-size: 10px;
-
-            font-weight: 800;
-        }
-
-        .employee-signature-table td {
-            border: 1px solid #222;
-
-            height: 90px;
-
-            vertical-align: bottom;
-
-            padding: 8px;
-        }
-
-        .employee-signature-content {
-            text-align: center;
-
-            font-size: 9px;
-
-            color: #555;
-        }
-
-        /* =========================================================
-           PAGE 2 TITLE
-        ========================================================== */
-
-        .employee-page-title {
-            color: #0a9745;
-
-            font-size: 15px;
-
-            font-weight: 800;
-
-            border-bottom: 3px solid #fcec10;
-
-            padding-bottom: 5px;
-
-            margin-bottom: 12px;
-        }
-
-        /* =========================================================
-           FOOTER
-        ========================================================== */
-
-        .employee-footer {
-            margin-top: 25px;
-
-            padding-top: 7px;
-
-            border-top: 2px solid #0a9745;
-
-            text-align: center;
-
-            font-size: 8px;
-
-            line-height: 1.6;
-
-            color: #555;
-        }
-
-        .employee-footer strong {
-            color: #0a9745;
-        }
-
-        /* =========================================================
-           PAGE BREAK
-        ========================================================== */
-
-        .employee-page-break {
-            page-break-before: always;
-
-            break-before: page;
+            height: 100%;
+            object-fit: contain;
         }
 
         /* =========================================================
            RESPONSIVE
         ========================================================== */
 
-        @media (max-width: 900px) {
-
-            body {
-                background: #fff;
-            }
-
-            .employee-wrapper {
-                width: 100%;
-            }
-
-            .employee-page {
-                width: 100%;
-
-                min-height: auto;
-
-                margin: 0;
-
-                padding: 20px;
-
-                box-shadow: none;
-            }
-        }
-
         @media (max-width: 768px) {
 
-            .employee-page {
-                padding: 12px;
+            .fiche {
+                padding: 1rem;
+                font-size: 10px;
             }
 
-            .employee-header-top {
-                grid-template-columns: 1fr;
+            .fiche .row > [class*="col-"] {
+                margin-bottom: 1rem;
             }
 
-            .employee-logo-area {
-                border-right: 0;
-
-                border-bottom: 1px solid #222;
-            }
-
-            .employee-company-row {
-                grid-template-columns:
-                    20%
-                    1fr
-                    8%
-                    8%
-                    8%
-                    10%;
-            }
-
-            .employee-company-name {
-                font-size: 9px;
-            }
-
-            .employee-title {
-                font-size: 16px;
-            }
-
-            .employee-info-table {
-                font-size: 8px;
-            }
-
-            .employee-status-row {
-                flex-wrap: wrap;
-            }
-
-            .employee-children-table,
-            .employee-emergency-table {
-                font-size: 8px;
+            .fiche-download {
+                top: 10px;
+                right: 10px;
             }
         }
 
         /* =========================================================
-           PRINT
+           PRINT / PDF A4
         ========================================================== */
 
         @media print {
 
             @page {
                 size: A4;
-
                 margin: 0;
             }
 
             html,
             body {
                 width: 210mm;
-
                 min-height: 297mm;
-
                 margin: 0 !important;
-
                 padding: 0 !important;
-
                 background: #fff !important;
             }
 
-            .employee-actions {
+            .fiche-wrapper {
+                display: block;
+                width: 210mm;
+                min-height: 297mm;
+                margin: 0;
+                padding: 0;
+                background: #fff !important;
+            }
+
+            .fiche-container {
+                width: 210mm;
+                margin: 0;
+            }
+
+            .fiche-download {
                 display: none !important;
             }
 
-            .employee-wrapper {
+            .fiche {
                 width: 210mm;
-
-                margin: 0;
-            }
-
-            .employee-page {
-                width: 210mm;
-
+                max-width: 210mm;
                 min-height: 297mm;
-
                 margin: 0;
-
-                padding: 9mm 10mm;
-
-                box-shadow: none;
+                padding: 1.5cm;
+                box-shadow: none !important;
             }
         }
 
@@ -794,1091 +193,77 @@
 
 
     {{-- =========================================================
-         WRAPPER
+         FICHE WRAPPER
     ========================================================== --}}
 
-    <div class="employee-wrapper">
+    <div class="fiche-wrapper">
 
-        {{-- =====================================================
-             DOWNLOAD BUTTON
-        ====================================================== --}}
+        <div class="fiche-container">
 
-        <div class="employee-actions">
+            {{-- =====================================================
+                 DOWNLOAD BUTTON
+            ====================================================== --}}
 
-            <button
-                type="button"
-                class="employee-download-btn"
-                onclick="downloadEmployeeInformation()"
-                title="Download employee information"
-            >
-                <i class="bi bi-download"></i>
-                Download
-            </button>
+            <div class="fiche-download">
 
-        </div>
-
-
-        {{-- =========================================================
-             PAGE 1
-        ========================================================== --}}
-
-        <div class="employee-page">
-
-            <div
-                class="employee-document"
-                id="employee-information-document"
-            >
-
-                {{-- =================================================
-                     HEADER
-                ================================================== --}}
-
-                <div class="employee-header">
-
-                    <div class="employee-header-top">
-
-                        <div class="employee-logo-area">
-
-                            <img
-                                src="{{ asset('logo/logo.png') }}"
-                                alt="AMC SARL"
-                                class="employee-logo"
-                            >
-
-                        </div>
-
-                        <div class="employee-title-area">
-
-                            <div class="employee-title">
-                                Fiche de Renseignement du Salarié
-                            </div>
-
-                            <div class="employee-title-line"></div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="employee-company-row">
-
-                        <div class="employee-company-label">
-                            Entreprise
-                        </div>
-
-                        <div class="employee-company-name">
-                            AFRICA MADGENGO COMPANY SARL
-                        </div>
-
-                        <div class="employee-company-letter">
-                            A
-                        </div>
-
-                        <div class="employee-company-letter">
-                            M
-                        </div>
-
-                        <div class="employee-company-letter">
-                            C
-                        </div>
-
-                        <div class="employee-company-letter">
-                            SARL
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                {{-- =================================================
-                     VARIABLES
-                ================================================== --}}
-
-                @php
-
-                    $employeeName = trim(
-                        ($employee->last_name ?? '') . ' ' .
-                        ($employee->middle_name ?? '')
-                    );
-
-                    $maritalStatus =
-                        $employee->marital_status?->value
-                        ?? $employee->marital_status
-                        ?? '-';
-
-                    $gender =
-                        $employee->gender?->value
-                        ?? $employee->gender
-                        ?? '-';
-
-                    $contractType =
-                        $employee->contract_type?->value
-                        ?? $employee->contract_type
-                        ?? '-';
-
-                    $workLocation =
-                        $employee->work_location?->value
-                        ?? $employee->work_location
-                        ?? '-';
-
-                    $employeeType =
-                        $employee->employee_type?->value
-                        ?? $employee->employee_type
-                        ?? '';
-
-                    $salary = $employee->salary;
-
-                    $salaryAmount =
-                        data_get($salary, 'gross_salary')
-                        ?? data_get($salary, 'monthly_salary')
-                        ?? data_get($salary, 'basic_salary')
-                        ?? data_get($salary, 'amount')
-                        ?? null;
-
-                    $father = $employee->parents
-                        ->first(function ($parent) {
-
-                            $relation = strtolower(
-                                (string) (
-                                    data_get($parent, 'relationship')
-                                    ?? data_get($parent, 'relation')
-                                    ?? data_get($parent, 'type')
-                                    ?? ''
-                                )
-                            );
-
-                            return str_contains($relation, 'father')
-                                || str_contains($relation, 'père')
-                                || str_contains($relation, 'pere');
-
-                        });
-
-                    $mother = $employee->parents
-                        ->first(function ($parent) {
-
-                            $relation = strtolower(
-                                (string) (
-                                    data_get($parent, 'relationship')
-                                    ?? data_get($parent, 'relation')
-                                    ?? data_get($parent, 'type')
-                                    ?? ''
-                                )
-                            );
-
-                            return str_contains($relation, 'mother')
-                                || str_contains($relation, 'mère')
-                                || str_contains($relation, 'mere');
-
-                        });
-
-                @endphp
-
-
-                {{-- =================================================
-                     PERSONAL INFORMATION
-                ================================================== --}}
-
-                <div class="employee-section-header">
-                    Informations personnelles
-                </div>
-
-
-                <table class="employee-info-table">
-
-                    <tr>
-
-                        <td class="employee-label">
-                            * Nom
-                        </td>
-
-                        <td class="employee-value employee-value-highlight">
-                            {{ $employee->last_name ?? '-' }}
-                        </td>
-
-                        <td class="employee-label">
-                            * Prénom
-                        </td>
-
-                        <td class="employee-value employee-value-highlight">
-                            {{ $employee->first_name ?? '-' }}
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td class="employee-label">
-                            Autre Nom
-                        </td>
-
-                        <td class="employee-value">
-                            {{ $employee->middle_name ?? '-' }}
-                        </td>
-
-                        <td class="employee-label">
-                            * Situation Familiale
-                        </td>
-
-                        <td class="employee-value">
-                            {{ strtoupper(str_replace('_', ' ', $maritalStatus)) }}
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td colspan="4"
-                            style="
-                                text-align:center;
-                                color:#777;
-                                font-size:8px;
-                            ">
-
-                            Célibataire · Divorcé · Vie maritale · Marié(e)
-                            · Séparé(e) · Veuf(ve)
-
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td class="employee-label">
-                            Nbre d'enfant(s) à charge
-                        </td>
-
-                        <td class="employee-value">
-                            {{ $employee->children_count ?? $employee->number_of_children ?? '-' }}
-                        </td>
-
-                        <td class="employee-label">
-                            Nbre de personne(s) à charge
-                        </td>
-
-                        <td class="employee-value">
-                            {{ $employee->dependants_count ?? $employee->number_of_dependants ?? '-' }}
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td class="employee-label">
-                            * Numéro Téléphone
-                        </td>
-
-                        <td colspan="3" class="employee-value">
-                            {{ $employee->employee_phone ?? $employee->employee_work_phone ?? '-' }}
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td class="employee-label">
-                            Nom du père
-                        </td>
-
-                        <td class="employee-value">
-
-                            {{ data_get($father, 'full_name')
-                                ?? data_get($father, 'name')
-                                ?? trim(
-                                    (string) data_get($father, 'first_name') . ' ' .
-                                    (string) data_get($father, 'last_name')
-                                )
-                                ?: '-' }}
-
-                        </td>
-
-                        <td class="employee-label">
-                            Nom de la mère
-                        </td>
-
-                        <td class="employee-value">
-
-                            {{ data_get($mother, 'full_name')
-                                ?? data_get($mother, 'name')
-                                ?? trim(
-                                    (string) data_get($mother, 'first_name') . ' ' .
-                                    (string) data_get($mother, 'last_name')
-                                )
-                                ?: '-' }}
-
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td class="employee-label">
-                            Lieu de naissance
-                        </td>
-
-                        <td class="employee-value">
-                            {{ $employee->place_of_birth ?? '-' }}
-                        </td>
-
-                        <td class="employee-label">
-                            Date de naissance
-                        </td>
-
-                        <td class="employee-value">
-
-                            @if($employee->date_of_birth)
-
-                                {{ $employee->date_of_birth->format('d/m/Y') }}
-
-                            @else
-
-                                -
-
-                            @endif
-
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td class="employee-label">
-                            Département
-                        </td>
-
-                        <td class="employee-value employee-value-highlight">
-                            {{ $employee->department?->name ?? '-' }}
-                        </td>
-
-                        <td class="employee-label">
-                            Nationalité
-                        </td>
-
-                        <td class="employee-value">
-                            {{ $employee->country ?? '-' }}
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td class="employee-label">
-                            N° pièce d'identité
-                        </td>
-
-                        <td class="employee-value">
-                            {{ $employee->number_card ?? '-' }}
-                        </td>
-
-                        <td class="employee-label">
-                            Date d'expiration
-                        </td>
-
-                        <td class="employee-value">
-
-                            @if($employee->identity_expiry_date ?? false)
-
-                                {{ \Carbon\Carbon::parse(
-                                    $employee->identity_expiry_date
-                                )->format('d/m/Y') }}
-
-                            @else
-
-                                -
-
-                            @endif
-
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td class="employee-label">
-                            Adresse complète
-                        </td>
-
-                        <td colspan="3" class="employee-value">
-                            {{ $employee->employee_address ?? '-' }}
-                        </td>
-
-                    </tr>
-
-                </table>
-
-
-                {{-- =================================================
-                     EMPLOYMENT INFORMATION
-                ================================================== --}}
-
-                <div class="employee-section-header">
-                    Informations professionnelles
-                </div>
-
-
-                <table class="employee-info-table">
-
-                    <tr>
-
-                        <td class="employee-label">
-                            Emploi / Poste
-                        </td>
-
-                        <td class="employee-value employee-value-highlight">
-                            {{ $employee->jobTitle?->name
-                                ?? $employee->jobTitle?->title
-                                ?? '-' }}
-                        </td>
-
-                        <td class="employee-label">
-                            Matricule
-                        </td>
-
-                        <td class="employee-value employee-value-highlight">
-                            {{ $employee->employee_id ?? '-' }}
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td class="employee-label">
-                            Section
-                        </td>
-
-                        <td class="employee-value">
-                            {{ $employee->section?->name ?? '-' }}
-                        </td>
-
-                        <td class="employee-label">
-                            Lieu de travail
-                        </td>
-
-                        <td class="employee-value">
-                            {{ strtoupper(str_replace('_', ' ', $workLocation)) }}
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td class="employee-label">
-                            Superviseur
-                        </td>
-
-                        <td class="employee-value">
-                            {{ $employee->supervisor ?? '-' }}
-                        </td>
-
-                        <td class="employee-label">
-                            Sexe
-                        </td>
-
-                        <td class="employee-value">
-                            {{ strtoupper($gender) }}
-                        </td>
-
-                    </tr>
-
-                </table>
-
-
-                {{-- =================================================
-                     CLASSIFICATION
-                ================================================== --}}
-
-                <div class="employee-section-header">
-                    Classification
-                </div>
-
-
-                <table class="employee-classification">
-
-                    <tr class="employee-classification-head">
-
-                        <td>
-                            Niveau
-                        </td>
-
-                        <td>
-                            Coefficient
-                        </td>
-
-                        <td>
-                            Échelon
-                        </td>
-
-                        <td>
-                            Position
-                        </td>
-
-                    </tr>
-
-                    <tr>
-
-                        <td>
-                            {{ $employee->level ?? '-' }}
-                        </td>
-
-                        <td>
-                            {{ $employee->coefficient ?? '-' }}
-                        </td>
-
-                        <td>
-                            {{ $employee->step ?? '-' }}
-                        </td>
-
-                        <td>
-                            {{ $employee->position ?? '-' }}
-                        </td>
-
-                    </tr>
-
-                </table>
-
-
-                {{-- =================================================
-                     EMPLOYEE STATUS
-                ================================================== --}}
-
-                <div class="employee-section-header">
-                    Statut du salarié
-                </div>
-
-
-                <div
-                    style="
-                        border:1px solid #c9c9c9;
-                        border-top:0;
-                    "
+                <button
+                    type="button"
+                    class="fiche-download-btn"
+                    onclick="downloadEmployeeProfile()"
+                    title="Download"
+                    aria-label="Download employee profile"
                 >
-
-                    <div class="employee-status-row">
-
-                        <div class="employee-status-item">
-
-                            <span
-                                class="employee-checkbox
-                                {{ strtolower($employeeType) === 'cadre'
-                                    ? 'checked'
-                                    : '' }}"
-                            ></span>
-
-                            Cadre
-
-                        </div>
-
-
-                        <div class="employee-status-item">
-
-                            <span
-                                class="employee-checkbox
-                                {{ str_contains(
-                                    strtolower($employeeType),
-                                    'maitrise'
-                                )
-                                || str_contains(
-                                    strtolower($employeeType),
-                                    'maîtrise'
-                                )
-                                    ? 'checked'
-                                    : '' }}"
-                            ></span>
-
-                            Agent de maîtrise
-
-                        </div>
-
-
-                        <div class="employee-status-item">
-
-                            <span
-                                class="employee-checkbox
-                                {{ str_contains(
-                                    strtolower($employeeType),
-                                    'employ'
-                                )
-                                || str_contains(
-                                    strtolower($employeeType),
-                                    'apprenti'
-                                )
-                                    ? 'checked'
-                                    : '' }}"
-                            ></span>
-
-                            Employé / Apprenti
-
-                        </div>
-
-
-                        <div class="employee-status-item">
-
-                            <span
-                                class="employee-checkbox
-                                {{ str_contains(
-                                    strtolower($employeeType),
-                                    'ouvrier'
-                                )
-                                    ? 'checked'
-                                    : '' }}"
-                            ></span>
-
-                            Ouvrier
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                {{-- =================================================
-                     SALARY
-                ================================================== --}}
-
-                <div class="employee-section-header">
-                    Rémunération et contrat
-                </div>
-
-
-                <table class="employee-info-table">
-
-                    <tr>
-
-                        <td class="employee-label">
-                            Taux horaire brut en FC
-                        </td>
-
-                        <td class="employee-value">
-
-                            {{ $employee->hourly_rate ?? '-' }}
-
-                        </td>
-
-                        <td class="employee-label">
-                            Salaire mensuel brut en FC
-                        </td>
-
-                        <td class="employee-value employee-value-highlight">
-
-                            @if($salaryAmount !== null)
-
-                                {{ number_format(
-                                    (float) $salaryAmount,
-                                    2,
-                                    ',',
-                                    ' '
-                                ) }}
-
-                            @else
-
-                                -
-
-                            @endif
-
-                        </td>
-
-                    </tr>
-
-
-                    <tr>
-
-                        <td class="employee-label">
-                            Date d'embauche
-                        </td>
-
-                        <td class="employee-value">
-
-                            @if($employee->hire_date)
-
-                                {{ $employee->hire_date->format('d/m/Y') }}
-
-                            @else
-
-                                -
-
-                            @endif
-
-                        </td>
-
-                        <td class="employee-label">
-                            Fin du contrat
-                        </td>
-
-                        <td class="employee-value">
-
-                            @if($employee->end_contract_date)
-
-                                {{ $employee->end_contract_date->format('d/m/Y') }}
-
-                            @else
-
-                                -
-
-                            @endif
-
-                        </td>
-
-                    </tr>
-
-                </table>
-
-
-                {{-- =================================================
-                     CONTRACT TYPE
-                ================================================== --}}
-
-                <div class="employee-contract-row">
-
-                    <div class="employee-contract-item">
-
-                        <span
-                            class="employee-checkbox
-                            {{ strtolower($contractType) === 'cdi'
-                                ? 'checked'
-                                : '' }}"
-                        ></span>
-
-                        CDI
-
-                    </div>
-
-
-                    <div class="employee-contract-item">
-
-                        <span
-                            class="employee-checkbox
-                            {{ strtolower($contractType) === 'cdd'
-                                ? 'checked'
-                                : '' }}"
-                        ></span>
-
-                        CDD
-
-                    </div>
-
-
-                    <div class="employee-contract-item">
-
-                        <span
-                            class="employee-checkbox
-                            {{ in_array(
-                                strtolower($contractType),
-                                ['full_time', 'full time', 'temps plein']
-                            )
-                                ? 'checked'
-                                : '' }}"
-                        ></span>
-
-                        Temps plein
-
-                    </div>
-
-
-                    <div class="employee-contract-item">
-
-                        <span
-                            class="employee-checkbox
-                            {{ in_array(
-                                strtolower($contractType),
-                                ['part_time', 'part time', 'temps partiel']
-                            )
-                                ? 'checked'
-                                : '' }}"
-                        ></span>
-
-                        Temps partiel
-
-                    </div>
-
-                </div>
-
-
-                {{-- =================================================
-                     SPOUSE
-                ================================================== --}}
-
-                <div class="employee-section-header">
-                    Situation familiale
-                </div>
-
-
-                <table class="employee-info-table">
-
-                    <tr>
-
-                        <td class="employee-label">
-                            Nom du conjoint(e)
-                        </td>
-
-                        <td class="employee-value">
-                            {{ $employee->spouse_full_name ?? '-' }}
-                        </td>
-
-                        <td class="employee-label">
-                            Téléphone
-                        </td>
-
-                        <td class="employee-value">
-                            {{ $employee->spouse_phone ?? '-' }}
-                        </td>
-
-                    </tr>
-
-                </table>
-
-
-                {{-- =================================================
-                     CHILDREN
-                ================================================== --}}
-
-                <div class="employee-children-title">
-                    NOM DES ENFANTS
-                </div>
-
-
-                <table class="employee-children-table">
-
-                    <thead>
-
-                    <tr>
-
-                        <th style="width:7%;">
-                            N
-                        </th>
-
-                        <th style="width:18%;">
-                            Prénom
-                        </th>
-
-                        <th style="width:27%;">
-                            Nom & Post-Nom
-                        </th>
-
-                        <th style="width:20%;">
-                            Date de naissance
-                        </th>
-
-                        <th style="width:28%;">
-                            Situation familiale
-                        </th>
-
-                    </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                    @for($i = 1; $i <= 7; $i++)
-
-                        <tr>
-
-                            <td>
-                                {{ $i }}
-                            </td>
-
-                            <td></td>
-
-                            <td></td>
-
-                            <td></td>
-
-                            <td>
-
-                                <span style="font-size:8px;">
-                                    Décédé
-                                </span>
-
-                                <span
-                                    class="employee-checkbox"
-                                    style="
-                                        width:12px;
-                                        height:12px;
-                                        margin-left:4px;
-                                    "
-                                ></span>
-
-                                <span style="font-size:8px;">
-                                    En vie
-                                </span>
-
-                                <span
-                                    class="employee-checkbox"
-                                    style="
-                                        width:12px;
-                                        height:12px;
-                                        margin-left:4px;
-                                    "
-                                ></span>
-
-                            </td>
-
-                        </tr>
-
-                    @endfor
-
-                    </tbody>
-
-                </table>
+                    <i class="bi bi-download"></i>
+                </button>
 
             </div>
 
-        </div>
 
+            {{-- =====================================================
+                 FICHE PRINCIPALE
+            ====================================================== --}}
 
-        {{-- =========================================================
-             PAGE 2
-        ========================================================== --}}
-
-        <div class="employee-page employee-page-break">
-
-            <div class="employee-document">
-
-{{--                <div class="employee-page-title">--}}
-{{--                    Informations complémentaires du salarié--}}
-{{--                </div>--}}
-
+            <div class="fiche"
+                 id="employee-profile">
 
                 {{-- =================================================
-                     EMERGENCY CONTACT
+                     EN-TÊTE
                 ================================================== --}}
 
-                <div class="employee-emergency-title">
-                    PERSONNE À CONTACTER EN CAS D'URGENCE
-                </div>
+                <div class="d-flex align-items-center justify-content-between border-bottom mb-3">
 
+                    <div style="flex:1;">
 
-                <table class="employee-emergency-table">
+                        <h1 class="h4 fw-bold"
+                            style="color:#000; margin:0;">
 
-                    <thead>
+                            AMC SARL
 
-                    <tr>
+                        </h1>
 
-                        <th style="width:8%;">
-                            N
-                        </th>
-
-                        <th style="width:22%;">
-                            Prénom
-                        </th>
-
-                        <th style="width:30%;">
-                            Nom & Post-Nom
-                        </th>
-
-                        <th style="width:40%;">
-                            Numéro Téléphone
-                        </th>
-
-                    </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                    @forelse(
-                        $employee->emergencyContacts
-                        as $index => $contact
-                    )
-
-                        <tr>
-
-                            <td>
-                                {{ $index + 1 }}
-                            </td>
-
-                            <td>
-                                {{ data_get($contact, 'first_name')
-                                    ?? data_get($contact, 'firstname')
-                                    ?? '-' }}
-                            </td>
-
-                            <td>
-                                {{ data_get($contact, 'full_name')
-                                    ?? data_get($contact, 'name')
-                                    ?? trim(
-                                        (string) data_get(
-                                            $contact,
-                                            'last_name'
-                                        ) . ' ' .
-                                        (string) data_get(
-                                            $contact,
-                                            'middle_name'
-                                        )
-                                    )
-                                    ?: '-' }}
-                            </td>
-
-                            <td>
-                                {{ data_get($contact, 'phone')
-                                    ?? data_get($contact, 'telephone')
-                                    ?? data_get(
-                                        $contact,
-                                        'phone_number'
-                                    )
-                                    ?? '-' }}
-                            </td>
-
-                        </tr>
-
-                    @empty
-
-                        <tr>
-                            <td>1</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-                        <tr>
-                            <td>2</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-                    @endforelse
-
-                    </tbody>
-
-                </table>
-
-
-                {{-- =================================================
-                     ATTENTION
-                ================================================== --}}
-
-                <div class="employee-attention">
-
-                    <div class="employee-attention-title">
-                        Attention
                     </div>
 
-                    <div class="employee-attention-text">
 
-                        La fiche de paie du salarié ne pourra être établie
-                        qu'après retour de cette fiche complétée.
+                    <div class="text-center"
+                         style="flex:2;">
 
-                        <br>
+                        <h2 class="h5 fw-bold text-dark"
+                            style="margin:0;">
 
-                        <span class="employee-attention-note">
+                            Fiche de Renseignement du Salarié
 
-                            Les champs signalés par un astérisque sont
-                            obligatoires pour établir la déclaration annuelle
-                            des salaires.
+                        </h2>
 
-                        </span>
+                    </div>
+
+
+                    <div style="width:120px; height:120px; flex:none;"
+                         class="header-logo">
+
+                        <img
+                            src="{{ asset('logo/logo.png') }}"
+                            alt="AMC SARL Logo"
+                        >
 
                     </div>
 
@@ -1886,212 +271,990 @@
 
 
                 {{-- =================================================
-                     SIGNATURE
+                     PHOTO + INFORMATIONS
                 ================================================== --}}
 
-                <table class="employee-signature-table">
+                <div class="row mb-2">
 
-                    <thead>
+                    {{-- PHOTO --}}
 
-                    <tr>
+                    <div class="col-md-2 text-center mb-5 mb-md-0">
 
-                        <th>
-                            Date et Signature du représentant légal de l'entreprise
-                        </th>
+                        <div
+                            class="border bg-light d-flex align-items-center justify-content-center photo-box"
+                            style="
+                                width:128px;
+                                height:160px;
+                                font-size:10px;
+                                overflow:hidden;
+                            "
+                        >
 
-                        <th>
-                            Date et Signature de l'agent
-                        </th>
+                            @if($employee->photo)
 
-                    </tr>
+                                <img
+                                    src="{{ asset('storage/' . $employee->photo) }}"
+                                    alt="Photo de {{ $employee->first_name ?? '' }}"
+                                    style="
+                                        width:100%;
+                                        height:100%;
+                                        object-fit:cover;
+                                    "
+                                >
 
-                    </thead>
+                            @else
 
-                    <tbody>
+                                Photo
 
-                    <tr>
+                            @endif
 
-                        <td>
+                        </div>
 
-                            <div class="employee-signature-content">
+                    </div>
 
-                                <br><br><br>
 
-                                AFRICA MADGENGO COMPANY SARL
+                    {{-- TABLE INFORMATIONS --}}
 
-                                <br><br>
+                    <div class="col-md-10 table-responsive">
 
-                                ______________________________
+                        <table
+                            class="table table-bordered table-sm mb-0"
+                            style="font-size:11px;"
+                        >
 
-                            </div>
+                            <tbody>
 
-                        </td>
+                            {{-- =================================================
+                                 INFORMATIONS PERSONNELLES
+                            ================================================== --}}
 
-                        <td>
+                            <tr class="table-secondary">
 
-                            <div class="employee-signature-content">
+                                <th colspan="4">
+                                    Informations Personnelles
+                                </th>
 
-                                Date :
+                            </tr>
 
-                                @if($employee->hire_date)
 
-                                    {{ $employee->hire_date->format('d/m/Y') }}
+                            <tr>
 
-                                @else
+                                <td>
+                                    Entreprise
+                                </td>
 
-                                    __________________
+                                <td>
+                                    AMC SARL
+                                </td>
 
-                                @endif
+                                <td>
+                                    Nom
+                                </td>
 
-                                <br><br>
+                                <td>
+                                    {{ $employee->first_name ?? 'N/A' }}
+                                </td>
 
-                                Signature :
+                            </tr>
 
-                                ______________________________
 
-                            </div>
+                            <tr>
 
-                        </td>
+                                <td>
+                                    Prénom
+                                </td>
 
-                    </tr>
+                                <td>
+                                    {{ $employee->last_name ?? 'N/A' }}
+                                </td>
 
-                    </tbody>
+                                <td>
+                                    Situation familiale
+                                </td>
 
-                </table>
+                                @php
+
+                                    $genderValue =
+                                        $employee->gender?->value
+                                        ?? $employee->gender
+                                        ?? '';
+
+                                    $maritalStatus =
+                                        $employee->marital_status?->value
+                                        ?? $employee->marital_status
+                                        ?? '';
+
+                                    $genderLower =
+                                        strtolower($genderValue);
+
+                                    $statusMap = [
+
+                                        'single' => 'célibataire',
+
+                                        'married' =>
+                                            $genderLower === 'female'
+                                                ? 'mariée'
+                                                : 'marié',
+
+                                        'divorced' =>
+                                            $genderLower === 'female'
+                                                ? 'divorcée'
+                                                : 'divorcé',
+
+                                        'widowed' =>
+                                            $genderLower === 'female'
+                                                ? 'veuve'
+                                                : 'veuf',
+
+                                    ];
+
+                                @endphp
+
+                                <td>
+
+                                    {{
+                                        $statusMap[
+                                            strtolower($maritalStatus)
+                                        ]
+                                        ?? 'N/A'
+                                    }}
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Post nom
+                                </td>
+
+                                <td>
+                                    {{ $employee->middle_name ?? 'N/A' }}
+                                </td>
+
+                                <td>
+                                    Nombre d'enfants à charge
+                                </td>
+
+                                <td>
+
+                                    {{ $employee->children?->count() ?? 0 }}
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Nombre de personnes à charge
+                                </td>
+
+                                <td>
+
+                                    {{ $employee->parents?->count() ?? 0 }}
+
+                                </td>
+
+                                <td>
+                                    Date de naissance
+                                </td>
+
+                                <td>
+
+                                    {{
+                                        $employee->date_of_birth
+                                            ? $employee->date_of_birth->format('d - m - Y')
+                                            : 'N/A'
+                                    }}
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Département
+                                </td>
+
+                                <td>
+
+                                    {{ $employee->department?->name ?? 'N/A' }}
+
+                                </td>
+
+                                <td>
+                                    Pays
+                                </td>
+
+                                <td>
+
+                                    {{ $employee->country ?? 'N/A' }}
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    N° carte CNSS
+                                </td>
+
+                                <td>
+                                    ________________________
+                                </td>
+
+                                <td>
+                                    N° pièce d'identité
+                                </td>
+
+                                <td>
+
+                                    {{ $employee->number_card ?? 'N/A' }}
+
+                                </td>
+
+                            </tr>
+
+
+                            {{-- =================================================
+                                 INFORMATIONS FAMILIALES
+                            ================================================== --}}
+
+                            @php
+
+                                $relationshipMap = [
+
+                                    'father'  => 'Père',
+                                    'mother'  => 'Mère',
+                                    'spouse'  => 'Conjoint(e)',
+                                    'brother' => 'Frère',
+                                    'sister'  => 'Sœur',
+                                    'mr'      => 'Monsieur',
+                                    'mrs'     => 'Madame',
+                                    'dr'      => 'Docteur',
+
+                                ];
+
+                            @endphp
+
+
+                            <tr class="table-secondary">
+
+                                <th colspan="4">
+                                    Informations Familiales
+                                </th>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Relation
+                                </td>
+
+                                <td>
+                                    Nom Complet
+                                </td>
+
+                                <td>
+                                    Nº Telephone
+                                </td>
+
+                                <td>
+                                    Adresse
+                                </td>
+
+                            </tr>
+
+
+                            @forelse($employee->parents as $parent)
+
+                                <tr>
+
+                                    <td>
+
+                                        {{
+                                            $relationshipMap[
+                                                strtolower(
+                                                    $parent->relationship ?? ''
+                                                )
+                                            ]
+                                            ?? (
+                                                $parent->relationship
+                                                ?? 'N/A'
+                                            )
+                                        }}
+
+                                    </td>
+
+                                    <td>
+
+                                        {{ $parent->full_name ?? 'N/A' }}
+
+                                    </td>
+
+                                    <td>
+
+                                        {{ $parent->phone ?? 'N/A' }}
+
+                                    </td>
+
+                                    <td>
+
+                                        {{ $parent->address ?? 'N/A' }}
+
+                                    </td>
+
+                                </tr>
+
+                            @empty
+
+                                <tr>
+
+                                    <td colspan="4"
+                                        class="text-center">
+
+                                        Aucun parent enregistré
+
+                                    </td>
+
+                                </tr>
+
+                            @endforelse
+
+
+                            {{-- =================================================
+                                 INFORMATIONS PROFESSIONNELLES
+                            ================================================== --}}
+
+                            <tr class="table-secondary">
+
+                                <th colspan="4">
+                                    Informations Professionnelles
+                                </th>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Adresse complète
+                                </td>
+
+                                <td colspan="3">
+
+                                    {{ $employee->employee_address ?? 'N/A' }}
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Emploi / Poste
+                                </td>
+
+                                <td colspan="3">
+
+                                    {{ $employee->jobTitle?->name ?? 'N/A' }}
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Section
+                                </td>
+
+                                <td>
+
+                                    {{ $employee->section?->name ?? 'N/A' }}
+
+                                </td>
+
+                                <td>
+                                    Position
+                                </td>
+
+                                <td>
+
+                                    {{ $employee->jobTitle?->name ?? 'N/A' }}
+
+                                </td>
+
+                            </tr>
+
+
+                            {{-- =================================================
+                                 SALAIRE
+                            ================================================== --}}
+
+                            @php
+
+                                $salary = $employee->salary;
+
+                                $currency =
+                                    $salary?->currency ?? '';
+
+                                $baseSalary =
+                                    $salary?->base_salary ?? 0;
+
+                                $category =
+                                    $salary?->category ?? 'N/A';
+
+                                $echelon =
+                                    $salary?->echelon ?? 'N/A';
+
+                                $contractType =
+                                    strtolower(
+                                        $employee->contract_type?->value
+                                        ?? $employee->contract_type
+                                        ?? ''
+                                    );
+
+                                $hoursPerDay =
+                                    str_contains(
+                                        $contractType,
+                                        'part'
+                                    )
+                                    ? 4
+                                    : 8;
+
+                                $daysPerWeek = 5;
+
+                                $weeksPerMonth = 4;
+
+                                $monthlyHours =
+                                    $hoursPerDay
+                                    * $daysPerWeek
+                                    * $weeksPerMonth;
+
+                                $hourlySalary =
+                                    $monthlyHours > 0
+                                    ? $baseSalary / $monthlyHours
+                                    : 0;
+
+                            @endphp
+
+
+                            <tr>
+
+                                <td>
+                                    Niveau
+                                </td>
+
+                                <td>
+
+                                    {{ $category }}
+
+                                </td>
+
+                                <td>
+                                    Coefficient
+                                </td>
+
+                                <td>
+
+                                    {{ number_format($baseSalary, 2) }}
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Échelon
+                                </td>
+
+                                <td>
+
+                                    {{ $echelon }}
+
+                                </td>
+
+                                <td>
+                                    Taux horaire brut (FC)
+                                </td>
+
+                                <td>
+                                    FC 2.200
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Salaire mensuel brut
+                                </td>
+
+                                <td>
+
+                                    {{ $currency }}
+                                    {{ number_format($baseSalary, 2) }}
+
+                                </td>
+
+                                <td>
+                                    Horaire hebdomadaire
+                                </td>
+
+                                <td>
+
+                                    {{ $currency }}
+                                    {{ number_format($hourlySalary, 2) }}
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Date d'embauche
+                                </td>
+
+                                <td>
+
+                                    @if($employee->hire_date)
+
+                                        {{ $employee->hire_date->format('d - m - Y') }}
+
+                                    @else
+
+                                        N/A
+
+                                    @endif
+
+                                </td>
+
+                                <td>
+                                    Numéro matricule
+                                </td>
+
+                                <td>
+
+                                    {{ $employee->employee_id ?? 'N/A' }}
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Type de contrat
+                                </td>
+
+                                <td>
+
+                                    {{
+                                        $employee->contract_type?->value
+                                        ?? $employee->contract_type
+                                        ?? 'N/A'
+                                    }}
+
+                                </td>
+
+                                <td>
+                                    Lieu de travail
+                                </td>
+
+                                <td>
+
+                                    {{
+                                        $employee->work_location?->value
+                                        ?? $employee->work_location
+                                        ?? 'N/A'
+                                    }}
+
+                                </td>
+
+                            </tr>
+
+
+                            {{-- =================================================
+                                 CONJOINT & ENFANTS
+                            ================================================== --}}
+
+                            <tr class="table-secondary">
+
+                                <th colspan="4">
+                                    Conjoint(e) et Enfants
+                                </th>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td>
+                                    Nom du conjoint(e)
+                                </td>
+
+                                <td colspan="3">
+
+                                    @if($employee->spouse_full_name)
+
+                                        {{ $employee->spouse_full_name }}
+
+                                        @if($employee->spouse_phone)
+
+                                            -
+                                            {{ $employee->spouse_phone }}
+
+                                        @endif
+
+                                    @else
+
+                                        Aucun conjoint enregistré
+
+                                    @endif
+
+                                </td>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td colspan="4">
+
+                                    <div class="table-responsive">
+
+                                        <table
+                                            class="table table-bordered table-sm mb-0"
+                                            style="font-size:10px;"
+                                        >
+
+                                            <thead class="table-light">
+
+                                            <tr>
+
+                                                <th>
+                                                    N°
+                                                </th>
+
+                                                <th>
+                                                    Nom complet
+                                                </th>
+
+                                                <th>
+                                                    Genre
+                                                </th>
+
+                                                <th>
+                                                    Date de naissance
+                                                </th>
+
+                                            </tr>
+
+                                            </thead>
+
+
+                                            <tbody>
+
+                                            @forelse($employee->children ?? [] as $child)
+
+                                                <tr>
+
+                                                    <td class="text-center">
+
+                                                        {{ $loop->iteration }}
+
+                                                    </td>
+
+                                                    <td>
+
+                                                        {{
+                                                            $child->full_name
+                                                            ?? 'N/A'
+                                                        }}
+
+                                                    </td>
+
+                                                    <td>
+
+                                                        {{
+                                                            $child->gender
+                                                            ?? 'N/A'
+                                                        }}
+
+                                                    </td>
+
+                                                    <td>
+
+                                                        @if($child->date_of_birth)
+
+                                                            {{
+                                                                Carbon::parse(
+                                                                    $child->date_of_birth
+                                                                )->format(
+                                                                    'd - m - Y'
+                                                                )
+                                                            }}
+
+                                                        @else
+
+                                                            N/A
+
+                                                        @endif
+
+                                                    </td>
+
+                                                </tr>
+
+                                            @empty
+
+                                                <tr>
+
+                                                    <td colspan="4"
+                                                        class="text-center">
+
+                                                        Aucun enfant enregistré
+
+                                                    </td>
+
+                                                </tr>
+
+                                            @endforelse
+
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+
+                            {{-- =================================================
+                                 URGENCE
+                            ================================================== --}}
+
+                            <tr class="table-secondary">
+
+                                <th colspan="4">
+                                    Personne à contacter en cas d'urgence
+                                </th>
+
+                            </tr>
+
+
+                            <tr>
+
+                                <td colspan="4">
+
+                                    <div class="table-responsive">
+
+                                        <table
+                                            class="table table-bordered table-sm mb-0"
+                                            style="font-size:10px;"
+                                        >
+
+                                            <thead class="table-light">
+
+                                            <tr>
+
+                                                <th>
+                                                    N°
+                                                </th>
+
+                                                <th>
+                                                    Nom Complet
+                                                </th>
+
+                                                <th>
+                                                    Adresse
+                                                </th>
+
+                                                <th>
+                                                    Numéro Téléphone
+                                                </th>
+
+                                            </tr>
+
+                                            </thead>
+
+
+                                            <tbody>
+
+                                            @forelse($employee->emergencyContacts as $emergency)
+
+                                                <tr>
+
+                                                    <td class="text-center">
+
+                                                        {{ $loop->iteration }}
+
+                                                    </td>
+
+                                                    <td>
+
+                                                        {{
+                                                            $emergency->full_name
+                                                            ?? ''
+                                                        }}
+
+                                                    </td>
+
+                                                    <td>
+
+                                                        {{
+                                                            $emergency->address
+                                                            ?? ''
+                                                        }}
+
+                                                    </td>
+
+                                                    <td>
+
+                                                        {{
+                                                            $emergency->phone
+                                                            ?? ''
+                                                        }}
+
+                                                    </td>
+
+                                                </tr>
+
+                                            @empty
+
+                                                <tr>
+
+                                                    <td colspan="4"
+                                                        class="text-center">
+
+                                                        Aucune personne à contacter enregistrée
+
+                                                    </td>
+
+                                                </tr>
+
+                                            @endforelse
+
+                                            </tbody>
+
+                                        </table>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+
+                <br>
 
 
                 {{-- =================================================
-                     CONTACT / SYSTEM INFORMATION
+                     ALERT + SIGNATURES
                 ================================================== --}}
 
-{{--                <div class="employee-section-header"--}}
-{{--                     style="margin-top:18px;">--}}
+                <div class="alert-signatures-wrapper"
+                     style="font-size:10px;">
 
-{{--                    Informations administratives--}}
+                    {{-- ALERT --}}
 
-{{--                </div>--}}
+                    <div class="alert alert-warning p-2 mb-3"
+                         role="alert">
 
+                        <strong>
+                            Attention :
+                        </strong>
 
-{{--                <table class="employee-info-table">--}}
+                        <ul class="mb-0">
 
-{{--                    <tr>--}}
+                            <li>
+                                Aucun de ceux du salaire ne pourra être établi
+                                après retour de cette fiche dûment complétée.
+                            </li>
 
-{{--                        <td class="employee-label">--}}
-{{--                            Matricule--}}
-{{--                        </td>--}}
+                            <li>
+                                Les champs signalés par un calendrier sont
+                                obligatoires pour établir la déclaration annuelle
+                                des salaires.
+                            </li>
 
-{{--                        <td class="employee-value employee-value-highlight">--}}
-{{--                            {{ $employee->employee_id ?? '-' }}--}}
-{{--                        </td>--}}
+                        </ul>
 
-{{--                        <td class="employee-label">--}}
-{{--                            Email--}}
-{{--                        </td>--}}
-
-{{--                        <td class="employee-value">--}}
-{{--                            {{ $employee->employee_email ?? '-' }}--}}
-{{--                        </td>--}}
-
-{{--                    </tr>--}}
-
-
-{{--                    <tr>--}}
-
-{{--                        <td class="employee-label">--}}
-{{--                            Téléphone professionnel--}}
-{{--                        </td>--}}
-
-{{--                        <td class="employee-value">--}}
-{{--                            {{ $employee->employee_work_phone ?? '-' }}--}}
-{{--                        </td>--}}
-
-{{--                        <td class="employee-label">--}}
-{{--                            Téléphone personnel--}}
-{{--                        </td>--}}
-
-{{--                        <td class="employee-value">--}}
-{{--                            {{ $employee->employee_phone ?? '-' }}--}}
-{{--                        </td>--}}
-
-{{--                    </tr>--}}
+                    </div>
 
 
-{{--                    <tr>--}}
+                    {{-- SIGNATURES --}}
 
-{{--                        <td class="employee-label">--}}
-{{--                            Département--}}
-{{--                        </td>--}}
+                    <div class="row mt-3 text-center">
 
-{{--                        <td class="employee-value">--}}
-{{--                            {{ $employee->department?->name ?? '-' }}--}}
-{{--                        </td>--}}
+                        <div class="col-md-6 mb-2 mb-md-0">
 
-{{--                        <td class="employee-label">--}}
-{{--                            Section--}}
-{{--                        </td>--}}
+                            <div class="border p-2 signature-box">
 
-{{--                        <td class="employee-value">--}}
-{{--                            {{ $employee->section?->name ?? '-' }}--}}
-{{--                        </td>--}}
+                                <p class="fw-bold mb-2">
 
-{{--                    </tr>--}}
+                                    Date et signature du représentant légal
+                                    de l'entreprise
 
+                                </p>
 
-{{--                    <tr>--}}
+                                <div class="border-top mt-1"
+                                     style="height:50px;">
+                                </div>
 
-{{--                        <td class="employee-label">--}}
-{{--                            Poste--}}
-{{--                        </td>--}}
+                            </div>
 
-{{--                        <td class="employee-value">--}}
-{{--                            {{ $employee->jobTitle?->name--}}
-{{--                                ?? $employee->jobTitle?->title--}}
-{{--                                ?? '-' }}--}}
-{{--                        </td>--}}
-
-{{--                        <td class="employee-label">--}}
-{{--                            Superviseur--}}
-{{--                        </td>--}}
-
-{{--                        <td class="employee-value">--}}
-{{--                            {{ $employee->supervisor ?? '-' }}--}}
-{{--                        </td>--}}
-
-{{--                    </tr>--}}
-
-{{--                </table>--}}
+                        </div>
 
 
-                {{-- =================================================
-                     FOOTER
-                ================================================== --}}
+                        <div class="col-md-6">
 
-                <div class="employee-footer">
+                            <div class="border p-2 signature-box">
 
-                    <strong>
-                        AFRICA MADGENGO COMPANY SARL
-                    </strong>
+                                <p class="fw-bold mb-2">
 
-                    <br>
+                                    Date et signature de l'agent
 
-                    RCCM :
-                    CD/LSH/RCCM/21-B-00395
+                                </p>
 
-                    &nbsp; | &nbsp;
+                                <div class="border-top mt-1"
+                                     style="height:50px;">
+                                </div>
 
-                    Tél. :
-                    +243 970 520 222
+                            </div>
 
-                    &nbsp; | &nbsp;
+                        </div>
 
-                    Email :
-                    info@amc-sarl.com
-
-                    <br>
-
-                    Adresse :
-                    Av. Katakokombe Q/Kamanyola,
-                    V/Kolwezi, Lualaba/RDC
+                    </div>
 
                 </div>
 
@@ -2111,28 +1274,50 @@
 
     <script>
 
-        function downloadEmployeeInformation() {
+        function downloadEmployeeProfile() {
 
-            const documentElement =
-                document.querySelector('.employee-wrapper');
+            const element =
+                document.querySelector('#employee-profile');
 
-            const employeeId = @json(
-                $employee->employee_id ?? 'Employee'
-            );
+            const employeeId =
+                @json($employee->employee_id ?? 'Employee');
 
-            const safeEmployeeId = employeeId
-                .toString()
-                .replace(/[^a-zA-Z0-9_-]/g, '-');
+            const firstName =
+                @json($employee->first_name ?? '');
+
+            const lastName =
+                @json($employee->last_name ?? '');
+
+            const safeEmployeeId =
+                employeeId
+                    .toString()
+                    .replace(/[^a-zA-Z0-9_-]/g, '-');
+
+            const safeFirstName =
+                firstName
+                    .toString()
+                    .replace(/[^a-zA-Z0-9_-]/g, '-');
+
+            const safeLastName =
+                lastName
+                    .toString()
+                    .replace(/[^a-zA-Z0-9_-]/g, '-');
+
+            const filename =
+                'Employee-' +
+                safeEmployeeId +
+                '-' +
+                safeFirstName +
+                '-' +
+                safeLastName +
+                '.pdf';
 
 
             const options = {
 
                 margin: 0,
 
-                filename:
-                    'Employee-Information-' +
-                    safeEmployeeId +
-                    '.pdf',
+                filename: filename,
 
                 image: {
                     type: 'jpeg',
@@ -2145,11 +1330,7 @@
 
                     useCORS: true,
 
-                    backgroundColor: '#ffffff',
-
-                    scrollX: 0,
-
-                    scrollY: 0
+                    backgroundColor: '#ffffff'
 
                 },
 
@@ -2167,11 +1348,8 @@
 
 
             html2pdf()
-
                 .set(options)
-
-                .from(documentElement)
-
+                .from(element)
                 .save();
 
         }

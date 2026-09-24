@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-
 use App\Enums\ContractType;
 use App\Enums\EmployeeType;
 use App\Enums\Gender;
@@ -395,62 +394,28 @@ class EmployeeSeeder extends Seeder
                 'spouse_phone' => null,
             ],
 
-            [
-                'employee_id' => 'AMC-012',
-                'user_id' => 12,
-
-                'first_name' => 'Marie',
-                'middle_name' => 'Louise',
-                'last_name' => 'Kalume',
-
-                'gender' => Gender::FEMALE->value,
-                'date_of_birth' => '1996-10-10',
-                'number_card' => 'CARD-0012',
-                'country' => 'DR Congo',
-                'marital_status' => MaritalStatus::SINGLE->value,
-
-                'employee_work_phone' => '+243 810 000 012',
-                'employee_phone' => '+243 970 000 012',
-                'employee_email' => 'marie.kalume@example.com',
-                'employee_address' => 'Kolwezi, Lualaba',
-
-                'department_code' => 'DEP-CLN',
-                'section_code' => 'SEC-CLN',
-                'job_title_code' => 'JOB-CLN-CLR',
-
-                'contract_type' => ContractType::CDD->value,
-                'end_contract_date' => null,
-                'work_location' => WorkLocation::HEAD_OFFICE->value,
-                'supervisor' => 'Managing Director',
-                'employee_type' => EmployeeType::FULL_TIME->value,
-
-                'spouse_status' => null,
-                'spouse_full_name' => null,
-                'spouse_phone' => null,
-            ],
-
 //            [
-//                'employee_id' => 'AMC-013',
-//                'user_id' => 13,
+//                'employee_id' => 'AMC-012',
+//                'user_id' => 12,
 //
-//                'first_name' => 'Joseph',
-//                'middle_name' => null,
-//                'last_name' => 'Mukendi',
+//                'first_name' => 'Marie',
+//                'middle_name' => 'Louise',
+//                'last_name' => 'Kalume',
 //
-//                'gender' => Gender::MALE->value,
-//                'date_of_birth' => '1993-09-14',
-//                'number_card' => 'CARD-0013',
+//                'gender' => Gender::FEMALE->value,
+//                'date_of_birth' => '1996-10-10',
+//                'number_card' => 'CARD-0012',
 //                'country' => 'DR Congo',
 //                'marital_status' => MaritalStatus::SINGLE->value,
 //
-//                'employee_work_phone' => '+243 810 000 013',
-//                'employee_phone' => '+243 970 000 013',
-//                'employee_email' => 'joseph.mukendi@example.com',
+//                'employee_work_phone' => '+243 810 000 012',
+//                'employee_phone' => '+243 970 000 012',
+//                'employee_email' => 'marie.kalume@example.com',
 //                'employee_address' => 'Kolwezi, Lualaba',
 //
-//                'department_code' => 'DEP-RES',
-//                'section_code' => 'SEC-RES',
-//                'job_title_code' => 'JOB-RES-FF',
+//                'department_code' => 'DEP-CLN',
+//                'section_code' => 'SEC-CLN',
+//                'job_title_code' => 'JOB-CLN-CLR',
 //
 //                'contract_type' => ContractType::CDD->value,
 //                'end_contract_date' => null,
@@ -464,56 +429,108 @@ class EmployeeSeeder extends Seeder
 //            ],
         ];
 
-
         foreach ($employees as $data) {
 
-            $department = Department::where('code', $data['department_code'])
-                ->firstOrFail();
+            /*
+             * ==========================================================
+             * USER
+             * ==========================================================
+             *
+             * On récupère le vrai User.
+             * On ne met plus directement un ID dans Employee.
+             */
 
-            $section = Section::where('code', $data['section_code'])
+            $user = User::findOrFail($data['user_id']);
+
+
+            /*
+             * ==========================================================
+             * DEPARTMENT
+             * ==========================================================
+             */
+
+            $department = Department::where(
+                'code',
+                $data['department_code']
+            )->firstOrFail();
+
+
+            /*
+             * ==========================================================
+             * SECTION
+             * ==========================================================
+             */
+
+            $section = Section::where(
+                'code',
+                $data['section_code']
+            )
                 ->where('department_id', $department->id)
                 ->firstOrFail();
 
-            $jobTitle = JobTitle::where('code', $data['job_title_code'])
+
+            /*
+             * ==========================================================
+             * JOB TITLE
+             * ==========================================================
+             */
+
+            $jobTitle = JobTitle::where(
+                'code',
+                $data['job_title_code']
+            )
                 ->where('section_id', $section->id)
                 ->firstOrFail();
 
-            Employee::create([
 
-                'employee_id' => $data['employee_id'],
-                'user_id' => $data['user_id'],
+            /*
+             * ==========================================================
+             * EMPLOYEE
+             * ==========================================================
+             *
+             * firstOrCreate() empêche les doublons lorsque le Seeder
+             * est exécuté plusieurs fois.
+             */
 
-                'first_name' => $data['first_name'],
-                'middle_name' => $data['middle_name'],
-                'last_name' => $data['last_name'],
+            Employee::firstOrCreate(
+                [
+                    'employee_id' => $data['employee_id'],
+                ],
+                [
+                    'user_id' => $user->id,
 
-                'gender' => $data['gender'],
-                'date_of_birth' => $data['date_of_birth'],
-                'number_card' => $data['number_card'],
-                'country' => $data['country'],
-                'marital_status' => $data['marital_status'],
+                    'first_name' => $data['first_name'],
+                    'middle_name' => $data['middle_name'],
+                    'last_name' => $data['last_name'],
 
-                'employee_work_phone' => $data['employee_work_phone'],
-                'employee_phone' => $data['employee_phone'],
-                'employee_email' => $data['employee_email'],
-                'employee_address' => $data['employee_address'],
+                    'gender' => $data['gender'],
+                    'date_of_birth' => $data['date_of_birth'],
+                    'number_card' => $data['number_card'],
+                    'country' => $data['country'],
+                    'marital_status' => $data['marital_status'],
 
-                'photo' => null,
+                    'employee_work_phone' => $data['employee_work_phone'],
+                    'employee_phone' => $data['employee_phone'],
+                    'employee_email' => $data['employee_email'],
+                    'employee_address' => $data['employee_address'],
 
-                'department_id' => $department->id,
-                'section_id' => $section->id,
-                'job_title_id' => $jobTitle->id,
+                    'photo' => null,
 
-                'contract_type' => $data['contract_type'],
-                'end_contract_date' => $data['end_contract_date'],
-                'work_location' => $data['work_location'],
-                'supervisor' => $data['supervisor'],
-                'employee_type' => $data['employee_type'],
+                    'department_id' => $department->id,
+                    'section_id' => $section->id,
+                    'job_title_id' => $jobTitle->id,
 
-                'spouse_status' => $data['spouse_status'],
-                'spouse_full_name' => $data['spouse_full_name'],
-                'spouse_phone' => $data['spouse_phone'],
-            ]);
+                    'contract_type' => $data['contract_type'],
+                    'end_contract_date' => $data['end_contract_date'],
+                    'work_location' => $data['work_location'],
+                    'supervisor' => $data['supervisor'],
+                    'employee_type' => $data['employee_type'],
+
+                    'spouse_status' => $data['spouse_status'],
+                    'spouse_full_name' => $data['spouse_full_name'],
+                    'spouse_phone' => $data['spouse_phone'],
+                ]
+            );
         }
     }
 }

@@ -61,19 +61,19 @@ class DepartmentSeeder extends Seeder
         ]);
 
         // Masonry
-        $section = Section::create([
+        $section = Section::firstOrCreate([
             'department_id' => $department->id,
             'name' => 'Masonry',
             'code' => 'SEC-OP-MAS',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'Masonry Officer',
             'code' => 'JOB-OP-MO',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'Assistant Masonry Officer',
             'code' => 'JOB-OP-AMO',
@@ -85,24 +85,24 @@ class DepartmentSeeder extends Seeder
         | 3. HUMAN RESOURCES
         |--------------------------------------------------------------------------
         */
-        $department = Department::create([
+        $department = Department::firstOrCreate([
             'name' => 'Human Resources',
             'code' => 'DEP-HR',
         ]);
 
-        $section = Section::create([
+        $section = Section::firstOrCreate([
             'department_id' => $department->id,
             'name' => 'Human Resources',
             'code' => 'SEC-HR',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'HR Officer',
             'code' => 'JOB-HR-HRO',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'Assistant HR Officer',
             'code' => 'JOB-HR-AHRO',
@@ -114,18 +114,18 @@ class DepartmentSeeder extends Seeder
         | 4. FINANCE
         |--------------------------------------------------------------------------
         */
-        $department = Department::create([
+        $department = Department::firstOrCreate([
             'name' => 'Finance',
             'code' => 'DEP-FIN',
         ]);
 
-        $section = Section::create([
+        $section = Section::firstOrCreate([
             'department_id' => $department->id,
             'name' => 'Finance',
             'code' => 'SEC-FIN',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'Finance Officer',
             'code' => 'JOB-FIN-FO',
@@ -137,24 +137,24 @@ class DepartmentSeeder extends Seeder
         | 5. SAFETY
         |--------------------------------------------------------------------------
         */
-        $department = Department::create([
+        $department = Department::firstOrCreate([
             'name' => 'Safety',
             'code' => 'DEP-SAF',
         ]);
 
-        $section = Section::create([
+        $section = Section::firstOrCreate([
             'department_id' => $department->id,
             'name' => 'HSE',
             'code' => 'SEC-SAF-HSE',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'HSE Officer',
             'code' => 'JOB-SAF-HSE',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'Assistant Safety Officer',
             'code' => 'JOB-SAF-ASO',
@@ -166,48 +166,48 @@ class DepartmentSeeder extends Seeder
         | 6. TRANSPORT
         |--------------------------------------------------------------------------
         */
-        $department = Department::create([
+        $department = Department::firstOrCreate([
             'name' => 'Transport',
             'code' => 'DEP-TRA',
         ]);
 
-        $section = Section::create([
+        $section = Section::firstOrCreate([
             'department_id' => $department->id,
             'name' => 'Transport',
             'code' => 'SEC-TRA',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'Supervisor Officer',
             'code' => 'JOB-TRA-SUP',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'Driver Officer',
             'code' => 'JOB-TRA-DO',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => "Truck Driver's Assistant",
             'code' => 'JOB-TRA-TDA',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'Truck Driver',
             'code' => 'JOB-TRA-TDR',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'Operator Officer',
             'code' => 'JOB-TRA-OO',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'Transport Dispatcher',
             'code' => 'JOB-TRA-DSP',
@@ -219,24 +219,24 @@ class DepartmentSeeder extends Seeder
         | 7. LOGISTICS
         |--------------------------------------------------------------------------
         */
-        $department = Department::create([
+        $department = Department::firstOrCreate([
             'name' => 'Logistics',
             'code' => 'DEP-LOG',
         ]);
 
-        $section = Section::create([
+        $section = Section::firstOrCreate([
             'department_id' => $department->id,
             'name' => 'Logistics',
             'code' => 'SEC-LOG',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'Logistics Officer',
             'code' => 'JOB-LOG-LO',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'Store Officer',
             'code' => 'JOB-LOG-SO',
@@ -248,18 +248,18 @@ class DepartmentSeeder extends Seeder
         | 8. PROCUREMENT
         |--------------------------------------------------------------------------
         */
-        $department = Department::create([
+        $department = Department::firstOrCreate([
             'name' => 'Procurement',
             'code' => 'DEP-PRO',
         ]);
 
-        $section = Section::create([
+        $section = Section::firstOrCreate([
             'department_id' => $department->id,
             'name' => 'Procurement',
             'code' => 'SEC-PRO',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'Procurement Officer',
             'code' => 'JOB-PRO-OFF',
@@ -271,18 +271,18 @@ class DepartmentSeeder extends Seeder
         | 9. INFORMATION TECHNOLOGY
         |--------------------------------------------------------------------------
         */
-        $department = Department::create([
+        $department = Department::firstOrCreate([
             'name' => 'Information Technology',
             'code' => 'DEP-IT',
         ]);
 
-        $section = Section::create([
+        $section = Section::firstOrCreate([
             'department_id' => $department->id,
             'name' => 'Information Technology',
             'code' => 'SEC-IT',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'IT Officer',
             'code' => 'JOB-IT-OFF',
@@ -294,18 +294,18 @@ class DepartmentSeeder extends Seeder
         | 10. SECURITY
         |--------------------------------------------------------------------------
         */
-        $department = Department::create([
+        $department = Department::firstOrCreate([
             'name' => 'Security',
             'code' => 'DEP-SEC',
         ]);
 
-        $section = Section::create([
+        $section = Section::firstOrCreate([
             'department_id' => $department->id,
             'name' => 'Security',
             'code' => 'SEC-SEC',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'Security Officer',
             'code' => 'JOB-SEC-OFF',
@@ -317,18 +317,18 @@ class DepartmentSeeder extends Seeder
         | 11. CLEANING
         |--------------------------------------------------------------------------
         */
-        $department = Department::create([
+        $department = Department::firstOrCreate([
             'name' => 'Cleaning',
             'code' => 'DEP-CLN',
         ]);
 
-        $section = Section::create([
+        $section = Section::firstOrCreate([
             'department_id' => $department->id,
             'name' => 'Cleaning',
             'code' => 'SEC-CLN',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'Cleaner',
             'code' => 'JOB-CLN-CLR',
@@ -340,18 +340,18 @@ class DepartmentSeeder extends Seeder
         | 12. RESTAURATION
         |--------------------------------------------------------------------------
         */
-        $department = Department::create([
+        $department = Department::firstOrCreate([
             'name' => 'Restauration',
             'code' => 'DEP-RES',
         ]);
 
-        $section = Section::create([
+        $section = Section::firstOrCreate([
             'department_id' => $department->id,
             'name' => 'Restauration',
             'code' => 'SEC-RES',
         ]);
 
-        JobTitle::create([
+        JobTitle::firstOrCreate([
             'section_id' => $section->id,
             'name' => 'Fast Food',
             'code' => 'JOB-RES-FF',

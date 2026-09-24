@@ -409,6 +409,12 @@ Route::middleware([
         [LanguageController::class, 'switch']
     )->name('language.switch');
 
+// payroll
+
+
+    Route::get('/payroll', [\App\Http\Controllers\PayrollController::class, 'index'])
+        ->name('payroll.index');
+
 
 });
 
