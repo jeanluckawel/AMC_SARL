@@ -479,7 +479,6 @@
                 id="employeeForm"
                 autocomplete="off"
             >
-
                 @csrf
 
 
@@ -964,21 +963,22 @@
 
 
                         {{-- ADDRESS --}}
-
                         <div class="col-12">
-
-                            <label class="form-label">
-                                Address
-                            </label>
+                            <label class="form-label">Address</label>
 
                             <textarea
                                 name="employee_address"
+                                id="employee_address"
                                 class="form-control"
                                 rows="4"
                                 placeholder="Enter employee address"
-                                autocomplete="off"
+                                autocomplete="new-password"
+                                autocorrect="off"
+                                autocapitalize="none"
+                                spellcheck="false"
+                                data-lpignore="true"
+                                data-1p-ignore="true"
                             >{{ old('employee_address') }}</textarea>
-
                         </div>
 
                     </div>
@@ -1459,34 +1459,34 @@
 
                         {{-- HIRE DATE --}}
 
-                        <div class="col-12 col-md-4">
+{{--                        <div class="col-12 col-md-4">--}}
 
-                            <label class="form-label">
+{{--                            <label class="form-label">--}}
 
-                                Hire Date
+{{--                                Hire Date--}}
 
-                                <span class="text-danger">*</span>
+{{--                                <span class="text-danger">*</span>--}}
 
-                            </label>
+{{--                            </label>--}}
 
-                            <input
-                                type="date"
-                                name="hire_date"
-                                class="form-control @error('hire_date') is-invalid @enderror"
-                                value="{{ old('hire_date') }}"
-                                required
-                                autocomplete="off"
-                            >
+{{--                            <input--}}
+{{--                                type="date"--}}
+{{--                                name="hire_date"--}}
+{{--                                class="form-control @error('hire_date') is-invalid @enderror"--}}
+{{--                                value="{{ old('hire_date') }}"--}}
+{{--                                required--}}
+{{--                                autocomplete="off"--}}
+{{--                            >--}}
 
-                            @error('hire_date')
+{{--                            @error('hire_date')--}}
 
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
+{{--                            <div class="invalid-feedback">--}}
+{{--                                {{ $message }}--}}
+{{--                            </div>--}}
 
-                            @enderror
+{{--                            @enderror--}}
 
-                        </div>
+{{--                        </div>--}}
 
                     </div>
 
@@ -2090,6 +2090,7 @@
 
                         {{-- ADDRESS --}}
 
+
                         <div class="col-12">
 
                             <label class="form-label">
@@ -2102,9 +2103,15 @@
                                 rows="3"
                                 placeholder="Emergency contact address"
                                 autocomplete="off"
+                                autocorrect="off"
+                                autocapitalize="off"
+                                spellcheck="false"
+                                data-form-type="other"
+                                data-lpignore="true"
                             >{{ old('emergency_address') }}</textarea>
 
                         </div>
+
 
                     </div>
 
@@ -2799,6 +2806,22 @@
             }
 
 
+            const addressFields = document.querySelectorAll(
+                'textarea[name="employee_address"], textarea[name="emergency_address"]'
+            );
+
+            addressFields.forEach(function (field) {
+                field.setAttribute('autocomplete', 'new-password');
+                field.setAttribute('autocorrect', 'off');
+                field.setAttribute('autocapitalize', 'none');
+                field.setAttribute('spellcheck', 'false');
+
+                field.addEventListener('focus', function () {
+                    this.setAttribute('autocomplete', 'new-password');
+                });
+            });
+
+
 
             /* =========================================================
                VALIDATE STEP
@@ -3310,27 +3333,38 @@
                AUTOCOMPLETE OFF
             ========================================================== */
 
+
+
             if (form) {
 
-                form.setAttribute(
-                    'autocomplete',
-                    'off'
-                );
+                form.setAttribute('autocomplete', 'off');
+
+                form.querySelectorAll('input, select, textarea').forEach(function (field) {
+
+                    field.setAttribute('autocomplete', 'off');
+                    field.setAttribute('autocorrect', 'off');
+                    field.setAttribute('autocapitalize', 'off');
+                    field.setAttribute('spellcheck', 'false');
 
 
-                form.querySelectorAll(
-                    'input, select, textarea'
-                ).forEach(function (field) {
+                    field.setAttribute('data-form-type', 'other');
 
-                    field.setAttribute(
-                        'autocomplete',
-                        'off'
-                    );
+                    // Prevent automatic suggestions on text inputs
+                    if (
+                        field.tagName === 'INPUT' &&
+                        field.type !== 'hidden' &&
+                        field.type !== 'file' &&
+                        field.type !== 'checkbox' &&
+                        field.type !== 'radio' &&
+                        field.type !== 'submit' &&
+                        field.type !== 'button'
+                    ) {
+                        field.setAttribute('autocomplete', 'new-password');
+                    }
 
                 });
 
             }
-
 
 
             /* =========================================================

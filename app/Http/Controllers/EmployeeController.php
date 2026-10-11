@@ -227,11 +227,6 @@ class EmployeeController extends Controller
                 Rule::enum(EmployeeType::class),
             ],
 
-            'hire_date' => [
-                'required',
-                'date',
-            ],
-
 
             /*
             |--------------------------------------------------------------------------
@@ -364,17 +359,7 @@ class EmployeeController extends Controller
         DB::transaction(function () use ($request, $validated) {
 
 
-            /*
-            |--------------------------------------------------------------------------
-            | GENERATE AMC EMPLOYEE ID
-            |--------------------------------------------------------------------------
-            |
-            | Exemple :
-            | AMC-001
-            | AMC-002
-            | AMC-003
-            |
-            */
+
 
             $lastEmployee = Employee::query()
                 ->orderByDesc('id')
@@ -383,12 +368,12 @@ class EmployeeController extends Controller
             if ($lastEmployee && $lastEmployee->employee_id) {
 
                 $lastNumber = (int) str_replace(
-                    'AMC-',
+                    'AMC-OA',
                     '',
                     $lastEmployee->employee_id
                 );
 
-                $employeeId = 'AMC-' . str_pad(
+                $employeeId = 'AMC-OA' . str_pad(
                         $lastNumber + 1,
                         3,
                         '0',
@@ -397,7 +382,7 @@ class EmployeeController extends Controller
 
             } else {
 
-                $employeeId = 'AMC-001';
+                $employeeId = 'AMC-OA001';
 
             }
 
@@ -801,7 +786,6 @@ class EmployeeController extends Controller
             'work_location' => ['required', Rule::enum(WorkLocation::class)],
             'supervisor' => ['nullable', 'string', 'max:255'],
             'employee_type' => ['required', Rule::enum(EmployeeType::class)],
-            'hire_date' => ['required', 'date'],
 
 
             /*
@@ -908,7 +892,6 @@ class EmployeeController extends Controller
                 'work_location' => $validated['work_location'],
                 'supervisor' => $validated['supervisor'] ?? null,
                 'employee_type' => $validated['employee_type'],
-                'hire_date' => $validated['hire_date'],
 
                 'spouse_status' => $validated['spouse_status'] ?? null,
                 'spouse_full_name' => $validated['spouse_full_name'] ?? null,

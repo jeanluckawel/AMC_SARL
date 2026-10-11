@@ -15,28 +15,28 @@ return new class extends Migration
 
             $table->id();
 
-            // 1. Identification du Travailleur (Code du Travail RDC)
+
             $table->foreignId('employee_id')
                 ->constrained('employees')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
 
-            // 2. Période de paie
+
             $table->unsignedSmallInteger('year');
             $table->unsignedTinyInteger('month');
 
-            // 3. Salaire de base et temps de travail
-            $table->decimal('days_worked', 4, 1)->default(26.0); // Généralement 26 jours ouvrables par mois en RDC
+
+            $table->decimal('days_worked', 4, 1)->default(26.0);
             $table->decimal('basic_salary', 15, 2)->default(0);
 
-            // 4. Primes et Heures Supplémentaires (Soumises à cotisations et impôts)
+
             $table->decimal('overtime_hours', 8, 2)->default(0);
-            $table->decimal('overtime_amount', 15, 2)->default(0); // Majorations légales de 15%, 50%, 100%
-            $table->decimal('bonus', 15, 2)->default(0);            // Primes de performance, d'ancienneté, de fin d'année
-            $table->decimal('other_taxable_allowances', 15, 2)->default(0); // Autres primes soumises (ex: prime de risque)
+            $table->decimal('overtime_amount', 15, 2)->default(0);
+            $table->decimal('bonus', 15, 2)->default(0);
+            $table->decimal('other_taxable_allowances', 15, 2)->default(0);
 
             // 5. Allocations et Indemnités Exonérées (Sous plafonds légaux en RDC)
-            $table->decimal('housing_allowance', 15, 2)->default(0); // Indemnité de logement (Exonérée si < 30% du salaire de base)
+            $table->decimal('housing_allowance', 15, 2)->default(0);
             $table->decimal('transport_allowance', 15, 2)->default(0); // Indemnité de transport (Légale ou conventionnelle exonérée)
             $table->decimal('meal_allowance', 15, 2)->default(0);      // Collation / Restauration
             $table->decimal('family_allowance', 15, 2)->default(0);    // Allocations familiales (Exonérées sous plafond de l'INSS/CNSS)
