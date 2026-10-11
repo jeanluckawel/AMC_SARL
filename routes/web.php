@@ -410,35 +410,32 @@ Route::middleware([
         [LanguageController::class, 'switch']
     )->name('language.switch');
 
-// payroll
+// =====================================================
+// PAYROLL
+// =====================================================
 
-
-    Route::get('/payroll', [\App\Http\Controllers\PayrollController::class, 'index'])
+    Route::get('/payroll', [PayrollController::class, 'index'])
         ->name('payroll.index');
 
-
     Route::get('/payroll-create', [PayrollController::class, 'create'])
-        ->middleware('can:payroll.create')
         ->name('payroll.create');
 
+    Route::get('/payroll-payslips', [PayrollController::class, 'payslips'])
+        ->name('payroll.payslips');
+
     Route::post('/payroll', [PayrollController::class, 'store'])
-        ->middleware('can:payroll.create')
         ->name('payroll.store');
 
     Route::get('/payroll-{payroll}', [PayrollController::class, 'show'])
-        ->middleware('can:payroll.view')
         ->name('payroll.show');
 
     Route::get('/payroll-{payroll}-edit', [PayrollController::class, 'edit'])
-        ->middleware('can:payroll.edit')
         ->name('payroll.edit');
 
     Route::put('/payroll-{payroll}', [PayrollController::class, 'update'])
-        ->middleware('can:payroll.edit')
         ->name('payroll.update');
 
     Route::delete('/payroll-{payroll}', [PayrollController::class, 'destroy'])
-        ->middleware('can:payroll.delete')
         ->name('payroll.destroy');
 
 });

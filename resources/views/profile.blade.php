@@ -13,9 +13,6 @@
 
     <style>
 
-        /* =========================================================
-           PAGE / WRAPPER
-        ========================================================== */
 
         .fiche-wrapper {
             display: flex;
@@ -46,9 +43,7 @@
             position: relative;
         }
 
-        /* =========================================================
-           DOWNLOAD BUTTON
-        ========================================================== */
+
 
         .fiche-download {
             position: absolute;
@@ -89,9 +84,7 @@
             color: #fff;
         }
 
-        /* =========================================================
-           TABLE
-        ========================================================== */
+
 
         .table td,
         .table th {
@@ -100,9 +93,7 @@
             border: 1px solid #000 !important;
         }
 
-        /* =========================================================
-           PHOTO / SIGNATURE
-        ========================================================== */
+
 
         .photo-box,
         .signature-box,
@@ -110,9 +101,6 @@
             border-radius: 0 !important;
         }
 
-        /* =========================================================
-           HEADER LOGO
-        ========================================================== */
 
         .header-logo img {
             width: 100%;
@@ -120,9 +108,6 @@
             object-fit: contain;
         }
 
-        /* =========================================================
-           RESPONSIVE
-        ========================================================== */
 
         @media (max-width: 768px) {
 
@@ -141,9 +126,7 @@
             }
         }
 
-        /* =========================================================
-           PRINT / PDF A4
-        ========================================================== */
+
 
         @media print {
 
@@ -192,17 +175,13 @@
     </style>
 
 
-    {{-- =========================================================
-         FICHE WRAPPER
-    ========================================================== --}}
+
 
     <div class="fiche-wrapper">
 
         <div class="fiche-container">
 
-            {{-- =====================================================
-                 DOWNLOAD BUTTON
-            ====================================================== --}}
+
 
             <div class="fiche-download">
 
@@ -219,16 +198,10 @@
             </div>
 
 
-            {{-- =====================================================
-                 FICHE PRINCIPALE
-            ====================================================== --}}
 
             <div class="fiche"
                  id="employee-profile">
 
-                {{-- =================================================
-                     EN-TÊTE
-                ================================================== --}}
 
                 <div class="d-flex align-items-center justify-content-between border-bottom mb-3">
 
@@ -548,7 +521,7 @@
 
                             <tr class="table-secondary">
 
-                                <th colspan="4">
+                                <th colspan="5">
                                     Informations Familiales
                                 </th>
 
@@ -561,7 +534,7 @@
                                     Relation
                                 </td>
 
-                                <td>
+                                <td colspan="2">
                                     Nom Complet
                                 </td>
 
@@ -569,9 +542,6 @@
                                     Nº Telephone
                                 </td>
 
-                                <td>
-                                    Adresse
-                                </td>
 
                             </tr>
 
@@ -596,7 +566,7 @@
 
                                     </td>
 
-                                    <td>
+                                    <td colspan="2">
 
                                         {{ $parent->full_name ?? 'N/A' }}
 
@@ -608,11 +578,6 @@
 
                                     </td>
 
-                                    <td>
-
-                                        {{ $parent->address ?? 'N/A' }}
-
-                                    </td>
 
                                 </tr>
 
@@ -808,8 +773,8 @@
 
                                 <td>
 
-                                    {{ $currency }}
-                                    {{ number_format($baseSalary, 2) }}
+                                    {{ $currency ?? 'N/A' }}
+                                    {{ number_format($baseSalary, 2 ) ?? 'N/A' }}
 
                                 </td>
 
@@ -835,9 +800,9 @@
 
                                 <td>
 
-                                    @if($employee->hire_date)
+                                    @if($employee->created_at)
 
-                                        {{ $employee->hire_date->format('d - m - Y') }}
+                                        {{ $employee->created_at->format('d - m - Y') }}
 
                                     @else
 

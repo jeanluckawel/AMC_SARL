@@ -9,17 +9,22 @@ class EmployeeSalary extends Model
 {
     //
 
+// EmployeeSalary
     protected $fillable = [
-        'employee_id',
-        'base_salary',
-        'category',
-        'echelon',
-        'currency',
+        'employee_id', 'base_salary', 'category', 'echelon', 'currency',
+        'payment_methods',
+        'housing_allowance', 'transport_allowance', 'meal_allowance',
+        'family_allowance', 'medical_allowance',
+        'other_non_taxable_allowances', 'other_taxable_allowances',
+        'cnss_employee', 'syndicate_deduction', 'ier',
+        'cnss_employer', 'inpp_employer', 'onem_employer',
     ];
 
     protected $casts = [
-        'base_salary' => 'decimal:2',
+        'payment_methods' => 'array',
     ];
+
+
 
     /**
      * Le salaire appartient à un employé.

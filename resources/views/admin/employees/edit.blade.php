@@ -740,7 +740,7 @@
                                 type="date"
                                 name="hire_date"
                                 class="form-control @error('hire_date') is-invalid @enderror"
-                                value="{{ old('hire_date', $employee->hire_date?->format('Y-m-d')) }}"
+                                value="{{ old('hire_date', $employee->created_at?->format('Y-m-d')) }}"
                                 required
                             >
                             @error('hire_date')

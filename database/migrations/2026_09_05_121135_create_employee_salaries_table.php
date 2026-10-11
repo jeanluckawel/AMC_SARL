@@ -27,6 +27,25 @@ return new class extends Migration
 
             $table->string('currency')->nullable();
 
+            $table->json('payment_methods')->nullable();
+
+            $table->decimal('housing_allowance', 15, 2)->default(0);
+            $table->decimal('transport_allowance', 15, 2)->default(0);
+            $table->decimal('meal_allowance', 15, 2)->default(0);
+            $table->decimal('family_allowance', 15, 2)->default(0);
+            $table->decimal('medical_allowance', 15, 2)->default(0);
+            $table->decimal('other_non_taxable_allowances', 15, 2)->default(0);
+            $table->decimal('other_taxable_allowances', 15, 2)->default(0);
+
+            $table->decimal('cnss_employee', 15, 2)->default(0);
+            $table->decimal('syndicate_deduction', 15, 2)->default(0);
+            $table->decimal('ier', 15, 2)->default(0);
+
+            $table->decimal('cnss_employer', 15, 2)->default(0);
+            $table->decimal('inpp_employer', 15, 2)->default(0);
+            $table->decimal('onem_employer', 15, 2)->default(0);
+
+
             $table->timestamps();
         });
     }

@@ -4,6 +4,48 @@
 
 @section('content')
 
+    @php
+
+        $salaryEchelons = collect(\App\Enums\SalaryCategory::cases())
+            ->mapWithKeys(function ($category) {
+                $echelon = $category->echelon();
+
+                return [$category->value => $echelon instanceof \BackedEnum ? $echelon->value : $echelon->name];
+            })
+            ->all();
+
+        $oldMethods = (array) old('salary_payment_methods', []);
+
+        $paymentMethods = [
+            'cash'          => 'sal_method_cash',
+            'bank_transfer' => 'sal_method_bank',
+            'mobile_money'  => 'sal_method_mobile',
+            'cheque'        => 'sal_method_cheque',
+        ];
+
+        $salaryAllowances = [
+            'salary_housing_allowance'            => 'sal_housing',
+            'salary_transport_allowance'          => 'sal_transport',
+            'salary_meal_allowance'               => 'sal_meal',
+            'salary_family_allowance'             => 'sal_family',
+            'salary_medical_allowance'            => 'sal_medical',
+            'salary_other_non_taxable_allowances' => 'sal_other_non_taxable',
+            'salary_other_taxable_allowances'     => 'sal_other_taxable',
+        ];
+
+        $salaryDeductions = [
+            'salary_cnss_employee'       => 'sal_cnss_employee',
+            'salary_syndicate_deduction' => 'sal_syndicate',
+            'salary_ier'                 => 'sal_ier',
+        ];
+
+        $salaryEmployer = [
+            'salary_cnss_employer' => 'sal_cnss_employer',
+            'salary_inpp_employer' => 'sal_inpp_employer',
+            'salary_onem_employer' => 'sal_onem_employer',
+        ];
+    @endphp
+
     <style>
 
         /* =========================================================
@@ -245,7 +287,7 @@
                 <div class="col-md-6 col-12">
 
                     <h3 class="mb-0">
-                        Create a New Employee
+                        {{ __('menu.employee_create_title') }}
                     </h3>
 
                 </div>
@@ -258,18 +300,18 @@
                         <li class="breadcrumb-item">
 
                             <a href="{{ url('/') }}">
-                                Home
+                                {{ __('menu.employee_home') }}
                             </a>
 
                         </li>
 
                         <li class="breadcrumb-item active">
 
-                            Employees
+                            {{ __('menu.employee_employees') }}
 
                             <i class="bi bi-chevron-right"></i>
 
-                            Create
+                            {{ __('menu.employee_home') }}
 
                         </li>
 
@@ -309,7 +351,7 @@
 
                         <i class="bi bi-exclamation-triangle-fill me-2"></i>
 
-                        Please correct the following errors:
+                        {{ __('menu.employee_validation_title') }}
 
                     </div>
 
@@ -351,7 +393,7 @@
                     </div>
 
                     <div class="employee-step-label">
-                        Personal
+                        {{ __('menu.employee_step_personal') }}
                     </div>
 
                 </div>
@@ -369,7 +411,7 @@
                     </div>
 
                     <div class="employee-step-label">
-                        Address
+                        {{ __('menu.employee_step_address') }}
                     </div>
 
                 </div>
@@ -387,7 +429,7 @@
                     </div>
 
                     <div class="employee-step-label">
-                        Photo
+                        {{ __('menu.employee_step_photo') }}
                     </div>
 
                 </div>
@@ -405,7 +447,7 @@
                     </div>
 
                     <div class="employee-step-label">
-                        Company
+                        {{ __('menu.employee_step_company') }}
                     </div>
 
                 </div>
@@ -423,7 +465,7 @@
                     </div>
 
                     <div class="employee-step-label">
-                        Family
+                        {{ __('menu.employee_step_family') }}
                     </div>
 
                 </div>
@@ -441,7 +483,7 @@
                     </div>
 
                     <div class="employee-step-label">
-                        Emergency
+                        {{ __('menu.employee_step_emergency') }}
                     </div>
 
                 </div>
@@ -459,7 +501,7 @@
                     </div>
 
                     <div class="employee-step-label">
-                        Salary
+                        {{ __('menu.employee_step_salary') }}
                     </div>
 
                 </div>
@@ -479,7 +521,6 @@
                 id="employeeForm"
                 autocomplete="off"
             >
-
                 @csrf
 
 
@@ -499,30 +540,26 @@
 
                             <i class="bi bi-person me-2"></i>
 
-                            Personal Information
+                            {{ __('menu.employee_personal_title') }}
 
                         </h5>
 
                         <p>
-                            Enter the employee's personal information.
+                            {{ __('menu.employee_personal_desc') }}
                         </p>
 
                     </div>
 
 
-                    <div class="row g-3">
 
+                    <div class="row g-3">
 
                         {{-- FIRST NAME --}}
 
                         <div class="col-12 col-md-4">
-
                             <label class="form-label">
-
-                                First Name
-
+                                {{ __('menu.employee_first_name') }}
                                 <span class="text-danger">*</span>
-
                             </label>
 
                             <input
@@ -530,30 +567,24 @@
                                 name="first_name"
                                 class="form-control @error('first_name') is-invalid @enderror"
                                 value="{{ old('first_name') }}"
-                                placeholder="John"
+                                placeholder="{{ __('menu.employee_first_name_placeholder') }}"
                                 required
                                 pattern="[A-Za-zÀ-ÿ\s]{2,}"
                                 autocomplete="off"
                             >
 
                             @error('first_name')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                             @enderror
-
                         </div>
-
-
 
                         {{-- MIDDLE NAME --}}
 
                         <div class="col-12 col-md-4">
-
                             <label class="form-label">
-                                Middle Name
+                                {{ __('menu.employee_middle_name') }}
                             </label>
 
                             <input
@@ -561,33 +592,24 @@
                                 name="middle_name"
                                 class="form-control @error('middle_name') is-invalid @enderror"
                                 value="{{ old('middle_name') }}"
-                                placeholder="Michael"
+                                placeholder="{{ __('menu.employee_middle_name_placeholder') }}"
                                 pattern="[A-Za-zÀ-ÿ\s]{2,}"
                                 autocomplete="off"
                             >
 
                             @error('middle_name')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                             @enderror
-
                         </div>
-
-
 
                         {{-- LAST NAME --}}
 
                         <div class="col-12 col-md-4">
-
                             <label class="form-label">
-
-                                Last Name
-
+                                {{ __('menu.employee_last_name') }}
                                 <span class="text-danger">*</span>
-
                             </label>
 
                             <input
@@ -595,34 +617,25 @@
                                 name="last_name"
                                 class="form-control @error('last_name') is-invalid @enderror"
                                 value="{{ old('last_name') }}"
-                                placeholder="Doe"
+                                placeholder="{{ __('menu.employee_last_name_placeholder') }}"
                                 required
                                 pattern="[A-Za-zÀ-ÿ\s]{2,}"
                                 autocomplete="off"
                             >
 
                             @error('last_name')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                             @enderror
-
                         </div>
-
-
 
                         {{-- GENDER --}}
 
                         <div class="col-12 col-md-4">
-
                             <label class="form-label">
-
-                                Gender
-
+                                {{ __('menu.employee_gender') }}
                                 <span class="text-danger">*</span>
-
                             </label>
 
                             <select
@@ -631,48 +644,33 @@
                                 required
                                 autocomplete="off"
                             >
-
                                 <option value="">
-                                    Select gender
+                                    {{ __('menu.employee_select_gender') }}
                                 </option>
 
                                 @foreach(\App\Enums\Gender::cases() as $gender)
-
                                     <option
                                         value="{{ $gender->value }}"
-                                        @selected(
-                                            old('gender') === $gender->value
-                                        )
+                                        @selected(old('gender') === $gender->value)
                                     >
                                         {{ $gender->label() }}
                                     </option>
-
                                 @endforeach
-
                             </select>
 
                             @error('gender')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                             @enderror
-
                         </div>
-
-
 
                         {{-- DATE OF BIRTH --}}
 
                         <div class="col-12 col-md-4">
-
                             <label class="form-label">
-
-                                Date of Birth
-
+                                {{ __('menu.employee_date_of_birth') }}
                                 <span class="text-danger">*</span>
-
                             </label>
 
                             <input
@@ -682,30 +680,22 @@
                                 value="{{ old('date_of_birth') }}"
                                 required
                                 autocomplete="off"
+                                max="{{ \Carbon\Carbon::now()->subYears(18)->format('Y-m-d') }}"
                             >
 
                             @error('date_of_birth')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                             @enderror
-
                         </div>
-
-
 
                         {{-- ID CARD --}}
 
                         <div class="col-12 col-md-4">
-
                             <label class="form-label">
-
-                                ID / Card Number
-
+                                {{ __('menu.employee_card_number') }}
                                 <span class="text-danger">*</span>
-
                             </label>
 
                             <input
@@ -720,27 +710,18 @@
                             >
 
                             @error('number_card')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                             @enderror
-
                         </div>
-
-
 
                         {{-- COUNTRY --}}
 
                         <div class="col-12 col-md-6">
-
                             <label class="form-label">
-
-                                Country
-
+                                {{ __('menu.employee_country') }}
                                 <span class="text-danger">*</span>
-
                             </label>
 
                             <select
@@ -749,80 +730,59 @@
                                 required
                                 autocomplete="off"
                             >
-
                                 <option value="">
-                                    Select country
+                                    {{ __('menu.employee_select_country') }}
                                 </option>
 
                                 <option
                                     value="Democratic Republic of the Congo"
-                                    @selected(
-                                        old('country') === 'Democratic Republic of the Congo'
-                                    )
+                                    @selected(old('country') === 'Democratic Republic of the Congo')
                                 >
-                                    Democratic Republic of the Congo
+                                    {{ __('menu.employee_country_drc') }}
                                 </option>
 
                                 <option
                                     value="Zambia"
-                                    @selected(
-                                        old('country') === 'Zambia'
-                                    )
+                                    @selected(old('country') === 'Zambia')
                                 >
-                                    Zambia
+                                    {{ __('menu.employee_country_zambia') }}
                                 </option>
 
                                 <option
                                     value="South Africa"
-                                    @selected(
-                                        old('country') === 'South Africa'
-                                    )
+                                    @selected(old('country') === 'South Africa')
                                 >
-                                    South Africa
+                                    {{ __('menu.employee_country_south_africa') }}
                                 </option>
 
                                 <option
                                     value="Angola"
-                                    @selected(
-                                        old('country') === 'Angola'
-                                    )
+                                    @selected(old('country') === 'Angola')
                                 >
-                                    Angola
+                                    {{ __('menu.employee_country_angola') }}
                                 </option>
 
                                 <option
                                     value="Republic of the Congo"
-                                    @selected(
-                                        old('country') === 'Republic of the Congo'
-                                    )
+                                    @selected(old('country') === 'Republic of the Congo')
                                 >
-                                    Republic of the Congo
+                                    {{ __('menu.employee_country_congo') }}
                                 </option>
-
                             </select>
 
                             @error('country')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                             @enderror
-
                         </div>
-
-
 
                         {{-- MARITAL STATUS --}}
 
                         <div class="col-12 col-md-6">
-
                             <label class="form-label">
-
-                                Marital Status
-
+                                {{ __('menu.employee_marital_status') }}
                                 <span class="text-danger">*</span>
-
                             </label>
 
                             <select
@@ -831,41 +791,29 @@
                                 required
                                 autocomplete="off"
                             >
-
                                 <option value="">
-                                    Select marital status
+                                    {{ __('menu.employee_select_marital_status') }}
                                 </option>
 
-                                @foreach(
-                                    \App\Enums\MaritalStatus::cases()
-                                    as $status
-                                )
-
+                                @foreach(\App\Enums\MaritalStatus::cases() as $status)
                                     <option
                                         value="{{ $status->value }}"
-                                        @selected(
-                                            old('marital_status')
-                                            === $status->value
-                                        )
+                                        @selected(old('marital_status') === $status->value)
                                     >
                                         {{ $status->label() }}
                                     </option>
-
                                 @endforeach
-
                             </select>
 
                             @error('marital_status')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                             @enderror
-
                         </div>
 
                     </div>
+
 
                 </div>
 
@@ -875,6 +823,7 @@
                      STEP 2 : ADDRESS
                 ================================================== --}}
 
+
                 <div
                     class="employee-form-step"
                     data-step="2"
@@ -883,29 +832,24 @@
                     <div class="step-title">
 
                         <h5>
-
                             <i class="bi bi-geo-alt me-2"></i>
-
-                            Address & Contact
-
+                            {{ __('menu.employee_address_title') }}
                         </h5>
 
                         <p>
-                            Enter employee contact information.
+                            {{ __('menu.employee_address_desc') }}
                         </p>
 
                     </div>
 
-
                     <div class="row g-3">
-
 
                         {{-- WORK PHONE --}}
 
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-                                Work Phone
+                                {{ __('menu.employee_work_phone') }}
                             </label>
 
                             <input
@@ -913,20 +857,18 @@
                                 name="employee_work_phone"
                                 class="form-control"
                                 value="{{ old('employee_work_phone') }}"
-                                placeholder="+243 XXX XXX XXX"
+                                placeholder="{{ __('menu.employee_phone_placeholder') }}"
                                 autocomplete="off"
                             >
 
                         </div>
-
-
 
                         {{-- PERSONAL PHONE --}}
 
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-                                Personal Phone
+                                {{ __('menu.employee_personal_phone') }}
                             </label>
 
                             <input
@@ -934,20 +876,18 @@
                                 name="employee_phone"
                                 class="form-control"
                                 value="{{ old('employee_phone') }}"
-                                placeholder="+243 XXX XXX XXX"
+                                placeholder="{{ __('menu.employee_phone_placeholder') }}"
                                 autocomplete="off"
                             >
 
                         </div>
-
-
 
                         {{-- EMAIL --}}
 
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-                                Email Address
+                                {{ __('menu.employee_email') }}
                             </label>
 
                             <input
@@ -955,28 +895,32 @@
                                 name="employee_email"
                                 class="form-control"
                                 value="{{ old('employee_email') }}"
-                                placeholder="employee@example.com"
+                                placeholder="{{ __('menu.employee_email_placeholder') }}"
                                 autocomplete="off"
                             >
 
                         </div>
-
-
 
                         {{-- ADDRESS --}}
 
                         <div class="col-12">
 
                             <label class="form-label">
-                                Address
+                                {{ __('menu.employee_address') }}
                             </label>
 
                             <textarea
                                 name="employee_address"
+                                id="employee_address"
                                 class="form-control"
                                 rows="4"
-                                placeholder="Enter employee address"
-                                autocomplete="off"
+                                placeholder="{{ __('menu.employee_address_placeholder') }}"
+                                autocomplete="new-password"
+                                autocorrect="off"
+                                autocapitalize="none"
+                                spellcheck="false"
+                                data-lpignore="true"
+                                data-1p-ignore="true"
                             >{{ old('employee_address') }}</textarea>
 
                         </div>
@@ -987,9 +931,11 @@
 
 
 
+
                 {{-- =================================================
                      STEP 3 : PHOTO
                 ================================================== --}}
+
 
                 <div
                     class="employee-form-step"
@@ -999,27 +945,24 @@
                     <div class="step-title">
 
                         <h5>
-
                             <i class="bi bi-camera me-2"></i>
-
-                            Employee Photo
-
+                            {{ __('menu.employee_photo_title') }}
                         </h5>
 
                         <p>
-                            Upload an optional employee photo.
+                            {{ __('menu.employee_photo_desc') }}
                         </p>
 
                     </div>
 
-
                     <div class="row g-4">
 
+                        {{-- EMPLOYEE PHOTO --}}
 
                         <div class="col-12 col-md-6">
 
                             <label class="form-label">
-                                Employee Photo
+                                {{ __('menu.employee_photo_upload') }}
                             </label>
 
                             <input
@@ -1032,22 +975,18 @@
                             >
 
                             <small class="text-muted">
-
-                                JPG, JPEG or PNG.
-                                Maximum 2 MB.
-
+                                {{ __('menu.employee_photo_hint') }}
                             </small>
 
                             @error('photo')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                             @enderror
 
                         </div>
 
+                        {{-- PHOTO PREVIEW --}}
 
                         <div class="col-12 col-md-6">
 
@@ -1057,16 +996,13 @@
                                     id="photoPlaceholder"
                                     class="photo-placeholder"
                                 >
-
                                     <i class="bi bi-person fs-1"></i>
-
                                 </div>
-
 
                                 <img
                                     id="photoPreview"
                                     class="photo-preview ms-3"
-                                    alt="Employee photo preview"
+                                    alt="{{ __('menu.employee_photo_preview') }}"
                                 >
 
                             </div>
@@ -1079,45 +1015,38 @@
 
 
 
+
                 {{-- =================================================
                      STEP 4 : COMPANY
                 ================================================== --}}
+
 
                 <div
                     class="employee-form-step"
                     data-step="4"
                 >
-
                     <div class="step-title">
 
                         <h5>
-
                             <i class="bi bi-building me-2"></i>
-
-                            Company Information
-
+                            {{ __('menu.employee_company_title') }}
                         </h5>
 
                         <p>
-                            Assign the employee to a department, section and job title.
+                            {{ __('menu.employee_company_desc') }}
                         </p>
 
                     </div>
 
-
                     <div class="row g-3">
-
 
                         {{-- DEPARTMENT --}}
 
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-
-                                Department
-
+                                {{ __('menu.employee_department') }}
                                 <span class="text-danger">*</span>
-
                             </label>
 
                             <select
@@ -1129,16 +1058,14 @@
                             >
 
                                 <option value="">
-                                    Select department
+                                    {{ __('menu.employee_select_department') }}
                                 </option>
 
                                 @foreach($departments as $department)
 
                                     <option
                                         value="{{ $department->id }}"
-                                        @selected(
-                                            old('department_id') == $department->id
-                                        )
+                                        @selected(old('department_id') == $department->id)
                                     >
                                         {{ $department->name }}
                                     </option>
@@ -1148,15 +1075,12 @@
                             </select>
 
                             @error('department_id')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                             @enderror
 
                         </div>
-
 
 
                         {{-- SECTION --}}
@@ -1164,11 +1088,8 @@
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-
-                                Section
-
+                                {{ __('menu.employee_section') }}
                                 <span class="text-danger">*</span>
-
                             </label>
 
                             <select
@@ -1181,21 +1102,18 @@
                             >
 
                                 <option value="">
-                                    Select department first
+                                    {{ __('menu.employee_select_department_first') }}
                                 </option>
 
                             </select>
 
                             @error('section_id')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                             @enderror
 
                         </div>
-
 
 
                         {{-- JOB TITLE --}}
@@ -1203,11 +1121,8 @@
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-
-                                Job Title
-
+                                {{ __('menu.employee_job_title') }}
                                 <span class="text-danger">*</span>
-
                             </label>
 
                             <select
@@ -1220,21 +1135,18 @@
                             >
 
                                 <option value="">
-                                    Select section first
+                                    {{ __('menu.employee_select_section_first') }}
                                 </option>
 
                             </select>
 
                             @error('job_title_id')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                             @enderror
 
                         </div>
-
 
 
                         {{-- CONTRACT TYPE --}}
@@ -1242,11 +1154,8 @@
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-
-                                Contract Type
-
+                                {{ __('menu.employee_contract_type') }}
                                 <span class="text-danger">*</span>
-
                             </label>
 
                             <select
@@ -1258,20 +1167,14 @@
                             >
 
                                 <option value="">
-                                    Select contract type
+                                    {{ __('menu.employee_select_contract_type') }}
                                 </option>
 
-                                @foreach(
-                                    \App\Enums\ContractType::cases()
-                                    as $contract
-                                )
+                                @foreach(\App\Enums\ContractType::cases() as $contract)
 
                                     <option
                                         value="{{ $contract->value }}"
-                                        @selected(
-                                            old('contract_type')
-                                            === $contract->value
-                                        )
+                                        @selected(old('contract_type') === $contract->value)
                                     >
                                         {{ $contract->label() }}
                                     </option>
@@ -1281,15 +1184,12 @@
                             </select>
 
                             @error('contract_type')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                             @enderror
 
                         </div>
-
 
 
                         {{-- END CONTRACT DATE --}}
@@ -1300,11 +1200,8 @@
                         >
 
                             <label class="form-label">
-
-                                End Contract Date
-
+                                {{ __('menu.employee_end_contract_date') }}
                                 <span class="text-danger">*</span>
-
                             </label>
 
                             <input
@@ -1317,15 +1214,12 @@
                             >
 
                             @error('end_contract_date')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                             @enderror
 
                         </div>
-
 
 
                         {{-- WORK LOCATION --}}
@@ -1333,11 +1227,8 @@
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-
-                                Work Location
-
+                                {{ __('menu.employee_work_location') }}
                                 <span class="text-danger">*</span>
-
                             </label>
 
                             <select
@@ -1348,20 +1239,14 @@
                             >
 
                                 <option value="">
-                                    Select location
+                                    {{ __('menu.employee_select_work_location') }}
                                 </option>
 
-                                @foreach(
-                                    \App\Enums\WorkLocation::cases()
-                                    as $location
-                                )
+                                @foreach(\App\Enums\WorkLocation::cases() as $location)
 
                                     <option
                                         value="{{ $location->value }}"
-                                        @selected(
-                                            old('work_location')
-                                            === $location->value
-                                        )
+                                        @selected(old('work_location') === $location->value)
                                     >
                                         {{ $location->label() }}
                                     </option>
@@ -1371,15 +1256,12 @@
                             </select>
 
                             @error('work_location')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
                             @enderror
 
                         </div>
-
 
 
                         {{-- SUPERVISOR --}}
@@ -1387,7 +1269,7 @@
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-                                Supervisor
+                                {{ __('menu.employee_supervisor') }}
                             </label>
 
                             <input
@@ -1395,12 +1277,11 @@
                                 name="supervisor"
                                 class="form-control"
                                 value="{{ old('supervisor') }}"
-                                placeholder="Supervisor name"
+                                placeholder="{{ __('menu.employee_supervisor_placeholder') }}"
                                 autocomplete="off"
                             >
 
                         </div>
-
 
 
                         {{-- EMPLOYEE TYPE --}}
@@ -1408,11 +1289,8 @@
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-
-                                Employee Type
-
+                                {{ __('menu.employee_type') }}
                                 <span class="text-danger">*</span>
-
                             </label>
 
                             <select
@@ -1423,20 +1301,14 @@
                             >
 
                                 <option value="">
-                                    Select employee type
+                                    {{ __('menu.employee_select_type') }}
                                 </option>
 
-                                @foreach(
-                                    \App\Enums\EmployeeType::cases()
-                                    as $type
-                                )
+                                @foreach(\App\Enums\EmployeeType::cases() as $type)
 
                                     <option
                                         value="{{ $type->value }}"
-                                        @selected(
-                                            old('employee_type')
-                                            === $type->value
-                                        )
+                                        @selected(old('employee_type') === $type->value)
                                     >
                                         {{ $type->label() }}
                                     </option>
@@ -1446,44 +1318,9 @@
                             </select>
 
                             @error('employee_type')
-
                             <div class="invalid-feedback">
                                 {{ $message }}
                             </div>
-
-                            @enderror
-
-                        </div>
-
-
-
-                        {{-- HIRE DATE --}}
-
-                        <div class="col-12 col-md-4">
-
-                            <label class="form-label">
-
-                                Hire Date
-
-                                <span class="text-danger">*</span>
-
-                            </label>
-
-                            <input
-                                type="date"
-                                name="hire_date"
-                                class="form-control @error('hire_date') is-invalid @enderror"
-                                value="{{ old('hire_date') }}"
-                                required
-                                autocomplete="off"
-                            >
-
-                            @error('hire_date')
-
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-
                             @enderror
 
                         </div>
@@ -1494,9 +1331,11 @@
 
 
 
+
                 {{-- =================================================
                      STEP 5 : FAMILY
                 ================================================== --}}
+
 
                 <div
                     class="employee-form-step"
@@ -1506,44 +1345,35 @@
                     <div class="step-title">
 
                         <h5>
-
                             <i class="bi bi-people me-2"></i>
-
-                            Family Information
-
+                            {{ __('menu.employee_family_title') }}
                         </h5>
 
                         <p>
-                            Enter spouse and parent information.
+                            {{ __('menu.employee_family_desc') }}
                         </p>
 
                     </div>
 
-
                     <div class="row g-3">
-
 
                         {{-- SPOUSE --}}
 
                         <div class="col-12">
 
                             <h6 class="mb-1">
-
                                 <i class="bi bi-person-heart me-2"></i>
-
-                                Spouse Information
-
+                                {{ __('menu.employee_spouse_information') }}
                             </h6>
 
                         </div>
-
 
                         {{-- SPOUSE STATUS --}}
 
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-                                Status
+                                {{ __('menu.employee_spouse_status') }}
                             </label>
 
                             <select
@@ -1553,57 +1383,47 @@
                             >
 
                                 <option value="">
-                                    Select status
+                                    {{ __('menu.employee_select_status') }}
                                 </option>
 
                                 <option
                                     value="Married"
-                                    @selected(
-                                        old('spouse_status') === 'Married'
-                                    )
+                                    @selected(old('spouse_status') === 'Married')
                                 >
-                                    Married
+                                    {{ __('menu.employee_married') }}
                                 </option>
 
                                 <option
                                     value="Single"
-                                    @selected(
-                                        old('spouse_status') === 'Single'
-                                    )
+                                    @selected(old('spouse_status') === 'Single')
                                 >
-                                    Single
+                                    {{ __('menu.employee_single') }}
                                 </option>
 
                                 <option
                                     value="Divorced"
-                                    @selected(
-                                        old('spouse_status') === 'Divorced'
-                                    )
+                                    @selected(old('spouse_status') === 'Divorced')
                                 >
-                                    Divorced
+                                    {{ __('menu.employee_divorced') }}
                                 </option>
 
                                 <option
                                     value="Widowed"
-                                    @selected(
-                                        old('spouse_status') === 'Widowed'
-                                    )
+                                    @selected(old('spouse_status') === 'Widowed')
                                 >
-                                    Widowed
+                                    {{ __('menu.employee_widowed') }}
                                 </option>
 
                             </select>
 
                         </div>
 
-
-
                         {{-- SPOUSE NAME --}}
 
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-                                Full Name
+                                {{ __('menu.employee_full_name') }}
                             </label>
 
                             <input
@@ -1611,21 +1431,18 @@
                                 name="spouse_full_name"
                                 class="form-control"
                                 value="{{ old('spouse_full_name') }}"
-                                placeholder="Spouse full name"
                                 pattern="[A-Za-zÀ-ÿ\s]{2,}"
                                 autocomplete="off"
                             >
 
                         </div>
 
-
-
                         {{-- SPOUSE PHONE --}}
 
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-                                Phone
+                                {{ __('menu.employee_phone') }}
                             </label>
 
                             <input
@@ -1633,43 +1450,33 @@
                                 name="spouse_phone"
                                 class="form-control"
                                 value="{{ old('spouse_phone') }}"
-                                placeholder="+243 XXX XXX XXX"
                                 autocomplete="off"
                             >
 
                         </div>
-
-
 
                         {{-- PARENTS --}}
 
                         <div class="col-12 mt-4">
 
                             <h6 class="mb-1">
-
                                 <i class="bi bi-people-fill me-2"></i>
-
-                                Parents & In-Laws
-
+                                {{ __('menu.employee_parents_title') }}
                             </h6>
 
                             <small class="text-muted">
-
-                                Enter the full name, telephone number and status
-                                of each parent.
-
+                                {{ __('menu.employee_parents_hint') }}
                             </small>
 
                         </div>
-
-
 
                         {{-- FATHER --}}
 
                         <div class="col-12 col-md-5">
 
                             <label class="form-label">
-                                Father Full Name
+                                {{ __('menu.employee_father') }} —
+                                {{ __('menu.employee_parent_full_name') }}
                             </label>
 
                             <input
@@ -1683,18 +1490,16 @@
                                 name="parents[father][full_name]"
                                 class="form-control"
                                 value="{{ old('parents.father.full_name') }}"
-                                placeholder="Father full name"
                                 pattern="[A-Za-zÀ-ÿ\s]{2,}"
                                 autocomplete="off"
                             >
 
                         </div>
 
-
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-                                Telephone
+                                {{ __('menu.employee_phone') }}
                             </label>
 
                             <input
@@ -1702,17 +1507,15 @@
                                 name="parents[father][phone]"
                                 class="form-control"
                                 value="{{ old('parents.father.phone') }}"
-                                placeholder="+243 XXX XXX XXX"
                                 autocomplete="off"
                             >
 
                         </div>
 
-
                         <div class="col-12 col-md-3">
 
                             <label class="form-label">
-                                Status
+                                {{ __('menu.employee_spouse_status') }}
                             </label>
 
                             <div class="form-check mt-2">
@@ -1723,30 +1526,27 @@
                                     value="1"
                                     class="form-check-input"
                                     id="fatherDeceased"
-                                    @checked(
-                                        old('parents.father.deceased')
-                                    )
+                                    @checked(old('parents.father.deceased'))
                                 >
 
                                 <label
                                     class="form-check-label"
                                     for="fatherDeceased"
                                 >
-                                    Deceased
+                                    {{ __('menu.employee_deceased') }}
                                 </label>
 
                             </div>
 
                         </div>
 
-
-
                         {{-- MOTHER --}}
 
                         <div class="col-12 col-md-5">
 
                             <label class="form-label">
-                                Mother Full Name
+                                {{ __('menu.employee_mother') }} —
+                                {{ __('menu.employee_parent_full_name') }}
                             </label>
 
                             <input
@@ -1760,18 +1560,16 @@
                                 name="parents[mother][full_name]"
                                 class="form-control"
                                 value="{{ old('parents.mother.full_name') }}"
-                                placeholder="Mother full name"
                                 pattern="[A-Za-zÀ-ÿ\s]{2,}"
                                 autocomplete="off"
                             >
 
                         </div>
 
-
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-                                Telephone
+                                {{ __('menu.employee_phone') }}
                             </label>
 
                             <input
@@ -1779,17 +1577,15 @@
                                 name="parents[mother][phone]"
                                 class="form-control"
                                 value="{{ old('parents.mother.phone') }}"
-                                placeholder="+243 XXX XXX XXX"
                                 autocomplete="off"
                             >
 
                         </div>
 
-
                         <div class="col-12 col-md-3">
 
                             <label class="form-label">
-                                Status
+                                {{ __('menu.employee_spouse_status') }}
                             </label>
 
                             <div class="form-check mt-2">
@@ -1800,30 +1596,27 @@
                                     value="1"
                                     class="form-check-input"
                                     id="motherDeceased"
-                                    @checked(
-                                        old('parents.mother.deceased')
-                                    )
+                                    @checked(old('parents.mother.deceased'))
                                 >
 
                                 <label
                                     class="form-check-label"
                                     for="motherDeceased"
                                 >
-                                    Deceased
+                                    {{ __('menu.employee_deceased') }}
                                 </label>
 
                             </div>
 
                         </div>
 
-
-
-                        {{-- FATHER IN LAW --}}
+                        {{-- FATHER-IN-LAW --}}
 
                         <div class="col-12 col-md-5">
 
                             <label class="form-label">
-                                Father-in-law Full Name
+                                {{ __('menu.employee_father_in_law') }} —
+                                {{ __('menu.employee_parent_full_name') }}
                             </label>
 
                             <input
@@ -1837,18 +1630,16 @@
                                 name="parents[father_in_law][full_name]"
                                 class="form-control"
                                 value="{{ old('parents.father_in_law.full_name') }}"
-                                placeholder="Father-in-law full name"
                                 pattern="[A-Za-zÀ-ÿ\s]{2,}"
                                 autocomplete="off"
                             >
 
                         </div>
 
-
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-                                Telephone
+                                {{ __('menu.employee_phone') }}
                             </label>
 
                             <input
@@ -1856,17 +1647,15 @@
                                 name="parents[father_in_law][phone]"
                                 class="form-control"
                                 value="{{ old('parents.father_in_law.phone') }}"
-                                placeholder="+243 XXX XXX XXX"
                                 autocomplete="off"
                             >
 
                         </div>
 
-
                         <div class="col-12 col-md-3">
 
                             <label class="form-label">
-                                Status
+                                {{ __('menu.employee_spouse_status') }}
                             </label>
 
                             <div class="form-check mt-2">
@@ -1877,30 +1666,27 @@
                                     value="1"
                                     class="form-check-input"
                                     id="fatherInLawDeceased"
-                                    @checked(
-                                        old('parents.father_in_law.deceased')
-                                    )
+                                    @checked(old('parents.father_in_law.deceased'))
                                 >
 
                                 <label
                                     class="form-check-label"
                                     for="fatherInLawDeceased"
                                 >
-                                    Deceased
+                                    {{ __('menu.employee_deceased') }}
                                 </label>
 
                             </div>
 
                         </div>
 
-
-
-                        {{-- MOTHER IN LAW --}}
+                        {{-- MOTHER-IN-LAW --}}
 
                         <div class="col-12 col-md-5">
 
                             <label class="form-label">
-                                Mother-in-law Full Name
+                                {{ __('menu.employee_mother_in_law') }} —
+                                {{ __('menu.employee_parent_full_name') }}
                             </label>
 
                             <input
@@ -1914,18 +1700,16 @@
                                 name="parents[mother_in_law][full_name]"
                                 class="form-control"
                                 value="{{ old('parents.mother_in_law.full_name') }}"
-                                placeholder="Mother-in-law full name"
                                 pattern="[A-Za-zÀ-ÿ\s]{2,}"
                                 autocomplete="off"
                             >
 
                         </div>
 
-
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-                                Telephone
+                                {{ __('menu.employee_phone') }}
                             </label>
 
                             <input
@@ -1933,17 +1717,15 @@
                                 name="parents[mother_in_law][phone]"
                                 class="form-control"
                                 value="{{ old('parents.mother_in_law.phone') }}"
-                                placeholder="+243 XXX XXX XXX"
                                 autocomplete="off"
                             >
 
                         </div>
 
-
                         <div class="col-12 col-md-3">
 
                             <label class="form-label">
-                                Status
+                                {{ __('menu.employee_spouse_status') }}
                             </label>
 
                             <div class="form-check mt-2">
@@ -1954,16 +1736,14 @@
                                     value="1"
                                     class="form-check-input"
                                     id="motherInLawDeceased"
-                                    @checked(
-                                        old('parents.mother_in_law.deceased')
-                                    )
+                                    @checked(old('parents.mother_in_law.deceased'))
                                 >
 
                                 <label
                                     class="form-check-label"
                                     for="motherInLawDeceased"
                                 >
-                                    Deceased
+                                    {{ __('menu.employee_deceased') }}
                                 </label>
 
                             </div>
@@ -1976,9 +1756,11 @@
 
 
 
+
                 {{-- =================================================
                      STEP 6 : EMERGENCY
                 ================================================== --}}
+
 
                 <div
                     class="employee-form-step"
@@ -1988,29 +1770,24 @@
                     <div class="step-title">
 
                         <h5>
-
                             <i class="bi bi-telephone-forward me-2"></i>
-
-                            Emergency Contact
-
+                            {{ __('menu.employee_emergency_title') }}
                         </h5>
 
                         <p>
-                            Enter the employee's emergency contact information.
+                            {{ __('menu.employee_emergency_desc') }}
                         </p>
 
                     </div>
 
-
                     <div class="row g-3">
-
 
                         {{-- RELATIONSHIP --}}
 
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-                                Relationship
+                                {{ __('menu.employee_relationship') }}
                             </label>
 
                             <select
@@ -2020,20 +1797,14 @@
                             >
 
                                 <option value="">
-                                    Select relationship
+                                    {{ __('menu.employee_select_relationship') }}
                                 </option>
 
-                                @foreach(
-                                    \App\Enums\EmergencyRelationship::cases()
-                                    as $relationship
-                                )
+                                @foreach(\App\Enums\EmergencyRelationship::cases() as $relationship)
 
                                     <option
                                         value="{{ $relationship->value }}"
-                                        @selected(
-                                            old('emergency_relationship')
-                                            === $relationship->value
-                                        )
+                                        @selected(old('emergency_relationship') === $relationship->value)
                                     >
                                         {{ $relationship->label() }}
                                     </option>
@@ -2044,14 +1815,12 @@
 
                         </div>
 
-
-
                         {{-- FULL NAME --}}
 
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-                                Full Name
+                                {{ __('menu.employee_full_name') }}
                             </label>
 
                             <input
@@ -2059,20 +1828,17 @@
                                 name="emergency_full_name"
                                 class="form-control"
                                 value="{{ old('emergency_full_name') }}"
-                                placeholder="Emergency contact name"
                                 autocomplete="off"
                             >
 
                         </div>
-
-
 
                         {{-- PHONE --}}
 
                         <div class="col-12 col-md-4">
 
                             <label class="form-label">
-                                Phone
+                                {{ __('menu.employee_phone') }}
                             </label>
 
                             <input
@@ -2080,28 +1846,29 @@
                                 name="emergency_phone"
                                 class="form-control"
                                 value="{{ old('emergency_phone') }}"
-                                placeholder="+243 XXX XXX XXX"
                                 autocomplete="off"
                             >
 
                         </div>
-
-
 
                         {{-- ADDRESS --}}
 
                         <div class="col-12">
 
                             <label class="form-label">
-                                Address
+                                {{ __('menu.employee_address') }}
                             </label>
 
                             <textarea
                                 name="emergency_address"
                                 class="form-control"
                                 rows="3"
-                                placeholder="Emergency contact address"
                                 autocomplete="off"
+                                autocorrect="off"
+                                autocapitalize="off"
+                                spellcheck="false"
+                                data-form-type="other"
+                                data-lpignore="true"
                             >{{ old('emergency_address') }}</textarea>
 
                         </div>
@@ -2109,6 +1876,7 @@
                     </div>
 
                 </div>
+
 
 
 
@@ -2124,16 +1892,11 @@
                     <div class="step-title">
 
                         <h5>
-
                             <i class="bi bi-cash-stack me-2"></i>
-
-                            Salary Information
-
+                            {{ __('menu.sal_title') }}
                         </h5>
 
-                        <p>
-                            Enter employee salary information.
-                        </p>
+                        <p>{{ __('menu.sal_desc') }}</p>
 
                     </div>
 
@@ -2141,19 +1904,27 @@
                     <div class="row g-3">
 
 
+                        {{-- ================= BASE SALARY ================= --}}
+
+                        <div class="col-12">
+                            <h6 class="mb-1">
+                                <i class="bi bi-cash me-2"></i>
+                                {{ __('menu.sal_section_base') }}
+                            </h6>
+                        </div>
+
+
                         {{-- BASE SALARY --}}
 
-                        <div class="col-12 col-md-4">
+                        <div class="col-12 col-md-3">
 
-                            <label class="form-label">
-                                Base Salary
-                            </label>
+                            <label class="form-label">{{ __('menu.sal_base_salary') }}</label>
 
                             <input
                                 type="number"
                                 name="salary_base_salary"
                                 id="salary_base_salary"
-                                class="form-control"
+                                class="form-control @error('salary_base_salary') is-invalid @enderror"
                                 value="{{ old('salary_base_salary') }}"
                                 min="0"
                                 step="0.01"
@@ -2161,112 +1932,342 @@
                                 autocomplete="off"
                             >
 
-                        </div>
+                            @error('salary_base_salary')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
 
+                        </div>
 
 
                         {{-- CATEGORY --}}
 
-                        <div class="col-12 col-md-4">
+                        <div class="col-12 col-md-3">
 
-                            <label class="form-label">
-                                Salary Category
-                            </label>
+                            <label class="form-label">{{ __('menu.sal_category') }}</label>
 
                             <select
                                 name="salary_category"
                                 id="categorySelect"
-                                class="form-select"
+                                class="form-select @error('salary_category') is-invalid @enderror"
                                 autocomplete="off"
                             >
 
-                                <option value="">
-                                    Select category
-                                </option>
+                                <option value="">{{ __('menu.sal_select_category') }}</option>
 
-                                @foreach(
-                                    \App\Enums\SalaryCategory::cases()
-                                    as $category
-                                )
-
+                                @foreach(\App\Enums\SalaryCategory::cases() as $category)
                                     <option
                                         value="{{ $category->value }}"
-                                        @selected(
-                                            old('salary_category')
-                                            === $category->value
-                                        )
+                                        @selected(old('salary_category') === $category->value)
                                     >
                                         {{ $category->label() }}
                                     </option>
-
                                 @endforeach
 
                             </select>
 
+                            @error('salary_category')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+
                         </div>
 
 
+                        {{-- ECHELON (automatic) --}}
 
-                        {{-- ECHELON --}}
+                        <div class="col-12 col-md-3">
 
-                        <div class="col-12 col-md-4">
-
-                            <label class="form-label">
-                                Echelon
-                            </label>
+                            <label class="form-label">{{ __('menu.sal_echelon') }}</label>
 
                             <input
                                 type="text"
                                 name="salary_echelon"
                                 id="echelonSelect"
-                                class="form-control"
+                                class="form-control bg-light @error('salary_echelon') is-invalid @enderror"
                                 value="{{ old('salary_echelon') }}"
-                                placeholder="Echelon"
+                                placeholder="{{ __('menu.sal_echelon_auto') }}"
+                                readonly
                                 autocomplete="off"
                             >
 
-                        </div>
+                            @error('salary_echelon')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
 
+                        </div>
 
 
                         {{-- CURRENCY --}}
 
-                        <div class="col-12 col-md-4">
+                        <div class="col-12 col-md-3">
 
-                            <label class="form-label">
-                                Currency
-                            </label>
+                            <label class="form-label">{{ __('menu.sal_currency') }}</label>
 
                             <select
                                 name="salary_currency"
-                                class="form-select"
+                                class="form-select @error('salary_currency') is-invalid @enderror"
                                 autocomplete="off"
                             >
 
-                                <option value="">
-                                    Select currency
-                                </option>
+                                <option value="">{{ __('menu.sal_select_currency') }}</option>
 
-                                @foreach(
-                                    \App\Enums\SalaryCurrency::cases()
-                                    as $currency
-                                )
-
+                                @foreach(\App\Enums\SalaryCurrency::cases() as $currency)
                                     <option
                                         value="{{ $currency->value }}"
-                                        @selected(
-                                            old('salary_currency')
-                                            === $currency->value
-                                        )
+                                        @selected(old('salary_currency') === $currency->value)
                                     >
                                         {{ $currency->label() }}
                                     </option>
-
                                 @endforeach
 
                             </select>
 
+                            @error('salary_currency')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+
                         </div>
+
+
+                        {{-- ================= PAYMENT METHODS (several allowed) ================= --}}
+
+                        <div class="col-12 mt-4">
+
+                            <h6 class="mb-1">
+                                <i class="bi bi-wallet2 me-2"></i>
+                                {{ __('menu.sal_payment_methods') }}
+                            </h6>
+
+                            <small class="text-muted">{{ __('menu.sal_payment_methods_hint') }}</small>
+
+                        </div>
+
+                        <div class="col-12">
+
+                            <div class="d-flex flex-wrap gap-4">
+
+                                @foreach($paymentMethods as $key => $label)
+
+                                    <div class="form-check">
+
+                                        <input
+                                            type="checkbox"
+                                            name="salary_payment_methods[]"
+                                            value="{{ $key }}"
+                                            id="method_{{ $key }}"
+                                            class="form-check-input"
+                                            @checked(in_array($key, $oldMethods))
+                                        >
+
+                                        <label class="form-check-label" for="method_{{ $key }}">
+                                            {{ __('menu.' . $label) }}
+                                        </label>
+
+                                    </div>
+
+                                @endforeach
+
+                            </div>
+
+                            @error('salary_payment_methods')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
+
+                        </div>
+
+
+                        {{-- BANK DETAILS (only when "bank transfer" is checked) --}}
+
+                        <div
+                            class="col-12 {{ in_array('bank_transfer', $oldMethods) ? '' : 'd-none' }}"
+                            id="bankFields"
+                        >
+
+                            <div class="border bg-light p-3">
+
+                                <h6 class="mb-3">
+                                    <i class="bi bi-bank me-2"></i>
+                                    {{ __('menu.sal_bank_details') }}
+                                </h6>
+
+                                <div class="row g-3">
+
+                                    <div class="col-12 col-md-4">
+
+                                        <label class="form-label">
+                                            {{ __('menu.sal_bank_name') }}
+                                            <span class="text-danger">*</span>
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            name="salary_bank_name"
+                                            class="form-control @error('salary_bank_name') is-invalid @enderror"
+                                            value="{{ old('salary_bank_name') }}"
+                                            autocomplete="off"
+                                        >
+
+                                        @error('salary_bank_name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+
+                                    </div>
+
+                                    <div class="col-12 col-md-4">
+
+                                        <label class="form-label">
+                                            {{ __('menu.sal_bank_account_holder') }}
+                                            <span class="text-danger">*</span>
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            name="salary_bank_account_holder"
+                                            class="form-control @error('salary_bank_account_holder') is-invalid @enderror"
+                                            value="{{ old('salary_bank_account_holder') }}"
+                                            autocomplete="off"
+                                        >
+
+                                        @error('salary_bank_account_holder')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+
+                                    </div>
+
+                                    <div class="col-12 col-md-4">
+
+                                        <label class="form-label">
+                                            {{ __('menu.sal_bank_account_number') }}
+                                            <span class="text-danger">*</span>
+                                        </label>
+
+                                        <input
+                                            type="text"
+                                            name="salary_bank_account_number"
+                                            class="form-control @error('salary_bank_account_number') is-invalid @enderror"
+                                            value="{{ old('salary_bank_account_number') }}"
+                                            autocomplete="off"
+                                        >
+
+                                        @error('salary_bank_account_number')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+
+                                        <label class="form-label">
+                                            {{ __('menu.sal_rib') }}
+                                            <span class="text-danger">*</span>
+                                        </label>
+
+                                        <input
+                                            type="file"
+                                            name="salary_rib_file"
+                                            class="form-control @error('salary_rib_file') is-invalid @enderror"
+                                            accept="application/pdf,image/jpeg,image/png"
+                                        >
+
+                                        <small class="text-muted">{{ __('menu.sal_rib_hint') }}</small>
+
+                                        @error('salary_rib_file')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        {{-- ================= ALLOWANCES ================= --}}
+
+                        <div class="col-12 mt-4">
+                            <h6 class="mb-1">
+                                <i class="bi bi-plus-circle me-2"></i>
+                                {{ __('menu.sal_allowances') }}
+                            </h6>
+                        </div>
+
+                        @foreach($salaryAllowances as $name => $label)
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">{{ __('menu.' . $label) }}</label>
+                                <input
+                                    type="number"
+                                    name="{{ $name }}"
+                                    class="form-control @error($name) is-invalid @enderror"
+                                    value="{{ old($name) }}"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="0.00"
+                                    autocomplete="off"
+                                >
+                                @error($name)
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        @endforeach
+
+
+                        {{-- ================= RECURRING DEDUCTIONS ================= --}}
+
+                        <div class="col-12 mt-4">
+                            <h6 class="mb-1">
+                                <i class="bi bi-dash-circle me-2"></i>
+                                {{ __('menu.sal_recurring_deductions') }}
+                            </h6>
+                        </div>
+
+                        @foreach($salaryDeductions as $name => $label)
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">{{ __('menu.' . $label) }}</label>
+                                <input
+                                    type="number"
+                                    name="{{ $name }}"
+                                    class="form-control @error($name) is-invalid @enderror"
+                                    value="{{ old($name) }}"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="0.00"
+                                    autocomplete="off"
+                                >
+                                @error($name)
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        @endforeach
+
+
+                        {{-- ================= EMPLOYER CONTRIBUTIONS ================= --}}
+
+                        <div class="col-12 mt-4">
+                            <h6 class="mb-1">
+                                <i class="bi bi-building me-2"></i>
+                                {{ __('menu.sal_employer_contributions') }}
+                            </h6>
+                        </div>
+
+                        @foreach($salaryEmployer as $name => $label)
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">{{ __('menu.' . $label) }}</label>
+                                <input
+                                    type="number"
+                                    name="{{ $name }}"
+                                    class="form-control @error($name) is-invalid @enderror"
+                                    value="{{ old($name) }}"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="0.00"
+                                    autocomplete="off"
+                                >
+                                @error($name)
+                                <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        @endforeach
 
                     </div>
 
@@ -2799,6 +2800,22 @@
             }
 
 
+            const addressFields = document.querySelectorAll(
+                'textarea[name="employee_address"], textarea[name="emergency_address"]'
+            );
+
+            addressFields.forEach(function (field) {
+                field.setAttribute('autocomplete', 'new-password');
+                field.setAttribute('autocorrect', 'off');
+                field.setAttribute('autocapitalize', 'none');
+                field.setAttribute('spellcheck', 'false');
+
+                field.addEventListener('focus', function () {
+                    this.setAttribute('autocomplete', 'new-password');
+                });
+            });
+
+
 
             /* =========================================================
                VALIDATE STEP
@@ -3201,7 +3218,7 @@
 
 
             /* =========================================================
-               SALARY CATEGORY -> ECHELON
+               SALARY CATEGORY -> ECHELON (automatic, from the enum)
             ========================================================== */
 
             const categorySelect =
@@ -3210,84 +3227,20 @@
             const echelonSelect =
                 document.getElementById('echelonSelect');
 
-
-            /*
-             * This is only an example mapping.
-             * Change it according to your salary rules.
-             */
-
-            const echelons = {
-
-                A: [
-                    'A1',
-                    'A2',
-                    'A3'
-                ],
-
-                B: [
-                    'B1',
-                    'B2',
-                    'B3'
-                ],
-
-                C: [
-                    'C1',
-                    'C2',
-                    'C3'
-                ],
-
-                D: [
-                    'D1',
-                    'D2',
-                    'D3'
-                ]
-
-            };
+            const echelons =
+                @json($salaryEchelons);
 
 
             function updateEchelon() {
 
-                if (
-                    !categorySelect ||
-                    !echelonSelect
-                ) {
+                if (!categorySelect || !echelonSelect) {
 
                     return;
 
                 }
 
-
-                const category =
-                    categorySelect.value;
-
-
-                if (!category) {
-
-                    echelonSelect.value = '';
-
-                    return;
-
-                }
-
-
-                const values =
-                    echelons[category] || [];
-
-
-                /*
-                 * Your echelon field is currently
-                 * an INPUT, not a SELECT.
-                 *
-                 * If there are several echelons,
-                 * leave it available for manual entry.
-                 */
-
-                if (values.length === 1) {
-
-                    echelonSelect.value =
-                        values[0];
-
-                }
+                echelonSelect.value =
+                    echelons[categorySelect.value] || '';
 
             }
 
@@ -3299,8 +3252,59 @@
                     updateEchelon
                 );
 
-
                 updateEchelon();
+
+            }
+
+
+
+            /* =========================================================
+               PAYMENT METHODS -> BANK DETAILS
+            ========================================================== */
+
+            const bankMethod =
+                document.getElementById('method_bank_transfer');
+
+            const bankFields =
+                document.getElementById('bankFields');
+
+
+            function updateBankFields() {
+
+                if (!bankMethod || !bankFields) {
+
+                    return;
+
+                }
+
+                const show =
+                    bankMethod.checked;
+
+                bankFields.classList.toggle('d-none', !show);
+
+                /*
+                 * Hidden fields are disabled: they are not required,
+                 * not validated and not submitted.
+                 */
+
+                bankFields.querySelectorAll('input').forEach(function (input) {
+
+                    input.disabled = !show;
+                    input.required = show;
+
+                });
+
+            }
+
+
+            if (bankMethod) {
+
+                bankMethod.addEventListener(
+                    'change',
+                    updateBankFields
+                );
+
+                updateBankFields();
 
             }
 
@@ -3310,27 +3314,38 @@
                AUTOCOMPLETE OFF
             ========================================================== */
 
+
+
             if (form) {
 
-                form.setAttribute(
-                    'autocomplete',
-                    'off'
-                );
+                form.setAttribute('autocomplete', 'off');
+
+                form.querySelectorAll('input, select, textarea').forEach(function (field) {
+
+                    field.setAttribute('autocomplete', 'off');
+                    field.setAttribute('autocorrect', 'off');
+                    field.setAttribute('autocapitalize', 'off');
+                    field.setAttribute('spellcheck', 'false');
 
 
-                form.querySelectorAll(
-                    'input, select, textarea'
-                ).forEach(function (field) {
+                    field.setAttribute('data-form-type', 'other');
 
-                    field.setAttribute(
-                        'autocomplete',
-                        'off'
-                    );
+                    // Prevent automatic suggestions on text inputs
+                    if (
+                        field.tagName === 'INPUT' &&
+                        field.type !== 'hidden' &&
+                        field.type !== 'file' &&
+                        field.type !== 'checkbox' &&
+                        field.type !== 'radio' &&
+                        field.type !== 'submit' &&
+                        field.type !== 'button'
+                    ) {
+                        field.setAttribute('autocomplete', 'new-password');
+                    }
 
                 });
 
             }
-
 
 
             /* =========================================================
