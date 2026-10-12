@@ -262,7 +262,7 @@ return [
     // Page
     'pay_title' => 'Pay Employee',
     'pay_home' => 'Home',
-    'pay_page_title' => 'Pay Employee - HR Management',
+    'pay_page_title' => 'Pay Employee - AMC SARL',
     'pay_correct_errors' => 'Please correct the following errors:',
 
     // Employee info
@@ -270,7 +270,7 @@ return [
     'pay_matricule' => 'Matricule',
     'pay_department' => 'Department',
     'pay_job_title' => 'Job Title',
-    'pay_category_echelon' => 'Cat. / Ech.',
+    'pay_category_echelon' => 'Cat. / Ech. / Sal.',
     'pay_period' => 'Period',
 
     // Gains
@@ -287,6 +287,7 @@ return [
     'pay_bonus' => 'Bonus',
     'pay_overtime_hours' => 'Overtime Hours',
     'pay_overtime_amount' => 'Overtime Amount',
+    'pay_sick_days' => 'Sick Days',
 
     // Deductions
     'pay_deductions' => 'Deductions',

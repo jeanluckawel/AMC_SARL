@@ -1,9 +1,7 @@
 
 <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
 
-    {{-- =========================================================
-         BRAND
-    ========================================================== --}}
+
 
     <div class="sidebar-brand">
         <a href="{{ route('dashboard') }}" class="brand-link">
@@ -20,7 +18,7 @@
     </div>
 
     <style>
-        /* BRAND : même fond que la sidebar */
+
         .app-sidebar .sidebar-brand {
             background-color: var(--lte-sidebar-bg, var(--bs-secondary-bg)) !important;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -50,9 +48,6 @@
         }
     </style>
 
-    {{-- =========================================================
-         SIDEBAR
-    ========================================================== --}}
 
     <div class="sidebar-wrapper">
 
@@ -67,7 +62,7 @@
                 id="navigation"
             >
 
-                {{-- MAIN MENU --}}
+
 
                 <li class="nav-header">
                     {{ __('menu.main_menu') }}
@@ -83,7 +78,7 @@
                     </a>
                 </li>
 
-                {{-- REQUESTS --}}
+
 
                 @can('requests.view')
 
@@ -103,7 +98,7 @@
 
                 @endcan
 
-                {{-- PROCUREMENT --}}
+
 
                 @canany([
                     'procurement.view',
@@ -159,7 +154,7 @@
 
                 @endcanany
 
-                {{-- FINANCE --}}
+
 
                 @canany([
                     'finance.view',
@@ -282,7 +277,7 @@
 
                 @endcanany
 
-                {{-- EMPLOYEE MANAGEMENT --}}
+
 
                 @canany([
                     'employees.view',
@@ -331,7 +326,7 @@
 
                 @endcanany
 
-                {{-- PAYROLL MANAGEMENT --}}
+
 
                 <li class="nav-header">
                     {{ __('menu.payroll_management') }}
@@ -363,7 +358,7 @@
                     </a>
                 </li>
 
-                {{-- ORGANIZATION --}}
+
 
                 @canany([
                     'departments.view',
@@ -441,7 +436,7 @@
 
                 @endcanany
 
-                {{-- PURCHASE ORDERS --}}
+
 
                 @can('purchase_orders.view')
 
@@ -457,7 +452,7 @@
 
                 @endcan
 
-                {{-- ADMINISTRATION --}}
+
 
                 @canany([
                     'users.view',
@@ -528,7 +523,6 @@
 
                 @endcan
 
-                {{-- ACCOUNT --}}
 
                 <li class="nav-header">
                     {{ __('menu.account') }}
@@ -576,9 +570,7 @@
 </aside>
 
 <style>
-    /* =========================================================
-       BRAND
-    ========================================================= */
+
 
     .sidebar-brand {
         background: #fff;
@@ -608,9 +600,6 @@
         letter-spacing: .3px;
     }
 
-    /* =========================================================
-       BASE ICON STYLE
-    ========================================================= */
 
     .app-sidebar .nav-link .nav-icon {
         width: 1.5rem;
@@ -624,78 +613,62 @@
         transform: translateX(2px);
     }
 
-    /* =========================================================
-       SECTION COLORS
-    ========================================================= */
 
-    /* Dashboard — Blue */
     .icon-dashboard {
         color: #60a5fa !important;
     }
 
-    /* Requests — Cyan */
     .icon-requests {
         color: #22d3ee !important;
     }
 
-    /* Procurement — Orange */
     .icon-procurement {
         color: #fb923c !important;
     }
 
-    /* Finance — Green */
     .icon-finance {
         color: #4ade80 !important;
     }
 
-    /* CEO — Purple */
+
     .icon-ceo {
         color: #c084fc !important;
     }
 
-    /* Employee Management — Light Blue */
     .icon-employees {
         color: #38bdf8 !important;
     }
 
-    /* Payroll — Emerald */
+
     .icon-payroll {
         color: #34d399 !important;
     }
 
-    /* Organization — Turquoise */
     .icon-organization {
         color: #2dd4bf !important;
     }
 
-    /* Quotations — Yellow */
+
     .icon-quotations {
         color: #facc15 !important;
     }
 
-    /* Purchase Orders — Indigo */
     .icon-purchase-orders {
         color: #818cf8 !important;
     }
 
-    /* Administration — Pink */
     .icon-administration {
         color: #f472b6 !important;
     }
 
-    /* Audit — Gray */
     .icon-audit {
         color: #d1d5db !important;
     }
 
-    /* Account — White */
     .icon-account {
         color: #e5e7eb !important;
     }
 
-    /* =========================================================
-       HOVER COLORS — KEEP SECTION IDENTITY
-    ========================================================= */
 
     .app-sidebar .nav-link:hover .icon-dashboard {
         color: #93c5fd !important;
@@ -749,9 +722,6 @@
         color: #ffffff !important;
     }
 
-    /* =========================================================
-       ACTIVE LINKS
-    ========================================================= */
 
     .app-sidebar .nav-link.active {
         font-weight: 600;
@@ -761,7 +731,7 @@
         filter: brightness(1.15);
     }
 
-    /* Keep the colored icons visible on the dark sidebar */
+
     .app-sidebar[data-bs-theme="dark"] .nav-link .nav-icon {
         opacity: 1;
     }

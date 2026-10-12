@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Create Employee - HR Management')
+@section('title', 'Create Employee - AMC SARL')
 
 @section('content')
 

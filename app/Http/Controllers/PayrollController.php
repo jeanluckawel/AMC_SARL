@@ -74,11 +74,7 @@ class PayrollController extends Controller
         ])->findOrFail($employeeId);
 
 
-        /*
-        |--------------------------------------------------------------------------
-        | Vérifier si l'employé a déjà été payé
-        |--------------------------------------------------------------------------
-        */
+
 
         $existingPayroll = Payroll::where('employee_id', $employee->id)
             ->where('year', $year)
@@ -112,661 +108,191 @@ class PayrollController extends Controller
         ]);
     }
 
+
+
+
+
+
+    private const STANDARD_DAYS = 26;
+    private const HOURS_PER_DAY = 8;
+    private const OVERTIME_RATE = 1.3;
+
     public function store(Request $request)
     {
-        /*
-        |--------------------------------------------------------------------------
-        | VALIDATION
-        |--------------------------------------------------------------------------
-        */
-
         $validated = $request->validate([
+            'employee_id' => ['required', 'integer', 'exists:employees,id'],
+            'year'        => ['required', 'integer', 'min:2000', 'max:2100'],
+            'month'       => ['required', 'integer', 'between:1,12'],
 
-            'employee_id' => [
-                'required',
-                'integer',
-                'exists:employees,id',
-            ],
+            // Gains (saisies)
+            'days_worked'    => ['required', 'integer', 'between:1,26'],
+            'sick_days'      => ['nullable', 'numeric', 'min:0', 'max:31'],
+            'overtime_hours' => ['nullable', 'numeric', 'min:0', 'max:300'],
+            'bonus'          => ['nullable', 'numeric', 'min:0'],
+            'exchange_rate'  => ['nullable', 'numeric', 'min:0'],
 
-            'year' => [
-                'required',
-                'integer',
-                'min:2000',
-                'max:2100',
-            ],
+            // Retenues (saisies)
+            'ipr'              => ['nullable', 'numeric', 'min:0'],
+            'salary_advances'  => ['nullable', 'numeric', 'min:0'],
+            'other_deductions' => ['nullable', 'numeric', 'min:0'],
 
-            'month' => [
-                'required',
-                'integer',
-                'between:1,12',
-            ],
-
-            'days_worked' => [
-                'required',
-                'numeric',
-                'min:0',
-                'max:31',
-            ],
-
-            'basic_salary' => [
-                'required',
-                'numeric',
-                'min:0',
-            ],
-
-            'overtime_hours' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'overtime_amount' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'bonus' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'other_taxable_allowances' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'housing_allowance' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'transport_allowance' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'meal_allowance' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'family_allowance' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'medical_allowance' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'other_non_taxable_allowances' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'cnss_employee' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'ipr' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'salary_advances' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'syndicate_deduction' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'other_deductions' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'cnss_employer' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'inpp_employer' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'onem_employer' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'ier' => [
-                'nullable',
-                'numeric',
-                'min:0',
-            ],
-
-            'currency' => [
-                'required',
-                'string',
-                'size:3',
-                Rule::in([
-                    'CDF',
-                    'USD',
-                ]),
-            ],
-
-            'payment_method' => [
-                'nullable',
-                'string',
-                Rule::in([
-                    'bank_transfer',
-                    'cash',
-                    'cheque',
-                ]),
-            ],
-
-            'remarks' => [
-                'nullable',
-                'string',
-                'max:5000',
-            ],
+            'remarks' => ['nullable', 'string', 'max:5000'],
         ]);
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | NORMALIZE VALUES
-        |--------------------------------------------------------------------------
-        */
-
         $employeeId = (int) $validated['employee_id'];
+        $year       = (int) $validated['year'];
+        $month      = (int) $validated['month'];
 
-        $year = (int) $validated['year'];
+        $employee = Employee::with('salary')->findOrFail($employeeId);
+        $salary   = $employee->salary;
 
-        $month = (int) $validated['month'];
+        if (! $salary) {
+            return back()->withInput()->withErrors([
+                'employee_id' => 'Cet employé n\'a pas de fiche salariale.',
+            ]);
+        }
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | EMPLOYEE
-        |--------------------------------------------------------------------------
-        */
-
-        $employee = Employee::findOrFail($employeeId);
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | CHECK DUPLICATE PAYROLL
-        |--------------------------------------------------------------------------
-        */
-
-        $alreadyPaid = Payroll::query()
-            ->where('employee_id', $employeeId)
+        // Doublon
+        $alreadyPaid = Payroll::where('employee_id', $employeeId)
             ->where('year', $year)
             ->where('month', $month)
             ->exists();
 
-
         if ($alreadyPaid) {
-
             return redirect()
-                ->route('payroll.index', [
-                    'year' => $year,
-                    'month' => $month,
-                ])
-                ->with(
-                    'error',
-                    'This employee has already been paid for this payroll period.'
-                );
+                ->route('payroll.index', ['year' => $year, 'month' => $month])
+                ->with('error', 'Cet employé a déjà été payé pour cette période.');
         }
 
+        // Valeurs issues du système (fiche salariale)
+        $s = fn (string $field): float => (float) ($salary->{$field} ?? 0);
 
-        /*
-        |--------------------------------------------------------------------------
-        | GET VALUES
-        |--------------------------------------------------------------------------
-        */
+        $baseSalary = $s('base_salary');
 
-        $basicSalary = (float) ($validated['basic_salary'] ?? 0);
+        $housing         = $s('housing_allowance');
+        $transport       = $s('transport_allowance');
+        $meal            = $s('meal_allowance');
+        $family          = $s('family_allowance');
+        $medical         = $s('medical_allowance');
+        $otherNonTaxable = $s('other_non_taxable_allowances');
+        $otherTaxable    = $s('other_taxable_allowances');
 
-        $overtimeHours = (float) ($validated['overtime_hours'] ?? 0);
+        $cnssEmployee = $s('cnss_employee');
+        $syndicate    = $s('syndicate_deduction');
+        $ier          = $s('ier');
 
-        $overtimeAmount = (float) ($validated['overtime_amount'] ?? 0);
+        $cnssEmployer = $s('cnss_employer');
+        $inppEmployer = $s('inpp_employer');
+        $onemEmployer = $s('onem_employer');
 
-        $bonus = (float) ($validated['bonus'] ?? 0);
+        // Valeurs saisies
+        $daysWorked      = (float) $validated['days_worked'];
+        $sickDays        = (float) ($validated['sick_days'] ?? 0);
+        $overtimeHours   = (float) ($validated['overtime_hours'] ?? 0);
+        $bonus           = (float) ($validated['bonus'] ?? 0);
+        $exchangeRate    = (float) ($validated['exchange_rate'] ?? 0) ?: null;
+        $ipr             = (float) ($validated['ipr'] ?? 0);
+        $salaryAdvances  = (float) ($validated['salary_advances'] ?? 0);
+        $otherDeductions = (float) ($validated['other_deductions'] ?? 0);
 
-        $otherTaxableAllowances =
-            (float) ($validated['other_taxable_allowances'] ?? 0);
+        // Calculs
+        $dailyRate   = $baseSalary / self::STANDARD_DAYS;
+        $hourlyRate  = $dailyRate / self::HOURS_PER_DAY;
 
+        $basicSalary    = round($dailyRate * $daysWorked, 2);
+        $overtimeAmount = round($overtimeHours * $hourlyRate * self::OVERTIME_RATE, 2);
 
-        $housingAllowance =
-            (float) ($validated['housing_allowance'] ?? 0);
-
-        $transportAllowance =
-            (float) ($validated['transport_allowance'] ?? 0);
-
-        $mealAllowance =
-            (float) ($validated['meal_allowance'] ?? 0);
-
-        $familyAllowance =
-            (float) ($validated['family_allowance'] ?? 0);
-
-        $medicalAllowance =
-            (float) ($validated['medical_allowance'] ?? 0);
-
-        $otherNonTaxableAllowances =
-            (float) ($validated['other_non_taxable_allowances'] ?? 0);
-
-
-        $cnssEmployee =
-            (float) ($validated['cnss_employee'] ?? 0);
-
-        $ipr =
-            (float) ($validated['ipr'] ?? 0);
-
-        $salaryAdvances =
-            (float) ($validated['salary_advances'] ?? 0);
-
-        $syndicateDeduction =
-            (float) ($validated['syndicate_deduction'] ?? 0);
-
-        $otherDeductions =
-            (float) ($validated['other_deductions'] ?? 0);
-
-
-        $cnssEmployer =
-            (float) ($validated['cnss_employer'] ?? 0);
-
-        $inppEmployer =
-            (float) ($validated['inpp_employer'] ?? 0);
-
-        $onemEmployer =
-            (float) ($validated['onem_employer'] ?? 0);
-
-        $ier =
-            (float) ($validated['ier'] ?? 0);
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | CALCULATE GROSS SALARY
-        |--------------------------------------------------------------------------
-        |
-        | Gross =
-        | basic salary
-        | + overtime
-        | + bonus
-        | + taxable allowances
-        | + non-taxable allowances
-        |
-        */
-
-        $grossSalary =
-            $basicSalary
+        $grossSalary = $basicSalary
             + $overtimeAmount
             + $bonus
-            + $otherTaxableAllowances
-            + $housingAllowance
-            + $transportAllowance
-            + $mealAllowance
-            + $familyAllowance
-            + $medicalAllowance
-            + $otherNonTaxableAllowances;
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | SOCIAL BASE
-        |--------------------------------------------------------------------------
-        |
-        | Base utilisée pour les calculs sociaux.
-        |
-        | Ici on utilise le brut comme base initiale.
-        | Les règles de plafonnement peuvent être ajoutées
-        | selon les paramètres légaux/conventionnels de l'entreprise.
-        |
-        */
+            + $otherTaxable
+            + $housing + $transport + $meal + $family + $medical
+            + $otherNonTaxable;
 
         $socialBase = $grossSalary;
+        $fiscalBase = $basicSalary + $overtimeAmount + $bonus + $otherTaxable;
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | FISCAL BASE
-        |--------------------------------------------------------------------------
-        |
-        | Base imposable initiale.
-        |
-        | À adapter avec les règles fiscales RDC définitives
-        | appliquées par ton entreprise.
-        |
-        */
-
-        $fiscalBase =
-            $basicSalary
-            + $overtimeAmount
-            + $bonus
-            + $otherTaxableAllowances;
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | TOTAL EMPLOYEE DEDUCTIONS
-        |--------------------------------------------------------------------------
-        |
-        | IMPORTANT :
-        | Les charges patronales ne sont PAS incluses ici.
-        |
-        */
-
-        $totalDeductions =
-            $cnssEmployee
-            + $ipr
-            + $salaryAdvances
-            + $syndicateDeduction
-            + $otherDeductions;
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | NET SALARY
-        |--------------------------------------------------------------------------
-        */
-
-        $netSalary =
-            $grossSalary - $totalDeductions;
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | PROTECTION
-        |--------------------------------------------------------------------------
-        */
+        // Les charges patronales et l'IER ne sont pas déduits du net
+        $totalDeductions = $cnssEmployee + $ipr + $salaryAdvances + $syndicate + $otherDeductions;
+        $netSalary       = $grossSalary - $totalDeductions;
 
         if ($netSalary < 0) {
-
-            return back()
-                ->withInput()
-                ->withErrors([
-                    'net_salary' =>
-                        'The total deductions cannot be greater than the gross salary.',
-                ]);
+            return back()->withInput()->withErrors([
+                'net_salary' => 'Le total des retenues ne peut pas dépasser le salaire brut.',
+            ]);
         }
 
+        // Mode de paiement : premier mode défini sur la fiche salariale
+        $methods = $salary->payment_methods ?? [];
+        if (is_string($methods)) {
+            $methods = json_decode($methods, true) ?: [];
+        }
+        $paymentMethod = array_values((array) $methods)[0] ?? 'cash';
 
-        /*
-        |--------------------------------------------------------------------------
-        | PAYMENT REFERENCE
-        |--------------------------------------------------------------------------
-        */
-
-        $paymentReference =
-            'PAY-' .
-            $year .
-            str_pad(
-                (string) $month,
-                2,
-                '0',
-                STR_PAD_LEFT
-            ) .
-            '-' .
-            strtoupper(
-                Str::random(8)
-            );
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | PAYMENT METHOD
-        |--------------------------------------------------------------------------
-        */
-
-        $paymentMethod =
-            $validated['payment_method']
-            ?? 'bank_transfer';
-
-
-        /*
-        |--------------------------------------------------------------------------
-        | CREATE PAYROLL
-        |--------------------------------------------------------------------------
-        */
+        $paymentReference = 'PAY-' . $year . str_pad((string) $month, 2, '0', STR_PAD_LEFT)
+            . '-' . strtoupper(Str::random(8));
 
         DB::transaction(function () use (
-            $employeeId,
-            $year,
-            $month,
-            $validated,
-            $basicSalary,
-            $overtimeHours,
-            $overtimeAmount,
-            $bonus,
-            $otherTaxableAllowances,
-            $housingAllowance,
-            $transportAllowance,
-            $mealAllowance,
-            $familyAllowance,
-            $medicalAllowance,
-            $otherNonTaxableAllowances,
-            $grossSalary,
-            $socialBase,
-            $fiscalBase,
-            $cnssEmployee,
-            $ipr,
-            $salaryAdvances,
-            $syndicateDeduction,
-            $otherDeductions,
-            $cnssEmployer,
-            $inppEmployer,
-            $onemEmployer,
-            $ier,
-            $totalDeductions,
-            $netSalary,
-            $paymentReference,
-            $paymentMethod
+            $employeeId, $year, $month, $daysWorked, $sickDays, $basicSalary,
+            $overtimeHours, $overtimeAmount, $exchangeRate, $bonus,
+            $otherTaxable, $housing, $transport, $meal, $family, $medical, $otherNonTaxable,
+            $grossSalary, $socialBase, $fiscalBase,
+            $cnssEmployee, $ipr, $salaryAdvances, $syndicate, $otherDeductions,
+            $cnssEmployer, $inppEmployer, $onemEmployer, $ier, $totalDeductions,
+            $netSalary, $salary, $paymentMethod, $paymentReference, $validated
         ) {
-
             Payroll::create([
-
-                /*
-                |--------------------------------------------------------------------------
-                | IDENTIFICATION
-                |--------------------------------------------------------------------------
-                */
-
                 'employee_id' => $employeeId,
+                'year'        => $year,
+                'month'       => $month,
 
-                'year' => $year,
-
-                'month' => $month,
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | WORK TIME
-                |--------------------------------------------------------------------------
-                */
-
-                'days_worked' =>
-                    (float) ($validated['days_worked'] ?? 26),
-
-                /*
-                |--------------------------------------------------------------------------
-                | EARNINGS
-                |--------------------------------------------------------------------------
-                */
-
-                'basic_salary' => $basicSalary,
-
+                'days_worked'    => $daysWorked,
+                'sick_days'      => $sickDays,
                 'overtime_hours' => $overtimeHours,
 
-                'overtime_amount' => $overtimeAmount,
-
-                'bonus' => $bonus,
-
-                'other_taxable_allowances' =>
-                    $otherTaxableAllowances,
-
-                'housing_allowance' =>
-                    $housingAllowance,
-
-                'transport_allowance' =>
-                    $transportAllowance,
-
-                'meal_allowance' =>
-                    $mealAllowance,
-
-                'family_allowance' =>
-                    $familyAllowance,
-
-                'medical_allowance' =>
-                    $medicalAllowance,
-
-                'other_non_taxable_allowances' =>
-                    $otherNonTaxableAllowances,
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | BASES
-                |--------------------------------------------------------------------------
-                */
+                'basic_salary'                 => $basicSalary,
+                'overtime_amount'              => $overtimeAmount,
+                'bonus'                        => $bonus,
+                'other_taxable_allowances'     => $otherTaxable,
+                'housing_allowance'            => $housing,
+                'transport_allowance'          => $transport,
+                'meal_allowance'               => $meal,
+                'family_allowance'             => $family,
+                'medical_allowance'            => $medical,
+                'other_non_taxable_allowances' => $otherNonTaxable,
 
                 'gross_salary' => $grossSalary,
+                'social_base'  => $socialBase,
+                'fiscal_base'  => $fiscalBase,
 
-                'social_base' => $socialBase,
+                'cnss_employee'       => $cnssEmployee,
+                'ipr'                 => $ipr,
+                'salary_advances'     => $salaryAdvances,
+                'syndicate_deduction' => $syndicate,
+                'other_deductions'    => $otherDeductions,
 
-                'fiscal_base' => $fiscalBase,
+                'cnss_employer' => $cnssEmployer,
+                'inpp_employer' => $inppEmployer,
+                'onem_employer' => $onemEmployer,
+                'ier'           => $ier,
 
+                'total_deductions' => $totalDeductions,
+                'net_salary'       => $netSalary,
 
-                /*
-                |--------------------------------------------------------------------------
-                | EMPLOYEE DEDUCTIONS
-                |--------------------------------------------------------------------------
-                */
+                'currency'          => strtoupper($salary->currency ?? 'CDF'),
+                'exchange_rate'     => $exchangeRate,
+                'payment_date'      => now()->toDateString(),
+                'payment_method'    => $paymentMethod,
+                'payment_reference' => $paymentReference,
 
-                'cnss_employee' =>
-                    $cnssEmployee,
-
-                'ipr' =>
-                    $ipr,
-
-                'salary_advances' =>
-                    $salaryAdvances,
-
-                'syndicate_deduction' =>
-                    $syndicateDeduction,
-
-                'other_deductions' =>
-                    $otherDeductions,
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | EMPLOYER CONTRIBUTIONS
-                |--------------------------------------------------------------------------
-                */
-
-                'cnss_employer' =>
-                    $cnssEmployer,
-
-                'inpp_employer' =>
-                    $inppEmployer,
-
-                'onem_employer' =>
-                    $onemEmployer,
-
-                'ier' =>
-                    $ier,
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | TOTALS
-                |--------------------------------------------------------------------------
-                */
-
-                'total_deductions' =>
-                    $totalDeductions,
-
-                'net_salary' =>
-                    $netSalary,
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | PAYMENT
-                |--------------------------------------------------------------------------
-                */
-
-                'currency' =>
-                    strtoupper($validated['currency']),
-
-                'payment_date' =>
-                    now()->toDateString(),
-
-                'payment_method' =>
-                    $paymentMethod,
-
-                'payment_reference' =>
-                    $paymentReference,
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | REMARKS
-                |--------------------------------------------------------------------------
-                */
-
-                'remarks' =>
-                    $validated['remarks'] ?? null,
+                'remarks' => $validated['remarks'] ?? null,
             ]);
         });
 
-
-        /*
-        |--------------------------------------------------------------------------
-        | REDIRECT
-        |--------------------------------------------------------------------------
-        */
-
         return redirect()
-            ->route('payroll.index', [
-                'year' => $year,
-                'month' => $month,
-            ])
-            ->with(
-                'success',
-                'Payroll successfully processed for ' .
-                $employee->first_name . ' ' .
-                ($employee->last_name ?? '') .
-                '. Payment reference: ' .
-                $paymentReference
-            );
+            ->route('payroll.index', ['year' => $year, 'month' => $month])
+            ->with('success', 'Paie traitée pour ' . $employee->first_name . ' '
+                . ($employee->last_name ?? '') . '. Référence : ' . $paymentReference);
     }
 
     public function show(Payroll $payroll): View

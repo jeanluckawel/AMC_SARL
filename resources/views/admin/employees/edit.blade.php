@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', 'Edit Employee - HR Management')
+@section('title', 'Edit Employee - AMC SARL')
 
 @section('content')
 

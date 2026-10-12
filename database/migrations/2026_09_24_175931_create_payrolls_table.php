@@ -15,18 +15,17 @@ return new class extends Migration
 
             $table->id();
 
-
             $table->foreignId('employee_id')
                 ->constrained('employees')
                 ->cascadeOnUpdate()
                 ->restrictOnDelete();
-
 
             $table->unsignedSmallInteger('year');
             $table->unsignedTinyInteger('month');
 
 
             $table->decimal('days_worked', 4, 1)->default(26.0);
+            $table->decimal('sick_days', 4, 1)->default(0);
             $table->decimal('basic_salary', 15, 2)->default(0);
 
 
@@ -60,7 +59,6 @@ return new class extends Migration
             $table->decimal('inpp_employer', 15, 2)->default(0);
             $table->decimal('onem_employer', 15, 2)->default(0);
 
-
             $table->decimal('ier', 15, 2)->default(0);
 
 
@@ -69,21 +67,20 @@ return new class extends Migration
 
 
             $table->string('currency', 3)->default('CDF');
+            $table->decimal('exchange_rate', 12, 4)->nullable();
             $table->date('payment_date')->nullable();
-            $table->string('payment_method')->default('bank_transfer');
+            $table->string('payment_method')->default('cash');
             $table->string('payment_reference')->nullable();
-
 
             $table->text('remarks')->nullable();
 
             $table->timestamps();
             $table->softDeletes();
+
+            $table->unique(['employee_id', 'year', 'month']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('payrolls');

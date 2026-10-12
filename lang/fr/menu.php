@@ -234,7 +234,7 @@ return [
     'pay_matricule' => 'Matricule',
     'pay_department' => 'Département',
     'pay_job_title' => 'Poste',
-    'pay_category_echelon' => 'Cat. / Éch.',
+    'pay_category_echelon' => 'Cat. / Éch. / Sal.',
     'pay_period' => 'Période',
 
     // Gains
@@ -251,6 +251,7 @@ return [
     'pay_bonus' => 'Prime',
     'pay_overtime_hours' => 'Heures supplémentaires',
     'pay_overtime_amount' => 'Montant heures supp.',
+    'pay_sick_days' => 'Jours de Maladie',
 
     // Retenues
     'pay_deductions' => 'Retenues',
