@@ -26,7 +26,6 @@ return new class extends Migration
             $table->text('description')
                 ->nullable();
 
-            // Montant calculé par Procurement
             $table->decimal('total_amount', 15, 2)
                 ->default(0);
 
