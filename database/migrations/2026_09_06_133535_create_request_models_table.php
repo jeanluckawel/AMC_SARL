@@ -18,10 +18,10 @@ return new class extends Migration
                 ->constrained('users')
                 ->cascadeOnDelete();
 
-            $table->string('reference')
+            $table->string('reference', 191)
                 ->unique();
 
-            $table->string('title');
+            $table->string('title', 191);
 
             $table->text('description')
                 ->nullable();
@@ -30,7 +30,7 @@ return new class extends Migration
             $table->decimal('total_amount', 15, 2)
                 ->default(0);
 
-            $table->string('status');
+            $table->string('status', 100);
 
             $table->timestamp('approved_at')
                 ->nullable();
@@ -38,9 +38,9 @@ return new class extends Migration
             $table->timestamp('rejected_at')
                 ->nullable();
 
-            $table->string('document_path')
-                ->nullable()
-                ->after('total_amount');
+            // Chemin du document
+            $table->string('document_path', 191)
+                ->nullable();
 
             $table->boolean('budget_consumed')
                 ->default(false);
@@ -50,7 +50,6 @@ return new class extends Migration
             $table->index('requester_id');
             $table->index('status');
             $table->index('created_at');
-
         });
     }
 
