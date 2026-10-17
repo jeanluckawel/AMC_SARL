@@ -8,6 +8,7 @@ use App\Enums\Gender;
 use App\Enums\MaritalStatus;
 use App\Enums\WorkLocation;
 use App\Http\Requests\StoreEmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\EmployeeBankAccount;
@@ -207,321 +208,230 @@ class EmployeeController extends Controller
     }
 
 
+//    public function edit(Employee $employee): View
+//    {
+//
+//        $employee->load(['parents', 'emergencyContacts', 'salary']);
+//
+//        $departments = Department::all();
+//
+//        $sections = Section::where(
+//            'department_id',
+//            $employee->department_id
+//        )->get();
+//
+//        $jobTitles = JobTitle::where(
+//            'section_id',
+//            $employee->section_id
+//        )->get();
+//
+//        return view(
+//            'admin.employees.edit',
+//            compact('employee', 'departments', 'sections', 'jobTitles')
+//        );
+//    }
+
+
+
+
+
+
     public function edit(Employee $employee): View
     {
 
-        $employee->load(['parents', 'emergencyContacts', 'salary']);
+        $employee->load(['parents', 'emergencyContacts', 'salary', 'bankAccount']);
 
         $departments = Department::all();
+        $sections    = Section::where('department_id', $employee->department_id)->get();
+        $jobTitles   = JobTitle::where('section_id', $employee->section_id)->get();
 
-        $sections = Section::where(
-            'department_id',
-            $employee->department_id
-        )->get();
-
-        $jobTitles = JobTitle::where(
-            'section_id',
-            $employee->section_id
-        )->get();
-
-        return view(
-            'admin.employees.edit',
-            compact('employee', 'departments', 'sections', 'jobTitles')
-        );
+        return view('admin.employees.edit', compact('employee', 'departments', 'sections', 'jobTitles'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Employee $employee): RedirectResponse
+
+    public function update(UpdateEmployeeRequest $request, Employee $employee): RedirectResponse
     {
-        $validated = $request->validate([
+        $validated = $request->validated();
 
-            /*
-            |--------------------------------------------------------------------------
-            | PERSONAL INFORMATION
-            |--------------------------------------------------------------------------
-            */
+        $storedFiles = [];
+        $oldFiles    = [];
 
-            'first_name' => ['required', 'string', 'min:2', 'max:255'],
-            'middle_name' => ['nullable', 'string', 'min:2', 'max:255'],
-            'last_name' => ['required', 'string', 'min:2', 'max:255'],
-            'gender' => ['required', Rule::enum(Gender::class)],
-            'date_of_birth' => ['required', 'date', 'before:today'],
+        try {
 
-            'number_card' => [
-                'required',
-                'string',
-                'min:10',
-                'max:255',
+            DB::transaction(function () use ($request, $validated, $employee, &$storedFiles, &$oldFiles) {
 
-                // On ignore l'employé actuel dans la règle unique
-                Rule::unique('employees', 'number_card')
-                    ->ignore($employee->id),
-            ],
+                /* ---------------- PHOTO ---------------- */
 
-            'country' => ['required', 'string', 'max:255'],
-            'marital_status' => ['required', Rule::enum(MaritalStatus::class)],
+                $photoPath = $employee->photo;
 
+                if ($request->hasFile('photo')) {
+                    $photoPath = $request->file('photo')->store('employees/photos', 'public');
+                    $storedFiles[] = ['public', $photoPath];
 
-            /*
-            |--------------------------------------------------------------------------
-            | CONTACT INFORMATION
-            |--------------------------------------------------------------------------
-            */
-
-            'employee_work_phone' => ['nullable', 'string', 'max:50'],
-            'employee_phone' => ['nullable', 'string', 'max:50'],
-            'employee_email' => ['nullable', 'email', 'max:255'],
-            'employee_address' => ['nullable', 'string'],
-
-            'photo' => [
-                'nullable',
-                'image',
-                'mimes:jpg,jpeg,png',
-                'max:2048',
-            ],
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | COMPANY
-            |--------------------------------------------------------------------------
-            */
-
-            'department_id' => ['required', 'integer', 'exists:departments,id'],
-
-            'section_id' => [
-                'required',
-                'integer',
-                Rule::exists('sections', 'id')
-                    ->where(fn ($query) => $query->where(
-                        'department_id',
-                        $request->department_id
-                    )),
-            ],
-
-            'job_title_id' => [
-                'nullable',
-                'integer',
-                Rule::exists('job_titles', 'id')
-                    ->where(fn ($query) => $query->where(
-                        'section_id',
-                        $request->section_id
-                    )),
-            ],
-
-            'contract_type' => ['required', Rule::enum(ContractType::class)],
-
-            'end_contract_date' => [
-                'nullable',
-                'date',
-                Rule::requiredIf(function () use ($request) {
-                    return in_array(
-                        $request->contract_type,
-                        ['CDD', 'Stage', 'Consultant'],
-                        true
-                    );
-                }),
-            ],
-
-            'work_location' => ['required', Rule::enum(WorkLocation::class)],
-            'supervisor' => ['nullable', 'string', 'max:255'],
-            'employee_type' => ['required', Rule::enum(EmployeeType::class)],
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | SPOUSE
-            |--------------------------------------------------------------------------
-            */
-
-            'spouse_status' => ['nullable', 'string', 'max:50'],
-            'spouse_full_name' => ['nullable', 'string', 'max:255'],
-            'spouse_phone' => ['nullable', 'string', 'max:50'],
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | PARENTS
-            |--------------------------------------------------------------------------
-            */
-
-            'parents' => ['nullable', 'array'],
-            'parents.*.relationship' => ['nullable', 'string', 'max:100'],
-            'parents.*.full_name' => ['nullable', 'string', 'max:255'],
-            'parents.*.phone' => ['nullable', 'string', 'max:50'],
-            'parents.*.deceased' => ['nullable', 'boolean'],
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | EMERGENCY CONTACT
-            |--------------------------------------------------------------------------
-            */
-
-            'emergency_relationship' => ['nullable', 'string', 'max:100'],
-            'emergency_full_name' => ['nullable', 'string', 'max:255'],
-            'emergency_phone' => ['nullable', 'string', 'max:50'],
-            'emergency_address' => ['nullable', 'string'],
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | SALARY
-            |--------------------------------------------------------------------------
-            */
-
-            'salary_base_salary' => ['nullable', 'numeric', 'min:0'],
-            'salary_category' => ['nullable', 'string', 'max:20'],
-            'salary_echelon' => ['nullable', 'string', 'max:20'],
-            'salary_currency' => ['nullable', 'string', 'max:20'],
-        ]);
-
-
-        DB::transaction(function () use ($request, $validated, $employee) {
-
-            /*
-            |--------------------------------------------------------------------------
-            | PHOTO (on ne remplace que si un nouveau fichier est envoyé)
-            |--------------------------------------------------------------------------
-            */
-
-            $photoPath = $employee->photo;
-
-            if ($request->hasFile('photo')) {
-
-                // On supprime l'ancienne photo si elle existe
-                if ($employee->photo) {
-                    Storage::disk('public')->delete($employee->photo);
+                    if ($employee->photo) {
+                        $oldFiles[] = ['public', $employee->photo];
+                    }
                 }
 
-                $photoPath = $request
-                    ->file('photo')
-                    ->store('employees/photos', 'public');
-            }
+                /* ---------------- EMPLOYEE ----------------
+                 * Colonnes NOT NULL : on ne les écrase que si une valeur est envoyée
+                 * (aucun champ n'est obligatoire en édition).
+                 */
 
+                $keepIfEmpty = [
+                    'first_name', 'last_name', 'gender', 'date_of_birth', 'number_card',
+                    'country', 'marital_status', 'department_id', 'section_id',
+                    'contract_type', 'work_location', 'employee_type',
+                ];
 
-            /*
-            |--------------------------------------------------------------------------
-            | UPDATE EMPLOYEE
-            |--------------------------------------------------------------------------
-            */
+                $nullable = [
+                    'middle_name', 'employee_work_phone', 'employee_phone', 'employee_email',
+                    'employee_address', 'end_contract_date', 'supervisor',
+                    'spouse_status', 'spouse_full_name', 'spouse_phone',
+                ];
 
-            $employee->update([
+                $data = ['photo' => $photoPath];
 
-                'first_name' => $validated['first_name'],
-                'middle_name' => $validated['middle_name'] ?? null,
-                'last_name' => $validated['last_name'],
-                'gender' => $validated['gender'],
-                'date_of_birth' => $validated['date_of_birth'],
-                'number_card' => $validated['number_card'],
-                'country' => $validated['country'],
-                'marital_status' => $validated['marital_status'],
+                foreach ($keepIfEmpty as $field) {
+                    if (filled($validated[$field] ?? null)) {
+                        $data[$field] = $validated[$field];
+                    }
+                }
 
-                'employee_work_phone' => $validated['employee_work_phone'] ?? null,
-                'employee_phone' => $validated['employee_phone'] ?? null,
-                'employee_email' => $validated['employee_email'] ?? null,
-                'employee_address' => $validated['employee_address'] ?? null,
+                foreach ($nullable as $field) {
+                    $data[$field] = $validated[$field] ?? null;
+                }
 
-                'photo' => $photoPath,
+                if (filled($validated['job_title_id'] ?? null)) {
+                    $data['job_title_id'] = $validated['job_title_id'];
+                }
 
-                'department_id' => $validated['department_id'],
-                'section_id' => $validated['section_id'],
-                'job_title_id' => $validated['job_title_id'] ?? 1,
-                'contract_type' => $validated['contract_type'],
-                'end_contract_date' => $validated['end_contract_date'] ?? null,
-                'work_location' => $validated['work_location'],
-                'supervisor' => $validated['supervisor'] ?? null,
-                'employee_type' => $validated['employee_type'],
+                $employee->update($data);
 
-                'spouse_status' => $validated['spouse_status'] ?? null,
-                'spouse_full_name' => $validated['spouse_full_name'] ?? null,
-                'spouse_phone' => $validated['spouse_phone'] ?? null,
-            ]);
+                /* ---------------- PARENTS ---------------- */
 
+                $employee->parents()->delete();
 
-            /*
-            |--------------------------------------------------------------------------
-            | PARENTS (on remplace la liste existante)
-            |--------------------------------------------------------------------------
-            */
+                $now = now();
 
-            $employee->parents()->delete();
+                $parents = collect($validated['parents'] ?? [])
+                    ->filter(fn ($p) => !empty($p['full_name']) || !empty($p['phone']))
+                    ->map(fn ($p) => [
+                        'employee_id'  => $employee->id,
+                        'relationship' => $p['relationship'] ?? null,
+                        'full_name'    => $p['full_name'] ?? null,
+                        'phone'        => $p['phone'] ?? null,
+                        'deceased'     => !empty($p['deceased']),
+                        'created_at'   => $now,
+                        'updated_at'   => $now,
+                    ])
+                    ->values()
+                    ->all();
 
-            if (!empty($validated['parents'])) {
+                if ($parents) {
+                    EmployeeParent::insert($parents);
+                }
 
-                foreach ($validated['parents'] as $parent) {
+                /* ---------------- EMERGENCY CONTACT ---------------- */
 
-                    if (empty($parent['full_name']) && empty($parent['phone'])) {
-                        continue;
+                if (!empty($validated['emergency_full_name']) || !empty($validated['emergency_phone'])) {
+
+                    EmergencyContact::updateOrCreate(
+                        ['employee_id' => $employee->id],
+                        [
+                            'relationship' => $validated['emergency_relationship'] ?? null,
+                            'full_name'    => $validated['emergency_full_name'] ?? null,
+                            'phone'        => $validated['emergency_phone'] ?? null,
+                            'address'      => $validated['emergency_address'] ?? null,
+                        ]
+                    );
+                }
+
+                /* ---------------- SALARY ---------------- */
+
+                $amountFields = [
+                    'housing_allowance', 'transport_allowance', 'meal_allowance',
+                    'family_allowance', 'medical_allowance',
+                    'other_non_taxable_allowances', 'other_taxable_allowances',
+                    'cnss_employee', 'syndicate_deduction', 'ier',
+                    'cnss_employer', 'inpp_employer', 'onem_employer',
+                ];
+
+                $amounts = [];
+                foreach ($amountFields as $field) {
+                    $amounts[$field] = $validated["salary_{$field}"] ?? 0;
+                }
+
+                $paymentMethods = $validated['salary_payment_methods'] ?? [];
+
+                $hasSalaryData = !empty($paymentMethods)
+                    || !empty($validated['salary_base_salary'])
+                    || !empty($validated['salary_category'])
+                    || !empty($validated['salary_currency'])
+                    || array_sum($amounts) > 0;
+
+                if ($hasSalaryData) {
+
+                    EmployeeSalary::updateOrCreate(
+                        ['employee_id' => $employee->id],
+                        array_merge($amounts, [
+                            'base_salary'     => $validated['salary_base_salary'] ?? null,
+                            'category'        => $validated['salary_category'] ?? null,
+                            'echelon'         => $validated['salary_echelon'] ?? null,
+                            'currency'        => $validated['salary_currency'] ?? null,
+                            'payment_methods' => $paymentMethods,
+                        ])
+                    );
+                }
+
+                /* ---------------- BANK ACCOUNT ----------------
+                 * Seulement si "bank_transfer" est coché. Les données existantes
+                 * ne sont jamais supprimées si la case est décochée.
+                 */
+
+                if (in_array('bank_transfer', $paymentMethods, true)) {
+
+                    $bank = EmployeeBankAccount::firstOrNew(['employee_id' => $employee->id]);
+
+                    $ribFilePath = $bank->rib_file;
+
+                    if ($request->hasFile('salary_rib_file')) {
+                        $ribFilePath = $request->file('salary_rib_file')->store('employees/rib', 'local');
+                        $storedFiles[] = ['local', $ribFilePath];
+
+                        if ($bank->rib_file) {
+                            $oldFiles[] = ['local', $bank->rib_file];
+                        }
                     }
 
-                    EmployeeParent::create([
-                        'employee_id' => $employee->id,
-                        'relationship' => $parent['relationship'] ?? null,
-                        'full_name' => $parent['full_name'] ?? null,
-                        'phone' => $parent['phone'] ?? null,
-                        'deceased' => !empty($parent['deceased']),
-                    ]);
+                    $bank->fill([
+                        'bank_name'      => $validated['salary_bank_name'] ?? null,
+                        'account_holder' => $validated['salary_bank_account_holder'] ?? null,
+                        'account_number' => $validated['salary_bank_account_number'] ?? null,
+                        'rib_file'       => $ribFilePath,
+                        'currency'       => $validated['salary_currency'] ?? null,
+                    ])->save();
                 }
+            });
+
+        } catch (Throwable $e) {
+
+            foreach ($storedFiles as [$disk, $path]) {
+                Storage::disk($disk)->delete($path);
             }
 
+            throw $e;
+        }
 
-            /*
-            |--------------------------------------------------------------------------
-            | EMERGENCY CONTACT (updateOrCreate)
-            |--------------------------------------------------------------------------
-            */
-
-            if (
-                !empty($validated['emergency_full_name']) ||
-                !empty($validated['emergency_phone'])
-            ) {
-
-                EmergencyContact::updateOrCreate(
-                    ['employee_id' => $employee->id],
-                    [
-                        'relationship' => $validated['emergency_relationship'] ?? null,
-                        'full_name' => $validated['emergency_full_name'] ?? null,
-                        'phone' => $validated['emergency_phone'] ?? null,
-                        'address' => $validated['emergency_address'] ?? null,
-                    ]
-                );
-            }
-
-
-            /*
-            |--------------------------------------------------------------------------
-            | SALARY (updateOrCreate)
-            |--------------------------------------------------------------------------
-            */
-
-            if (
-                !empty($validated['salary_base_salary']) ||
-                !empty($validated['salary_category']) ||
-                !empty($validated['salary_currency'])
-            ) {
-
-                EmployeeSalary::updateOrCreate(
-                    ['employee_id' => $employee->id],
-                    [
-                        'base_salary' => $validated['salary_base_salary'] ?? null,
-                        'category' => $validated['salary_category'] ?? null,
-                        'echelon' => $validated['salary_echelon'] ?? null,
-                        'currency' => $validated['salary_currency'] ?? null,
-                    ]
-                );
-            }
-
-        });
-
+        // La transaction a réussi : on peut supprimer les anciens fichiers.
+        foreach ($oldFiles as [$disk, $path]) {
+            Storage::disk($disk)->delete($path);
+        }
 
         return redirect()
             ->route('employees.index')
             ->with('success', 'Employee updated successfully.');
     }
-
     /**
      * Remove the specified resource from storage.
      */

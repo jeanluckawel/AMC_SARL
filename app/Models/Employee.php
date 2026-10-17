@@ -94,4 +94,8 @@ class Employee extends Model
     {
         return $this->hasMany(Payroll::class);
     }
+    public function bankAccount(): HasOne
+    {
+        return $this->hasOne(EmployeeBankAccount::class);
+    }
 }
