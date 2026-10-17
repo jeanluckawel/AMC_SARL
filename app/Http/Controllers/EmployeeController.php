@@ -200,17 +200,13 @@ class EmployeeController extends Controller
         return 'AMC-OA' . str_pad((string) $number, 4, '0', STR_PAD_LEFT);
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(Employee $employee)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(Employee $employee): View
     {
 
