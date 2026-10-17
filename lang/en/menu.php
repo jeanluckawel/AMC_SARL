@@ -22,7 +22,7 @@ return [
     'main_menu' => 'MAIN MENU',
     'procurement' => 'PROCUREMENT',
     'finance' => 'FINANCE',
-    'ceo' => 'CEO',
+    'ceo' => 'DG',
     'employee_management' => 'EMPLOYEE MANAGEMENT',
     'organization' => 'ORGANIZATION',
     'administration' => 'ADMINISTRATION',
