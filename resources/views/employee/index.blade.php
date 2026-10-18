@@ -199,6 +199,16 @@
                                                 <i class="bi bi-trash"></i>
                                             </button>
 
+
+                                            <a
+                                                href="{{ route('employees.children.create', $employee) }}"
+                                                class="btn btn-sm btn-success action-btn"
+                                                title="Add Child"
+                                                aria-label="Add child for {{ $fullName }}"
+                                            >
+                                                <i class="bi bi-person-plus-fill"></i>
+                                            </a>
+
                                         </div>
                                     </td>
 

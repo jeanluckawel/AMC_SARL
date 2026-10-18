@@ -63,6 +63,16 @@ Route::middleware('auth')->group(function () {
         [EmployeeController::class, 'destroy']
     )->name('employees.destroy');
 
+    Route::get(
+        '/employees-{employee}-children-create',
+        [EmployeeController::class, 'createChild']
+    )->name('employees.children.create');
+
+    Route::post(
+        '/employees-{employee}-children-store',
+        [EmployeeController::class, 'storeChild']
+    )->name('employees.children.store');
+
 
 
     Route::get('/get-sections/{department}', [EmployeeController::class, 'getSections'])

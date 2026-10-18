@@ -98,4 +98,9 @@ class Employee extends Model
     {
         return $this->hasOne(EmployeeBankAccount::class);
     }
+
+    public function children(): HasMany
+    {
+        return $this->hasMany(EmployeeChild::class);
+    }
 }

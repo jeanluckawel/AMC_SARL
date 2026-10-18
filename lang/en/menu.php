@@ -370,4 +370,27 @@ return [
     'sal_section_base' => 'Base Salary',
     'sal_select_currency' => 'Select currency',
 
+
+
+    'employee_child_create_title' => 'Add Children',
+    'employee_child_create_desc' => 'Add one or more children to this employee and attach their supporting documents.',
+    'employee_child_parent_employee' => 'Employee',
+    'employee_child_information' => 'Child Information',
+    'employee_child_document_title' => 'Supporting Document',
+    'employee_child_document_desc' => 'Select the document type and upload the corresponding file.',
+    'employee_child_document_type' => 'Document Type',
+    'employee_child_select_document_type' => 'Select a document type',
+    'employee_child_document_birth_certificate' => 'Birth Certificate',
+    'employee_child_document_passport' => 'Passport',
+    'employee_child_document_national_id' => 'National ID Card',
+    'employee_child_document_other' => 'Other Document',
+    'employee_child_document_file' => 'Document File',
+    'employee_child_document_hint' => 'Accepted formats: PDF, JPG, JPEG and PNG. Maximum size: 4 MB.',
+    'employee_child_add_another' => 'Add Another Child',
+    'employee_child_remove' => 'Remove',
+    'employee_child_save' => 'Save Children',
+    'employee_child_saving' => 'Saving...',
+
+
+
 ];

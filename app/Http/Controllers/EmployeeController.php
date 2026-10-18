@@ -12,6 +12,7 @@ use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\Department;
 use App\Models\Employee;
 use App\Models\EmployeeBankAccount;
+use App\Models\EmployeeChild;
 use App\Models\EmployeeParent;
 use App\Models\EmployeeSalary;
 use App\Models\EmergencyContact;
@@ -501,5 +502,118 @@ class EmployeeController extends Controller
         $employee->load(['department', 'section', 'jobTitle']);
 
         return view('admin.employees.profile', compact('employee'));
+    }
+
+
+    public function createChild(Employee $employee)
+    {
+        return view('employees.children.create', compact('employee'));
+    }
+
+
+    public function storeChild(Request $request, Employee $employee)
+    {
+        $validated = $request->validate([
+            'children' => ['required', 'array', 'min:1'],
+
+            'children.*.first_name' => [
+                'required',
+                'string',
+                'max:100',
+            ],
+
+            'children.*.middle_name' => [
+                'nullable',
+                'string',
+                'max:100',
+            ],
+
+            'children.*.last_name' => [
+                'required',
+                'string',
+                'max:100',
+            ],
+
+            'children.*.gender' => [
+                'nullable',
+                'string',
+                'max:20',
+            ],
+
+            'children.*.date_of_birth' => [
+                'nullable',
+                'date',
+                'before_or_equal:today',
+            ],
+
+            'children.*.document_type' => [
+                'nullable',
+                Rule::in([
+                    'birth_certificate',
+                    'passport',
+                    'other',
+                ]),
+            ],
+
+            'children.*.document' => [
+                'nullable',
+                'file',
+                'mimes:pdf,jpg,jpeg,png',
+                'max:4096',
+            ],
+        ]);
+
+        $storedFiles = [];
+
+        try {
+            DB::transaction(function () use (
+                $validated,
+                $employee,
+                &$storedFiles
+            ) {
+                foreach ($validated['children'] as $childData) {
+                    $documentPath = null;
+
+                    if (
+                        isset($childData['document']) &&
+                        $childData['document']->isValid()
+                    ) {
+                        $documentPath = $childData['document']->store(
+                            'employee-children/documents',
+                            'public'
+                        );
+
+                        $storedFiles[] = $documentPath;
+                    }
+
+                    EmployeeChild::create([
+                        'employee_id' => $employee->id,
+                        'first_name' => $childData['first_name'],
+                        'middle_name' => $childData['middle_name'] ?? null,
+                        'last_name' => $childData['last_name'],
+                        'gender' => $childData['gender'] ?? null,
+                        'date_of_birth' => $childData['date_of_birth'] ?? null,
+                        'document_type' => $childData['document_type'] ?? null,
+                        'document_path' => $documentPath,
+                    ]);
+                }
+            });
+        } catch (\Throwable $exception) {
+            foreach ($storedFiles as $path) {
+                Storage::disk('public')->delete($path);
+            }
+
+            report($exception);
+
+            return back()
+                ->withInput($request->except('children.*.document'))
+                ->withErrors([
+                    'children' => "Une erreur est survenue lors de l'enregistrement des enfants.",
+                ]);
+        }
+
+        return redirect()
+            ->route('employees.index')
+            ->with('success', 'Les enfants ont été enregistrés avec succès.');
     }
 }
