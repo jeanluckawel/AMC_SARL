@@ -199,7 +199,7 @@ class EmployeeController extends Controller
 
         $number = $last ? ((int) preg_replace('/\D/', '', $last)) + 1 : 1;
 
-        return 'AMC-OA' . str_pad((string) $number, 4, '0', STR_PAD_LEFT);
+        return 'AMC-OA' . str_pad((string) $number, 3, '0', STR_PAD_LEFT);
     }
 
 
